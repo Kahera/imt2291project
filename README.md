@@ -1,4 +1,4 @@
-# Prosjekt 2 - IMT2291 - Våren 2019 #
+# Prosjekt 2 - IMT2291 - Våren 2020 #
 
 Rediger readme filen og legg inn navnene på deltakerne på gruppen før dere begynner med noe annet :-).
 
