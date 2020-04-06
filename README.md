@@ -1,7 +1,10 @@
-# Prosjekt 2 - IMT2291 - Våren 2020 #
+# Prosjekt 2 - IMT2291 - Spring 2020 #
 
-Rediger readme filen og legg inn navnene på deltakerne på gruppen før dere begynner med noe annet :-).
+## Group members:    
+June V. E. Hansen
 
-Beskrivelsen til oppgaven finnes i [Wikien til det opprinnelige prosjektet](https://bitbucket.org/okolloen/imt2291-prosjekt2-2019/wiki/Home).
-
-Bruk Wikien til deres eget prosjekt til å dokumentere prosjektet slik det er beskrevet i oppgaven.
+## Report:    
+Can be found in the project wiki. 
+      
+## Other:
+Project description in [original project](https://bitbucket.org/okolloen/imt2291-prosjekt2-2019/wiki/Home).
