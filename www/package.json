@@ -1,14 +1,16 @@
 {
   "name": "imt2291-project2",
-  "description": "Video serving platform for lecture videos",
-  "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+  "version": "1.0.0",
+  "description": "Video serving platform for lectures",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "@polymer/test-fixture": "^4.0.2",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4",
-    "wct-mocha": "^1.0.1"
+  "author": "June Hansen",
+  "license": "ISC",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.4.3",
+    "lit-element": "^2.3.1",
+    "redux": "^4.0.5"
   }
 }

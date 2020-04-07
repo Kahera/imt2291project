@@ -1,7 +1,0 @@
-{
-  "name": "imt2291-project2",
-  "short_name": "imt2291-project2",
-  "description": "Video serving platform for lecture videos",
-  "start_url": "/",
-  "display": "standalone"
-}

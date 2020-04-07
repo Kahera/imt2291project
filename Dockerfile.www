@@ -1,7 +1,5 @@
 FROM node:10-jessie
 
-LABEL mantainer="Eloy Lopez <elswork@gmail.com>"
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git && \
     apt-get clean && \
