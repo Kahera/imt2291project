@@ -2,8 +2,8 @@ import { LitElement, html, css } from 'lit-element';
 import {
     incrementCounter,
     selectTechnology
-} from '../redux/actions';
-import store from '../redux/store';
+} from '../Redux/actions';
+import store from '../Redux/store';
 
 /**
  * `app-container` This is the main container of our lit-element app
@@ -38,12 +38,11 @@ class AppContainer extends LitElement {
         });
     }
 
-    static get styles() {
-        return [
-            css`
-            `,
-        ];
+    static styles = css`
+    :host {
+        display: block;
     }
+    `;
 
     /**
      * Implement to describe the element's DOM using lit-html.
