@@ -11,7 +11,8 @@ export class ComponentVideocard extends LitElement {
             }
 
             .card {
-                width: 25em;
+                width: 30em;
+                max-width: 100%;
             }
             
             .card-title {
