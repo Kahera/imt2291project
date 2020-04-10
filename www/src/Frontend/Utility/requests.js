@@ -4,18 +4,18 @@ export const serverURL = window.process.env.SERVER_URL
 /*
  * 'Fetch' wrapper
  */
-const request = (path, options = {}) => {
+const request = async (path, options = {}) => {
     options.credentials = 'include';
 
-    return fetch(serverURL + path, options).then(res => {
-        return new Promise((resolve, reject) => {
-            if (res.ok) {
-                res.json().then(resolve);
-            } else {
-                res.text().then(reject);
-            }
-        })
-    })
+    const res = await fetch(serverURL + path, options);
+    return new Promise((resolve, reject) => {
+        if (res.ok) {
+            res.json().then(resolve);
+        }
+        else {
+            res.text().then(reject);
+        }
+    });
 }
 
 /*

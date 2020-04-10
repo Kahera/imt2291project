@@ -44,7 +44,8 @@ export class UtilityLogin extends LitElement {
                 font-size: small;
                 margin-top: 1em;
                 margin-bottom: 0.8em;
-            }`,
+            }
+            `,
         ]
     }
 

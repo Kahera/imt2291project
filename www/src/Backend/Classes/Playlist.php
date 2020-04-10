@@ -17,7 +17,7 @@ class Playlist
         $sth = $this->db->prepare($sql);
         $sth->execute(array($data['title'], $data['owner'], $data['description'], $data['subject'], $data['theme'], $data['thumbnail']));
 
-        // Query should create one new row
+        //Query should create one new row
         if ($sth->rowCount() == 1) {
             $tmp['status'] = 'OK';
             $tmp['pid'] = $this->db->lastInsertId();

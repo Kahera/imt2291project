@@ -33,7 +33,6 @@ export class ComponentUsermanagement extends LitElement {
     render() {
         return html`
         <div class="user">
-                <p>Name</p>
                 <p>Email</p>
                 <div class="btns"
                         <paper-icon-button icon="remove-circle" class="red"></paper-icon-button>
