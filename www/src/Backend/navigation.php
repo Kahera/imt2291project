@@ -68,24 +68,6 @@ if (isset($_POST['managePlaylists'])) {
     echo $twig->render("playlistEdit.html", array('results' => $playlists));
 }
 
-//- - - - Admins - - - -
-// Edit permissions page
-if (isset($_POST['managePermissions'])) {
-    $user = new User($db);
-
-    //Get unvalidated teachers
-    $data['userType'] = 'teacher';
-    $data['validated'] = 0;
-    $newTeachers = $user->getUsersByTypeAndValidation($data);
-
-    //Get admins
-    $data['userType'] = 'admin';
-    $data['validated'] = 1;
-    $admins = $user->getUsersByTypeAndValidation($data);
-
-    echo $twig->render("adminPage.html", array('newTeachers' => $newTeachers, 'admins' => $admins));
-}
-
 //--------------From navbar--------------
 if (isset($_POST['home'])) {
     $user = new User($db);

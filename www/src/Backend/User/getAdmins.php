@@ -5,7 +5,6 @@ require_once "../Classes/User.php";
 require_once "../Classes/API.php";
 
 session_start();
-
 $header = API::header_init();
 $db = DB::getDBConnection();
 

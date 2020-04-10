@@ -33,53 +33,7 @@ if (isset($_POST['signup'])) {
   echo $twig->render('registerUser.html');
 }
 
-// "Listens" for posted register form
-if (isset($_POST['register'])) {
-  $user = new User($db);
 
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $password2 = $_POST['password_repeat'];
-
-  // Check if user already exists
-  $sql = 'SELECT * FROM user WHERE email=?';
-  $sth = $db->prepare($sql);
-  $sth->execute(array($email));
-  $user = $sth->fetch();
-
-  // If user exists: error message
-  if ($user) {
-    $msg = $email . " already exists!";
-    echo $twig->render('registerUser.html', array('msg' => $msg));
-
-    // If user doesn't exist: continue
-  } else {
-    // Check if passwords match
-    if (!strcmp($password, $password2)) { //strcmp returns 0 if matches
-
-      // Set teacher if checkbox is ticked, otherwise set student
-      $userType = (isset($_POST['isTeacher'])) ? "teacher" : "student";
-
-      // Create new user
-      $user = new User($db);
-      $userData['email'] = $email;
-      $userData['password'] = password_hash($password, PASSWORD_DEFAULT);
-      if (isset($_POST['userType'])) {
-        $userData['userType'] = $userType;
-      }
-      $tmp = $user->createUser($userData);
-
-      if ($tmp['errorMessage'] != 'OK') { //If user is not created
-        //Print error message
-        echo $twig->render('registerUser.html', array('msg' => $tmp['errorMessage']));
-      } else { //If user is created
-        echo $twig->render('index.html', array('msg' => 'Success! Now log in:'));
-      }
-    } else { // Error msg if passwords don't match
-      echo "Passwords doesn't match, try again.";
-    }
-  }
-}
 
 //Search for user
 if (isset($_POST['emailSearch'])) {
