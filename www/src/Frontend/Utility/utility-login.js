@@ -1,8 +1,9 @@
 import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
+import '@polymer/paper-card/paper-card'
 
-export class Login extends LitElement {
+export class UtilityLogin extends LitElement {
 
     static get properties() {
         return {
@@ -28,19 +29,36 @@ export class Login extends LitElement {
             css`
             :host {
                 display: block;
+                padding: 2em;
             }
-            `,
+
+            .card {
+                width: 50em;
+            }
+            
+            .card-content {
+                padding: 1em;
+            }
+
+            .btn {
+                font-size: small;
+                margin-top: 1em;
+                margin-bottom: 0.8em;
+            }`,
         ]
     }
 
     render() {
         return html`
-        <div>
-            <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
-            <paper-input type="password" id="password" label="Password" autocomplete="password" required></paper-input>
-            <paper-button raised id="register">Register</paper-button>
-            <paper-button raised id="login">Log in</paper-button>
-        </div>`;
+        <paper-card class="card">
+            <div class="card-content">
+                <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
+                <paper-input type="password" id="password" label="Password" autocomplete="password" required></paper-input>
+                <paper-button class="btn" raised id="register">Register</paper-button>
+                <paper-button class="btn" raised id="login">Log in</paper-button>
+            </div>
+        </paper-card>
+            `;
     }
 
 
@@ -94,4 +112,4 @@ export class Login extends LitElement {
     }
 
 }
-customElements.define('utility-login', Login);
+customElements.define('utility-login', UtilityLogin);

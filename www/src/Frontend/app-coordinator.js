@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import store from './Redux/store'
-import './Utility/login'
+import './Utility/utility-login'
+import './Views/view-homepage'
+import './Views/view-error'
 
 export class AppCoordinator extends LitElement {
 
@@ -16,8 +18,8 @@ export class AppCoordinator extends LitElement {
 
     render() {
         return html`
-        <p>Coordinator kjører</p>
         <utility-login></utility-login>
+        <view-homepage></view-homepage>
         `;
     }
 
@@ -76,7 +78,7 @@ export class AppCoordinator extends LitElement {
         // statement, so break it up.
         switch (page) {
             case 'homepage':
-                import('./Views/homepage.js');
+                import('./Views/view-homepage.js');
                 break;
             case 'view2':
                 import('./my-view2.js');
@@ -94,7 +96,7 @@ export class AppCoordinator extends LitElement {
                 import('./student-view.js');
                 break;
             case 'error':
-                import('./Views/error.js');
+                import('./Views/view-error.js');
                 break;
         }
     }
