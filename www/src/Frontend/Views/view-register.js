@@ -46,12 +46,14 @@ export class ViewRegister extends LitElement {
         <paper-card class="card">
             <div class="card-content">
                 <label for="msg">${this.msg}</label>
-                <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
-                <paper-input type="new-password" id="password" label="Password" autocomplete="password" required></paper-input>
-                <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
-                <paper-button class="btn" raised id="cancel" href="[[rootPath]]>Cancel</paper-button>
-                <paper-button class="btn" raised id="register" @click="${this.register}">Register</paper-button>
-            </div>
+                    <form onsubmit="javascript: return false;">
+                        <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
+                        <paper-input type="new-password" id="password" label="Password" autocomplete="password" required></paper-input>
+                        <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
+                        <paper-button class="btn" raised id="cancel" href="[[rootPath]]>Cancel</paper-button>
+                        <paper-button class="btn" raised id="register" @click="${this.register}">Register</paper-button>
+                    </form>
+                </div>
         </paper-card>
         `;
     }

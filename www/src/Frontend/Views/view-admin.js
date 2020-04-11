@@ -24,11 +24,15 @@ export class ViewAdmin extends LitElement {
 
     }
 
-    static styles = css`
-    :host {
-        display: block;
+    static get styles() {
+        return [
+            css`
+            :host {
+                display: block;
+            }
+            `,
+        ]
     }
-    `;
 
     render() {
         return html`

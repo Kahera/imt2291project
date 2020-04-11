@@ -33,13 +33,13 @@ export class ComponentVideoplayer extends LitElement {
         <div class="speed">
             <iron-selector slected="1">
                 <b>Speed</b>
-                <div @click="${this.adjustSpeed}" data-speed='2'>2x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.75'>1.75x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.5'>1.5x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.25'>1.25x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1'>1x</div>
-                <div @click="${this.adjustSpeed}" data-speed='0.75'>0.75x</div>
-                <div @click="${this.adjustSpeed}" data-speed='0.5'>0.5x</div>
+                <div @click="${this._adjustSpeed}" data-speed='2'>2x</div>
+                <div @click="${this._adjustSpeed}" data-speed='1.75'>1.75x</div>
+                <div @click="${this._adjustSpeed}" data-speed='1.5'>1.5x</div>
+                <div @click="${this._adjustSpeed}" data-speed='1.25'>1.25x</div>
+                <div @click="${this._adjustSpeed}" data-speed='1'>1x</div>
+                <div @click="${this._adjustSpeed}" data-speed='0.75'>0.75x</div>
+                <div @click="${this._adjustSpeed}" data-speed='0.5'>0.5x</div>
             </iron-selector>
         </div>
         `;
