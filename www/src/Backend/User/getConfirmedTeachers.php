@@ -11,9 +11,9 @@ $db = DB::getDBConnection();
 //Create new user object
 $user = new User($db);
 
-//Get unvalidated teachers
+//Get validated teachers
 $data['userType'] = 'teacher';
-$data['validated'] = 0;
+$data['validated'] = 1;
 $newTeachers = $user->getUsersByTypeAndValidation($data);
 
 //Return result

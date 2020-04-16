@@ -193,20 +193,3 @@ if (isset($_POST['deletePlaylist'])) {
     // Render edit page
     echo $twig->render('playlistEdit.html', array('results' => $results));
 }
-
-if (isset($_POST['subscribe'])) {
-    // Create playlist object
-    $playlist = new Playlist($db);
-
-    $data['pid'] = $_POST['pid'];
-    $data['uid'] = $_SESSION['uid'];
-
-    // Get playlist
-    $playlist->subscribePlaylist($data);
-
-    // Get playlists
-    $subscriptions = $playlist->getSubscriptions($_SESSION['uid']);
-
-    // Render edit page
-    echo $twig->render('home.html', array('subscriptions' => $subscriptions));
-}

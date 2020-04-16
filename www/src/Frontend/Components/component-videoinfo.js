@@ -102,7 +102,7 @@ export class ComponentVideoinfo extends LitElement {
 
     _rate(e) {
         const data = new FormData(e.target.form);
-        fetch(`${window.MyAppGlobals.serverURL}api/rate.php`, {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/rate.php`, {
             method: 'POST',
             credentials: "include",
             body: data

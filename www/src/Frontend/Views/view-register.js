@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit-element';
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
+import '@polymer/paper-checkbox/paper-checkbox'
 
 export class ViewRegister extends LitElement {
 
@@ -50,6 +51,7 @@ export class ViewRegister extends LitElement {
                         <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
                         <paper-input type="new-password" id="password" label="Password" autocomplete="password" required></paper-input>
                         <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
+                        <paper-checkbox id="chk_lecturer">I am a lecturer</paper-checkbox>
                         <paper-button class="btn" raised id="cancel" href="[[rootPath]]>Cancel</paper-button>
                         <paper-button class="btn" raised id="register" @click="${this.register}">Register</paper-button>
                     </form>
@@ -60,7 +62,7 @@ export class ViewRegister extends LitElement {
 
     register(e) {
         const data = new FormData(e.target.form);
-        fetch(`${window.MyAppGlobals.serverURL}api/register.php`, {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/register.php`, {
             method: 'POST',
             credentials: "include",
             body: data

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import '@polymer/paper-button/paper-button'
 
 export class ViewError extends LitElement {
 
@@ -19,7 +20,7 @@ export class ViewError extends LitElement {
         <h2>Error</h2>
 
         <P>There was an error. 
-            <a href="/">Go back home</a>
+            <paper-button href="/">Go back home</paper-button>
         </P>`;
     }
 

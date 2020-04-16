@@ -5,6 +5,16 @@ import '@polymer/paper-icon-button'
 
 export class ComponentUsermanagement extends LitElement {
 
+    static get properties() {
+        return {
+            user: Object,
+            pending: {
+                type: Boolean,
+                value: false
+            }
+        }
+    }
+
     static get styles() {
         return [
             css`
@@ -36,7 +46,12 @@ export class ComponentUsermanagement extends LitElement {
                 <p>Email</p>
                 <div class="btns"
                         <paper-icon-button icon="remove-circle" class="red"></paper-icon-button>
-                        <paper-icon-button icon="add-circle" class="green"></paper-icon-button>
+                        ${this.pending ?
+                hmtl`h
+                            <paper-icon-button icon="add-circle" class="green"></paper-icon-button>`
+                : html``
+            }
+                        
                 </div>
         </div>
         `;

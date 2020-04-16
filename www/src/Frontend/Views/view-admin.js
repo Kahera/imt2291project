@@ -7,21 +7,29 @@ export class ViewAdmin extends LitElement {
 
     static get properties() {
         return {
-            users: Array,
-            pending: Array,
+            user: Object,
+            teachersPending: Array,
+            teachersConfirmed: Array,
+            admins: Array
         }
     }
 
     constructor() {
         super();
 
+        //Load user from storage
         const state = store.getState();
         this.user = state.user;
 
-        this.pending = [];
+        //Initialise properties with empty arrays
+        this.teachersPending = [];
+        this.teachersConfirmed = [];
+        this.admins = [];
 
-        this._pendingUsers();
-
+        //Fill arrays
+        this._getPendingTeachers();
+        this._getValidatedTeachers();
+        this._getAdmins();
     }
 
     static get styles() {
@@ -38,23 +46,37 @@ export class ViewAdmin extends LitElement {
         return html`
         <h2>Admin page</h2>
 
-        ${this.pending.length > 0 ?
+        ${this.teachersPending.length > 0 ?
                 html`
                 <h3>Pending teacher requests</h3>
-                <component-usermanagement></component-usermanagement>
-            `: html`
-            <h3>No teachers pending.</h3>
-            `
-            }
+                ${this.teachersPending.map(i => html`<component-usermanagement .user=${i} .pending="true"></component-usermanagement>`)}
 
+            `: html`
+                <h3> No teachers pending.</h3>
+            `}
+        <h3>Teachers</h3>
+        ${this.teachersConfirmed.map(i => html`<component-usermanagement .user=${i}></component-usermanagement>`)}
+        
         <h3>Admins</h3>
-        <component-usermanagement></component-usermanagement>
+        ${this.admins.map(i => html`<component-usermanagement .user=${i}></component-usermanagement>`)}
         `
     }
 
-    _pendingUsers() {
-        get('../../Backend/User/pending.php').then(pending => this.pending = pending).catch(err => {
-            notify('Failed to get pending requests', err)
+    _getPendingTeachers() {
+        get('../../Backend/User/getPendingTeachers.php').then(pending => this.teachersPending = pending).catch(err => {
+            notify('Failed to get pending teachers', err)
+        })
+    }
+
+    _getValidatedTeachers() {
+        get('../../Backend/User/getConfirmedTeachers.php').then(confirmed => this.teachersConfirmed = confirmed).catch(err => {
+            notify('Failed to get teachers', err)
+        })
+    }
+
+    _getAdmins() {
+        get('../../Backend/User/getAdmins.php').then(admins => this.admins = admins).catch(err => {
+            notify('Failed to get admins', err)
         })
     }
 }

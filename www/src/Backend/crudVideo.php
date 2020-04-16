@@ -125,26 +125,7 @@ if (isset($_POST['delete'])) {
 }
 
 //- - - - Other video related stuff - - - -
-// "Listen" for new rating
-if (isset($_POST['rating'])) {
-    // Create empty video
-    $video = new Video($db);
 
-    // Set rating values
-    $data['vid'] = $_POST['vid'];
-    $data['uid'] = $_SESSION['uid'];
-    $data['rating'] = $_POST['rating'];
-
-    // Update video
-    $video->rateVideo($data);
-
-    // Get correct video & comments
-    $videoResult = $video->getVideo($_POST['vid']);
-    $commentResults = $video->getComments($_POST['vid']);
-
-    // Render video page
-    echo $twig->render('videoView.html', array('video' => $videoResult, 'comments' => $commentResults));
-}
 
 
 if (isset($_POST['addComment'])) {

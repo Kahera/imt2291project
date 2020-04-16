@@ -387,6 +387,29 @@ class Video
         return $tmp;
     }
 
+    public function getVideoAvgRating($data)
+    {
+        //Get video - this is needed for both updating and inserting new
+        $sql = "SELECT avgRating FROM video WHERE vid=?";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($data['vid']));
+
+        //Check that it was gotten correctly
+        if ($sth->rowCount() == 1) {
+            //Get old score and return
+            $videoRating = $sth->fetch(PDO::FETCH_ASSOC);
+            return $videoRating;
+
+            //Couldn't get correctly: error
+        } else {
+            $tmp['status'] = 'FAIL';
+            $tmp['errorMessage'] = 'Could not get old rating';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+        }
+        return $tmp;
+    }
 
     //-----------------------------COMMENTS------------------------------------
     public function newComment($data)

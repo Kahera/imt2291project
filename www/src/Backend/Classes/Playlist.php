@@ -309,6 +309,27 @@ class Playlist
         return $tmp;
     }
 
+    public function unsubscribePlaylist($data)
+    {
+        //Create statement and execute
+        $sql = 'DELETE FROM subscription WHERE uid=? AND pid=?';
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($data['uid'], $data['pid']));
+
+        // Query should return one row
+        if ($sth->rowCount() == 1) {
+            $tmp['status'] = 'OK';
+        } else {
+            $tmp['status'] = 'FAIL';
+            $tmp['errorMessage'] = 'Could not unsubscribe from playlist';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+        }
+
+        return $tmp;
+    }
+
     //------------------------------SEARCH--------------------------------------
     public function searchPlaylist($data)
     {

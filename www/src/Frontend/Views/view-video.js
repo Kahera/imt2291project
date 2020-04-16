@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import '../Components/component-videoplayer'
+import '../Components/component-videoinfo'
 
 export class ViewVideo extends LitElement {
 
@@ -25,11 +26,13 @@ export class ViewVideo extends LitElement {
     }
     `;
 
-    //TODO: Make sure correct video plays
-    //TODO: Add the rest of the page outside of video player
+    //TODO: Comment component
+    //TODO: Texting
+    //TODO: If teacher - add to playlist
     render() {
         return html`
         <component-videoplayer></component-videoplayer>
+        <component-videoinfo></component-videoinfo>
         `;
     }
 }

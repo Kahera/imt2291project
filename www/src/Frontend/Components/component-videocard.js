@@ -3,6 +3,12 @@ import '@polymer/paper-card/paper-card'
 
 export class ComponentVideocard extends LitElement {
 
+    static get properties() {
+        return {
+            video: Object
+        }
+    }
+
     static get styles() {
         return [
             css`
@@ -25,13 +31,22 @@ export class ComponentVideocard extends LitElement {
 
     render() {
         return html`
-        <paper-card class="card" image="https://www.insertcart.com/wp-content/uploads/2018/05/thumbnail.jpg">
+        <paper-card class="card" image="${this.video.thumbnail}">
             <div class="card-content">
                 <div class="card-title">
-                    Title here
+                    ${this.video.title}
+                </div>
+                <div class="card-info">
+                    ${this.video.subject}
+                </div>
+                <div class="card-info-lecturer">
+                        ${this.video.lecturer}
+                </div>
+                <div class="card-info">
+                        ${this.video.theme}
                 </div>
                 <div class="card-description">
-                    Video description goes here?
+                    ${this.video.description}
                 </div>
             </div>
         </paper-card>
