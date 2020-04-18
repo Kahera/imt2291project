@@ -59,7 +59,7 @@ export class AppCoordinator extends LitElement {
         // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
         if (!page) {
             this.page = 'homepage';
-        } else if (['homepage', 'view2', 'view3', 'teacher', 'student', 'admin'].indexOf(page) !== -1) {
+        } else if (['register', 'homepage', 'playlist', 'video', 'admin', 'error'].indexOf(page) !== -1) {
             this.page = page;
         } else {
             this.page = 'error';
@@ -77,23 +77,20 @@ export class AppCoordinator extends LitElement {
         // Note: `polymer build` doesn't like string concatenation in the import
         // statement, so break it up.
         switch (page) {
+            case 'register':
+                import('./Views/view-register.js');
+                break;
             case 'homepage':
                 import('./Views/view-homepage.js');
                 break;
-            case 'view2':
-                import('./my-view2.js');
+            case 'playlist':
+                import('./Views/view-playlist.js');
                 break;
-            case 'view3':
-                import('./my-view3.js');
-                break;
-            case 'teacher':
-                import('./teacher-view.js');
+            case 'video':
+                import('./Views/view-video.js');
                 break;
             case 'admin':
-                import('./admin-view.js');
-                break;
-            case 'student':
-                import('./student-view.js');
+                import('./Views/view-admin.js');
                 break;
             case 'error':
                 import('./Views/view-error.js');
