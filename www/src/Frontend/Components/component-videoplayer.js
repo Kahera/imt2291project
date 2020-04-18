@@ -2,33 +2,46 @@ import { LitElement, html } from 'lit-element';
 import '@polymer/iron-selector/iron-selector'
 
 export class ComponentVideoplayer extends LitElement {
+    //A lot of code borrowed from videoVTT example
 
     static get properties() {
         return {
             videofile: String,
+            videotype: String,
+            vttfile: String,
             thumbnail: String,
-            caption: String,
             cues: Array,
         }
     }
 
     constructor() {
         super();
-
+        this.videofile = '';
+        this.videotype = '';
+        this.vttfile = '';
         this.cues = [];
     }
 
-    static styles = css`
-    :host {
-        display: block;
+    static get styles() {
+        return [
+            css`
+            :host {
+                display: block;
+                padding: 10px 20px;
+            }
+
+            video, p {
+                width: 100%
+            }
+            `,
+        ]
     }
-    `;
 
     render() {
         return html`
         <video poster="${this.thumbnail}" controls>
             <source src="${this.videofile}">
-            <track src="${this.caption}" @load='${this._loadCaption}' default>
+            <track kind="subtitles" src="${this.vttfile}" @load='${this._loadCaption}' default></track>
         </video>
         <div class="speed">
             <iron-selector slected="1">
@@ -51,61 +64,61 @@ export class ComponentVideoplayer extends LitElement {
         video.playbackRate = target.dataset.speed;
     }
 
-    //To load captions on video load
-    _loadCaption(e) {
-        const video = this.shadowRoot.querySelector('video');
-        const list = this.shadowRoot.querySelector('#caption ul');
-        const track = e.path[0].track.cues;
-
-        //Listen for cue changes
-        track.this.addEventListener('cuechange', e => this._updateCaption(e));
-
-        //Store cues
-        for (let i = 0; i < track.cues.length; i++) {
-            const cue = track.cues[i];
-            this.cues.push(cue);
-
-            //Create and insert cue elements
-            const li = document.createElement('li');
-            li.dataset.id = cue.id;
-            li.innerHTML = cue.text;
-            li.addEventListener('click', e => this._selectCaption(e));
-
-            list.appendChild(li);
-        }
+    /**
+   * Set the current time of the video to the given time.
+   * @param {[Number]} time the time to set as the current time.
+   */
+    setTime(time) {
+        this.shadowRoot.querySelector('video').currentTime = time;
     }
 
-    //Triggered by click in caption list.
-    _selectCaption(e) {
-        const target = (e.originalTarget || e.Target);
-        const id = target.dataset.id - 1;
+    /**
+     * When the video has been added to the DOM an event listener listening for
+     * load events is added to the track element (containing the vtt source).
+     * This is used to get the cues as soon as a vtt file is loaded, this is then
+     * made available to container tags through dispatching a "cuesUpdated" event.
+     *
+     * The subtitle track is hidden from the video and then an eventListener is
+     * added to the subtitle track so that we can dispatch a cuechange event
+     * when cues are activated/deactivated.
+     */
+    firstUpdated() {
+        const track = this.shadowRoot.querySelector('video track');
+        track.addEventListener('load', e => {                       // vtt file is loaded
+            this.cues = [];
+            const trackCues = e.path[0].track.cues;
+            for (let i = 0; i < trackCues.length; i++) {               // Go through the cue list
+                this.cues.push({ text: trackCues[i].text, id: trackCues[i].id, startTime: trackCues[i].startTime });
+            };
+            // console.log (this.cues);
 
-        //Change location in video
-        this.shadowRoot.querySelector('video').currentTime = this.cues[id].startTime;
+            this.dispatchEvent(new CustomEvent("cuesUpdated", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    cues: this.cues
+                }
+            }));
+        });
+
+        this.shadowRoot.querySelector('video').textTracks[0].mode = 'hidden';
+        this.shadowRoot.querySelector('video').textTracks[0].addEventListener('cuechange', e => {   // When a cue change event occurs
+            // console.log(e);
+            const startTimes = [];
+            for (let i = 0; i < e.target.activeCues.length; i++) {
+                startTimes.push(e.target.activeCues[i].startTime);
+            }
+
+            this.dispatchEvent(new CustomEvent('cuechange', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    activeCues: startTimes
+                }
+            }));
+        });
     }
 
-    //Keeps caption up to date with playing video
-    // and scrolls caption list
-    _updateCaption(e) {
-        const caption = this.shadowRoot.getElementById('caption');
-        caption.querySelector('li').forEach(el.classList.remove('active'));
 
-        //Iterate active cues
-        const active = e.target.activeCues;
-        for (let i = 0; i < active.length; i++) {
-            //Set current cue to active
-            const cue = caption.querySelector(`li[data-id='${active[i].id}']`);
-            cue.classList.add('active');
-
-            //Scrolls so caption is about centered
-            caption.scrollTo({
-                top: cue.offsetTop - (caption.offsetHeight / 2),
-                left: 0,
-                behavior: 'smooth'
-            })
-        }
-
-
-    }
 }
 customElements.define('component-videoplayer', ComponentVideoplayer);

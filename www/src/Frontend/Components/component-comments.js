@@ -4,7 +4,6 @@ export class ComponentComments extends LitElement {
 
     static get properties() {
         return {
-            vid: Number,
             comments: Array
         }
     }
@@ -34,17 +33,12 @@ export class ComponentComments extends LitElement {
     //TODO: If comment user == user uid -> show delete button 
     render() {
         return html`
-        ${this.comments.map(comment => html`
-        <comment-author>${comment.email}</comment-author>
-        <comment>${comment.comment}</comment>
-        `)}
+            ${this.comments.map(comment => html`
+            <comment-author>${comment.email}</comment-author>
+            <comment>${comment.comment}</comment>
+            `)}
         `;
     }
 
-    _getComments() {
-        get('../../Backend/Video/getComments.php').then(comments => this.comments = comments).catch(err => {
-            notify('Failed to get comments', err)
-        })
-    }
 }
 customElements.define('component-comments', ComponentComments);
