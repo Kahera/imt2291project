@@ -12,6 +12,14 @@ export class ComponentPlaylistcard extends LitElement {
         }
     }
 
+    constructor() {
+        super();
+
+        //Load user from storage
+        const state = store.getState();
+        this.user = state.user;
+    }
+
     static get styles() {
         return [
             css`

@@ -53,14 +53,14 @@ export class ViewRegister extends LitElement {
                         <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
                         <paper-checkbox id="chk_lecturer">I am a lecturer</paper-checkbox>
                         <paper-button class="btn" raised id="cancel" href="[[rootPath]]>Cancel</paper-button>
-                        <paper-button class="btn" raised id="register" @click="${this.register}">Register</paper-button>
+                        <paper-button class="btn" raised id="register" @click="${this._register}">Register</paper-button>
                     </form>
                 </div>
         </paper-card>
         `;
     }
 
-    register(e) {
+    _register(e) {
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/register.php`, {
             method: 'POST',

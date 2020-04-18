@@ -12,9 +12,10 @@ $db = DB::getDBConnection();
 //Create new video object
 $video = new Video($db);
 
+
 //Get avgRating
 $data['vid'] = $_POST['vid'];
-$videoRating = $video->getVideoAvgRating($data);
+$comments = $video->getComments($vid);
 
 //Return result
-echo json_encode($videoRating);
+echo json_encode($comments);

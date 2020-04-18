@@ -20,11 +20,16 @@ export class ViewVideo extends LitElement {
         this.user = state.user;
     }
 
-    static styles = css`
-    :host {
-        display: block;
+    static get styles() {
+        return [
+            css`
+            :host {
+                display: block;
+                padding: 10px 20px;
+            }
+            `,
+        ]
     }
-    `;
 
     //TODO: Comment component
     //TODO: Texting

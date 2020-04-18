@@ -55,7 +55,6 @@ export class ViewHomepage extends LitElement {
         ]
     }
 
-    //TODO: Make sure one videocard shows up for each video
     render() {
         return html`
         <div class="content">
@@ -71,14 +70,17 @@ export class ViewHomepage extends LitElement {
         `;
     }
 
+
+    //TODO: Check which videos & playlists should be gotten
     _getVideos() {
         get('../../Backend/Video/getVideos.php').then(videos => this.videos = videos).catch(err => {
             notify('Failed to get admins', err)
         })
     }
 
+
     _getPlaylists() {
-        get('../../Backend/Playlist/getPlaylist.php').then(playlists => this.playlists = playlists).catch(err => {
+        get('../../Backend/Playlist/getPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
             notify('Failed to get admins', err)
         })
     }

@@ -45,16 +45,25 @@ export class ComponentUsermanagement extends LitElement {
         <div class="user">
                 <p>Email</p>
                 <div class="btns"
-                        <paper-icon-button icon="remove-circle" class="red"></paper-icon-button>
+                        <paper-icon-button icon="remove-circle" class="red" @click="${this._approve}"></paper-icon-button>
                         ${this.pending ?
-                hmtl`h
-                            <paper-icon-button icon="add-circle" class="green"></paper-icon-button>`
+                html`
+                            <paper-icon-button icon="add-circle" class="green" @click="${this._reject}"></paper-icon-button>`
                 : html``
             }
                         
                 </div>
         </div>
         `;
+    }
+
+    //TODO: Finish these functions
+    _reject(e) {
+
+    }
+
+    _approve(e) {
+
     }
 }
 customElements.define('component-usermanagement', ComponentUsermanagement);
