@@ -1,8 +1,15 @@
 import { LitElement, html, css } from 'lit-element';
+
 import store from './Redux/store'
-import './Utility/utility-login'
+import get from './Utility/requests'
+
+import './Views/view-login'
 import './Views/view-homepage'
 import './Views/view-error'
+import './Views/view-admin'
+import './Views/view-playlist'
+import './Views/view-video'
+import './Views/view-register'
 
 export class AppCoordinator extends LitElement {
 
@@ -18,7 +25,6 @@ export class AppCoordinator extends LitElement {
 
     render() {
         return html`
-        <utility-login></utility-login>
         <view-homepage></view-homepage>
         `;
     }
@@ -31,9 +37,7 @@ export class AppCoordinator extends LitElement {
             },
             routeData: Object,
             subroute: Object,
-            user: {
-                type: String
-            }
+            user: Object
         }
     }
 
@@ -43,6 +47,20 @@ export class AppCoordinator extends LitElement {
         this.user = data.user;
         store.subscribe((state) => {
             this.user = store.getState().user;
+        })
+
+        //Fetch user status from server
+        get('../../src/Backend/User/getUser.php').then(user => {
+            if (user.loggedIn) {
+                // the user is logged in, update the state
+                store.dispatch(login({
+                    uid: user.uid,
+                    email: user.email,
+                    type: user.userType
+                }))
+            }
+        }).catch(err => {
+            return html`<paper-toast text='$Failed to get user status: {err}'></paper-toast>`
         })
     }
 

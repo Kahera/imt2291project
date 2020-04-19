@@ -8,18 +8,15 @@ session_start();
 $header = API::header_init();
 $db = DB::getDBConnection();
 
-
-// Create playlist object
+//Create playlist object
 $playlist = new Playlist($db);
 
+//Set needed variables
 $data['pid'] = $_POST['pid'];
 $data['uid'] = $_SESSION['uid'];
 
-// Get playlist
-$playlist->unsubscribePlaylist($data);
-
-// Get playlists
+//Get playlist subscriptions
 $subscriptions = $playlist->getSubscriptions($_SESSION['uid']);
 
-// Return subscriptions
+//Return result
 echo json_encode($subscriptions);

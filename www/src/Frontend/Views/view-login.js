@@ -3,7 +3,7 @@ import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
 
-export class UtilityLogin extends LitElement {
+export class ViewLogin extends LitElement {
 
     static get properties() {
         return {
@@ -113,4 +113,4 @@ export class UtilityLogin extends LitElement {
     }
 
 }
-customElements.define('utility-login', UtilityLogin);
+customElements.define('view-login', ViewLogin);

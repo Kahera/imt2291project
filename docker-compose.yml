@@ -34,8 +34,8 @@ services:
   db:
       image: mariadb
       environment:
-          MYSQL_DATABASE: myDb
-          MYSQL_USER: user
+          MYSQL_DATABASE: imt2291-proj2
+          MYSQL_USER: admin
           MYSQL_PASSWORD: test
           MYSQL_ROOT_PASSWORD: test
       volumes:
@@ -48,9 +48,10 @@ services:
       ports:
           - 8082:80
       environment:
-          MYSQL_USER: user
+          MYSQL_USER: admin
           MYSQL_PASSWORD: test
           MYSQL_ROOT_PASSWORD: test
+          PMA_HOST: db
       networks:
           - default
   selenium-hub:

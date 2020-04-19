@@ -158,6 +158,26 @@ class User
     return $result;
   }
 
+  public function getUserByID($data)
+  {
+    $sql = 'SELECT * FROM user WHERE uid=?';
+    $sth = $this->db->prepare($sql);
+    $sth->execute(array($data['uid']));
+
+    //Should return one row
+    if ($sth->rowCount() == 1) {
+      $result = $sth->fetch();
+      $result['status'] = 'OK';
+    } else {
+      $result['status'] = 'FAIL';
+      $result['errorMessage'] = 'Could not get user';
+    }
+    if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+      $tmp['errorMessage'] = $this->db->errorInfo()[2];
+    }
+    return $result;
+  }
+
   public function getUsersByTypeAndValidation($data)
   {
     $sql = 'SELECT * FROM user WHERE userType=? AND validated=?';

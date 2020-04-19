@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
+import '@polymer/paper-toast'
 import store from '../Redux/store'
 import '../Components/component-usermanagement'
-import { get } from '../Utility/requests';
+import get from '../Utility/requests';
 
 export class ViewAdmin extends LitElement {
 
@@ -64,20 +65,24 @@ export class ViewAdmin extends LitElement {
 
     _getPendingTeachers() {
         get('../../Backend/User/getPendingTeachers.php').then(pending => this.teachersPending = pending).catch(err => {
-            notify('Failed to get pending teachers', err)
+            _renderToast('Failed to get pending teachers', err)
         })
     }
 
     _getValidatedTeachers() {
         get('../../Backend/User/getConfirmedTeachers.php').then(confirmed => this.teachersConfirmed = confirmed).catch(err => {
-            notify('Failed to get teachers', err)
+            _renderToast('Failed to get teachers', err)
         })
     }
 
     _getAdmins() {
         get('../../Backend/User/getAdmins.php').then(admins => this.admins = admins).catch(err => {
-            notify('Failed to get admins', err)
+            _renderToast('Failed to get admins', err)
         })
+    }
+
+    _renderToast(msg, err) {
+        return html`<paper-toast text='${msg + ':' + err}'></paper-toast>`
     }
 }
 customElements.define('view-admin', ViewAdmin);
