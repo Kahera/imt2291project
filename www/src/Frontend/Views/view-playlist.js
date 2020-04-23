@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import store from '../Redux/store'
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu'
 
 export class ViewPlaylist extends LitElement {
@@ -24,8 +25,8 @@ export class ViewPlaylist extends LitElement {
         this.userVideos = [];
 
         //Get videos and playlists
-        this._getPlaylistVideos();
-        this._getPlaylist();
+        //this._getPlaylistVideos();
+        //this._getPlaylist();
         //TODO: Check which videos and playlists are to be gotten
 
         //Check if user is teacher or admin

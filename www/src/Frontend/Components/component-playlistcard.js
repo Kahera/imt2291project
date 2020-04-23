@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import store from '../Redux/store'
 import '@polymer/paper-card/paper-card'
 import '@polymer/paper-icon-button/paper-icon-button'
 import '@polymer/iron-icons/iron-icons'
@@ -18,6 +19,7 @@ export class ComponentPlaylistcard extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
+
     }
 
     static get styles() {
@@ -62,6 +64,7 @@ export class ComponentPlaylistcard extends LitElement {
     }
 
     _subscribe(e) {
+        /*
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Playlist/subscribe.php`, {
             method: 'POST',
@@ -69,9 +72,11 @@ export class ComponentPlaylistcard extends LitElement {
             body: data
         }).then(res => res.json())
             .then(data => this.msg = data['msg']);
+            */
     }
 
     _unsubscribe(e) {
+        /*
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Playlist/unsubscribe.php`, {
             method: 'POST',
@@ -79,7 +84,7 @@ export class ComponentPlaylistcard extends LitElement {
             body: data
         }).then(res => res.json())
             .then(data => this.msg = data['msg']);
+            */
     }
-
 }
 customElements.define('component-playlistcard', ComponentPlaylistcard);

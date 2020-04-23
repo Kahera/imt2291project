@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
@@ -52,7 +52,7 @@ export class ViewRegister extends LitElement {
                         <paper-input type="new-password" id="password" label="Password" autocomplete="password" required></paper-input>
                         <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
                         <paper-checkbox id="chk_lecturer">I am a lecturer</paper-checkbox>
-                        <paper-button class="btn" raised id="cancel" href="[[rootPath]]>Cancel</paper-button>
+                        <paper-button class="btn" raised id="cancel" href="[[rootPath]]">Cancel</paper-button>
                         <paper-button class="btn" raised id="register" @click="${this._register}">Register</paper-button>
                     </form>
                 </div>

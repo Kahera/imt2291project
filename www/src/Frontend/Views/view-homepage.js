@@ -1,9 +1,18 @@
 import { LitElement, html, css } from 'lit-element';
+import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import '@polymer/paper-toast'
+import '@polymer/iron-ajax/iron-ajax'
 import store from '../Redux/store'
-import { get, request } from '../Utility/requests'
 import '../Components/component-videocard'
 import '../Components/component-playlistcard'
+
+// Gesture events like tap and track generated from touch will not be
+// preventable, allowing for better scrolling performance.
+setPassiveTouchGestures(true);
+
+// Set Polymer's root path to the same value we passed to our service worker
+// in `index.html`.
+setRootPath(MyAppGlobals.rootPath);
 
 export class ViewHomepage extends LitElement {
 
@@ -28,14 +37,14 @@ export class ViewHomepage extends LitElement {
 
         //Gets videos and playlists with check on which should be gotten
         if (this.user.Type == 'student') {
-            this._getSubscribedPlaylists();
-            this._getSubscribedVideos();
+            //this._getSubscribedPlaylists();
+            //this._getSubscribedVideos();
         } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
-            this._getOwnedPlaylists();
-            this._getOwnedVideos();
+            //this._getOwnedPlaylists();
+            //this._getOwnedVideos();
         } else {
-            this._getAllPlaylists();
-            this._getAllVideos();
+            //this._getAllPlaylists();
+            //this._getAllVideos();
         }
     }
 
@@ -81,6 +90,7 @@ export class ViewHomepage extends LitElement {
         `;
     }
 
+    /*
     _getSubscribedVideos() {
         get('../../Backend/Playlist/getSubscribedVideos.php').then(playlists => this.playlists = playlists).catch(err => {
             _renderToast('Failed to get subscribed videos', err)
@@ -104,26 +114,42 @@ export class ViewHomepage extends LitElement {
             _renderToast('Failed to get owned playlists', err)
         })
     }
-
+    */
     _getAllVideos() {
+        return html`
+        <iron-ajax
+            auto
+            url="${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php"
+            handle-as="json"
+            on-response="_handlePlaylistResponse"
+            debounce-duration = "500"
+        ></iron-ajax>
+        `
+        /*
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php`)
             .then(res => res.text())
             .then(text => console.log(text))
 
-
-        /*
-    request('../../src/Backend/Video/getAllVideos.php').then(videos => this.videos = videos).catch(err => {
-        _renderToast('Failed to get all videos', err)
-    })
-    */
+        request('../../src/Backend/Video/getAllVideos.php').then(videos => this.videos = videos).catch(err => {
+            _renderToast('Failed to get all videos', err)
+        })
+        */
+        
     }
 
     _getAllPlaylists() {
-        request('../../src/Backend/Playlist/getAllPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get all playlists', err)
-        })
+        return html`
+        <iron-ajax
+            auto
+            url="${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php"
+            handle-as="json"
+            on-response="_handlePlaylistResponse"
+            debounce-duration = "500"
+        ></iron-ajax>
+        `
     }
 
+    /*
     _getSearchedPlaylists() {
         get('../../src/Backend/Playlist/getSearchedPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
             _renderToast('Failed to get searched playlists', err)
@@ -135,9 +161,22 @@ export class ViewHomepage extends LitElement {
             _renderToast('Failed to get searched videos', err)
         })
     }
+   */
 
     _renderToast(msg, err) {
         return html`<paper-toast text='${msg + ':' + err}'></paper-toast>`
     }
+    
+
+    _handlePlaylistResponse(event, request) {
+        this.playlists = request.response;
+        console.log(this.playlists);
+    }
+
+    _handleVideoResponse(event, request) {
+        this.videos = request.response;
+        console.log(this.videos);
+    }
+    
 }
 customElements.define('view-homepage', ViewHomepage);

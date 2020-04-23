@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-toast'
 import store from '../Redux/store'
 import '../Components/component-usermanagement'
-import get from '../Utility/requests';
 
 export class ViewAdmin extends LitElement {
 
@@ -28,9 +27,9 @@ export class ViewAdmin extends LitElement {
         this.admins = [];
 
         //Fill arrays
-        this._getPendingTeachers();
-        this._getValidatedTeachers();
-        this._getAdmins();
+        //this._getPendingTeachers();
+        //this._getValidatedTeachers();
+        //this._getAdmins();
     }
 
     static get styles() {
@@ -62,25 +61,25 @@ export class ViewAdmin extends LitElement {
         ${this.admins.map(i => html`<component-usermanagement .user=${i}></component-usermanagement>`)}
         `
     }
-
-    _getPendingTeachers() {
-        get('../../Backend/User/getPendingTeachers.php').then(pending => this.teachersPending = pending).catch(err => {
-            _renderToast('Failed to get pending teachers', err)
-        })
-    }
-
-    _getValidatedTeachers() {
-        get('../../Backend/User/getConfirmedTeachers.php').then(confirmed => this.teachersConfirmed = confirmed).catch(err => {
-            _renderToast('Failed to get teachers', err)
-        })
-    }
-
-    _getAdmins() {
-        get('../../Backend/User/getAdmins.php').then(admins => this.admins = admins).catch(err => {
-            _renderToast('Failed to get admins', err)
-        })
-    }
-
+    /*
+        _getPendingTeachers() {
+            get('../../Backend/User/getPendingTeachers.php').then(pending => this.teachersPending = pending).catch(err => {
+                _renderToast('Failed to get pending teachers', err)
+            })
+        }
+    
+        _getValidatedTeachers() {
+            get('../../Backend/User/getConfirmedTeachers.php').then(confirmed => this.teachersConfirmed = confirmed).catch(err => {
+                _renderToast('Failed to get teachers', err)
+            })
+        }
+    
+        _getAdmins() {
+            get('../../Backend/User/getAdmins.php').then(admins => this.admins = admins).catch(err => {
+                _renderToast('Failed to get admins', err)
+            })
+        }
+    */
     _renderToast(msg, err) {
         return html`<paper-toast text='${msg + ':' + err}'></paper-toast>`
     }

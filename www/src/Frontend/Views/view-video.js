@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
+import store from '../Redux/store'
 import '../Components/component-videoplayer'
 import '../Components/component-videoinfo'
 

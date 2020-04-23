@@ -1,26 +1,33 @@
 import { LOG_IN, LOG_OUT } from "./constants";
 
 const initialState = {
-    user: { 
-
-     }
+    user: {
+        uid: -1,
+        email: null,
+        userType: null
+    }
 };
 
 function rootReducer(state = initialState, action) {
-    if (action.type === LOG_IN) {
-        state = {
-            ...state,
-            user: action.details
-        }
-    } else if (action.type === LOG_OUT) {
-        state = {
-            ...state,
-            user: { 
-                
-             }
-        }
+    switch (action.type) {
+        case LOG_IN:
+            //Update the state
+            return {
+                ...state,
+                ...action.details,
+            }
+
+        case LOG_OUT:
+            //Reset the state
+            return {
+                ...state,
+                ...USER_INITIAL_STATE
+            }
+
+        default:
+            //Use existing state
+            return state
     }
-    return state;
 };
 
 export default rootReducer;
