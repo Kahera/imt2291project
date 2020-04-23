@@ -19,9 +19,10 @@ export class ViewError extends LitElement {
         return html`
         <h2>Error</h2>
 
-        <P>There was an error. 
-            <paper-button href="/">Go back home</paper-button>
-        </P>`;
+        <p>There was an error.</p>
+        <a href="/">
+            <paper-button raised>Go back home</paper-button>
+        </a>`;
     }
 
 }

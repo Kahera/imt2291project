@@ -18,7 +18,7 @@ export class ViewLogin extends LitElement {
                 type: Boolean,
                 value: false
             },
-            username: {
+            email: {
                 type: String,
             }
         }
@@ -51,15 +51,22 @@ export class ViewLogin extends LitElement {
 
     render() {
         return html`
+        <p>Hello from login</p>
+        
         <paper-card class="card">
             <div class="card-content">
-                <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
-                <paper-input type="password" id="password" label="Password" autocomplete="password" required></paper-input>
-                <paper-button class="btn" raised id="register">Register</paper-button>
-                <paper-button class="btn" raised id="login">Log in</paper-button>
+                <form onsubmit="javascript: return false;">
+                    <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
+                    <paper-input type="password" id="password" label="Password" autocomplete="password" required></paper-input>
+                    <a href="${window.MyAppGlobals.serverURL}register">
+                        <paper-button class="btn" raised id="register">Register</paper-button>
+                    </a>
+                    <paper-button class="btn" raised id="login" @click="${this.login}">Log in</paper-button>
+                </form>
             </div>
         </paper-card>
-            `;
+        
+        `;
     }
 
 

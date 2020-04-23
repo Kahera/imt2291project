@@ -1,8 +1,16 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
-import '@polymer/app-route/app-location.js';
-import '@polymer/app-route/app-route.js';
-import '@polymer/iron-selector/iron-selector.js';
+import '@polymer/app-route/app-location';
+import '@polymer/app-route/app-route';
+import '@polymer/app-layout/app-layout'
+import '@polymer/iron-selector/iron-selector';
+import '@polymer/iron-pages/iron-pages'
+import '@polymer/iron-icon'
+import '@polymer/iron-icons'
+import '@polymer/paper-input/paper-input'
+import '@polymer/paper-icon-button'
+import '@polymer/paper-button/paper-button'
+
 
 import store from './Redux/store'
 
@@ -25,29 +33,6 @@ setRootPath(MyAppGlobals.rootPath);
 
 export class AppCoordinator extends PolymerElement {
 
-    render() {
-        return html`
-        
-        <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
-        </app-location>
-  
-        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
-        </app-route>
-
-        <a href="[[rootPath]]admin">admin</a>
-
-        <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <view-register name="register"></view-register>
-            <view-login name="login"></view-login>
-            <view-homepage name="homepage"></view-homepage>
-            <view-playlist name="playlist"></view-playlist>
-            <view-video name="video"></view-video>
-            <view-admin name="admin"></view-admin>
-            <view-error name="error"></view-error>
-        </iron-pages>
-        `;
-    }
-
     static get properties() {
         return {
             page: {
@@ -57,9 +42,15 @@ export class AppCoordinator extends PolymerElement {
             },
             routeData: Object,
             subroute: Object,
-            user: Object
+            user: {
+                type: Object,
+                value: { student: false, teacher: false, admin: false }
+            },
+            drawerOpened: Boolean
         }
     }
+
+    //TODO: Figure out logout
 
     constructor() {
         super();
@@ -68,10 +59,145 @@ export class AppCoordinator extends PolymerElement {
         const data = store.getState();
         this.user = data.user;
 
+        console.log(this.user)
         //Subscribe to changes in storage
+
         store.subscribe((state) => {
             this.user = store.getState().user;
         })
+
+        this.drawerOpened = false;
+    }
+
+    static get template() {
+        return html`
+
+        <style>
+            app-header {
+                background-color: whitesmoke;
+            --app-header-background-rear-layer: {
+                background-color: whitesmoke;
+                }; 
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+      
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            .toolbar {
+                color: rgb(70, 70, 70);
+                display: grid;
+                grid-template-columns: 1em 2fr 10fr 2fr 1em;
+                grid-template-rows: auto;
+                padding-bottom: 1em;
+            }
+
+            .drawer-list {
+                margin: 0 20px;
+            }
+    
+            .drawer-list a {
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 40px;
+            }
+    
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
+              
+            .searchbar {
+                grid-column-start: 3;
+                margin-bottom: 1em;
+                width: 100%;
+                align-self: center;
+                justify-self: right;
+            }
+
+            #btn-home {
+                display: inline-block;
+                grid-column-start: 2;
+                align-self: center;
+                justify-self: left;
+            }
+
+            #input-search {
+                width: 80%;
+                display: inline-block;
+            }
+
+            #btn-search {
+                display: inline-block;
+            }
+
+            #btn-drawer {
+                font-size: small;
+                width: 50%; 
+                grid-column-start: 4;
+                align-self: center;
+                justify-self: right;
+            }
+        </style>
+        
+        <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
+        </app-location>
+  
+        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
+        </app-route>
+        
+        <!-- App drawer content -->
+        <app-drawer-layout fullbleed="" force-narrow>
+            <app-drawer slot="drawer" id="drawer" align="right" swipe-open="right" position="right" opened>
+                <div class="drawer-content">
+                    <iron-selector slected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                        <a href="[[rootPath]]login">Log in</a>
+                        <a href="[[rootPath]]logout">Log out</a>
+                        <a href="[[rootPath]]videoUpload">Video upload</a>
+                        <a href="[[rootPath]]playlistCreation">Playlist creation</a>
+                        <a href="[[rootPath]]admin">Admin page</a>
+                    </iron-selector>
+                </div>
+            </app-drawer>
+
+            <!--Toolbar -->
+            <app-header-layout>
+                <app-header reveals>
+                    <app-toolbar class="toolbar">
+                        <a href="[[rootPath]]">
+                            <paper-icon-button class="btn" icon="home" id="btn-home"></paper-icon-button>
+                        </a>
+                        <div class="searchbar">
+                            <paper-input id="input-search" label="Search"></paper-input>
+                            <paper-icon-button icon="search" id="btn-search"></paper-icon-button>
+                        </div>
+                        <paper-icon-button class="btn" icon="account-circle" id="btn-drawer" drawer-toggle></paper-icon-button>
+                    </app-toolbar>
+                </app-header>
+
+                <!-- Main website content -->
+                <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+                    <view-register name="register"></view-register>
+                    <view-login name="login"></view-login>
+                    <view-homepage name="homepage"></view-homepage>
+                    <view-playlist name="playlist"></view-playlist>
+                    <view-video name="video"></view-video>
+                    <view-admin name="admin"></view-admin>
+                    <view-error name="error"></view-error>
+                </iron-pages>
+
+            </app-header-layout>
+        </app-drawer-layout>
+
+        `;
     }
 
     static get observers() {
@@ -84,14 +210,11 @@ export class AppCoordinator extends PolymerElement {
         // Show the corresponding page according to the route.
         //
         // If no page was found in the route data, page will be an empty string.
-        // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
-        console.log(page)
+        // Show 'homepage' in that case. And if the page doesn't exist, show 'error'.
         if (!page) {
             this.page = 'homepage';
-            console.log(page)
         } else if (['register', 'login', 'homepage', 'playlist', 'video', 'admin', 'error'].indexOf(page) !== -1) {
             this.page = page;
-            console.log(page)
         } else {
             this.page = 'error';
         }
@@ -107,7 +230,6 @@ export class AppCoordinator extends PolymerElement {
         //
         // Note: `polymer build` doesn't like string concatenation in the import
         // statement, so break it up.
-        console.log(page)
         switch (page) {
             case 'register':
                 import('./Views/view-register.js');
@@ -131,6 +253,10 @@ export class AppCoordinator extends PolymerElement {
                 import('./Views/view-error.js');
                 break;
         }
+    }
+
+    _drawerToggle() {
+        this.drawerOpened = !this.drawerOpened;
     }
 }
 customElements.define('app-coordinator', AppCoordinator);
