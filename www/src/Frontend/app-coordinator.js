@@ -71,8 +71,11 @@ export class AppCoordinator extends PolymerElement {
 
     static get template() {
         return html`
-
         <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+            }
+
             app-header {
                 background-color: whitesmoke;
             --app-header-background-rear-layer: {
@@ -161,9 +164,16 @@ export class AppCoordinator extends PolymerElement {
                     <iron-selector slected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                         <a href="[[rootPath]]login">Log in</a>
                         <a href="[[rootPath]]logout">Log out</a>
-                        <a href="[[rootPath]]videoUpload">Video upload</a>
-                        <a href="[[rootPath]]playlistCreation">Playlist creation</a>
-                        <a href="[[rootPath]]admin">Admin page</a>
+                        
+                        <template is="dom-if" if="{{user.isTeacher}}">
+                            <a href="[[rootPath]]videoUpload">Video upload</a>
+                            <a href="[[rootPath]]playlistCreation">Playlist creation</a>
+                        </template>
+                        <template is="dom-if" if="{{user.isAdmin}}">
+                            <a href="[[rootPath]]videoUpload">Video upload</a>
+                            <a href="[[rootPath]]playlistCreation">Playlist creation</a>
+                            <a href="[[rootPath]]admin">Admin page</a>
+                        </template>
                     </iron-selector>
                 </div>
             </app-drawer>

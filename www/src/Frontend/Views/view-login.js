@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
+import store from '../Redux/store'
+import { login } from '../Redux/actions'
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
@@ -32,6 +34,17 @@ export class ViewLogin extends LitElement {
                 padding: 2em;
             }
 
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            paper-input.custom {
+                --paper-input-container-label-floating: {
+                    width: auto;
+                }    
+            }
+
             .card {
                 width: 50em;
             }
@@ -51,17 +64,22 @@ export class ViewLogin extends LitElement {
 
     render() {
         return html`
-        <p>Hello from login</p>
-        
         <paper-card class="card">
             <div class="card-content">
+                <label for="msg">${this.msg}</label>
                 <form onsubmit="javascript: return false;">
-                    <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
-                    <paper-input type="password" id="password" label="Password" autocomplete="password" required></paper-input>
-                    <a href="${window.MyAppGlobals.serverURL}register">
+                    <paper-input-container always-float-label auto-validate>
+                        <label slot="label" for="email">Email</label>
+                        <input slot="input" type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$"><br/>
+                    </paper-input-container>
+                    <paper-input-container always-float-label auto-validate>
+                        <label slot="label" for="password">Password</label>
+                        <input slot="input" type="password" id="password" name="password"><br/>
+                    </paper-input-container>
+                    <a href="${window.MyAppGlobals.rootPath}register">
                         <paper-button class="btn" raised id="register">Register</paper-button>
                     </a>
-                    <paper-button class="btn" raised id="login" @click="${this.login}">Log in</paper-button>
+                    <button class="btn" id="login" @click="${this.login}">Log in</button>
                 </form>
             </div>
         </paper-card>
@@ -78,20 +96,22 @@ export class ViewLogin extends LitElement {
      */
     login(e) {
         const data = new FormData(e.target.form); // Wrap the form in a FormData object
-        fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Utility/login.php`, {
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/User/login.php`);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/login.php`, {
             method: 'POST',
             credentials: "include",
             body: data
-        }
-        ).then(res => res.json())         // When a reply has arrived
-            .then(res => {
-                if (res.status == 'OK') {  // Successfully logged in
-                    this.updateStatus(res);
-                    store.dispatch(logIn({ uid: res.uid, uname: res.uname, userType: res.userType }));
-                } else {
-                    //TODO: Tell user login failed
-                }
-            })
+        }).then(res => {
+            if (res.ok) {                   // Successfully logged in
+                res => res.json();
+                this.updateUserStatus(res);
+                store.dispatch(login({ uid: res.uid, email: res.email, userType: res.userType }));
+                window.location.href = (window.MyAppGlobals.rootPath);
+            } else {
+                this.msg = res.msg;
+            }
+        })
     }
 
     /**
@@ -103,8 +123,8 @@ export class ViewLogin extends LitElement {
         }
         ).then(res => res.json())
             .then(res => {
-                if (res.status == 'SUCCESS') {  // Successfully logged out
-                    this.updateStatus(res);
+                if (res.ok) {  // Successfully logged out
+                    this.updateUserStatus(res);
                     store.dispatch(logOut());
                 } else {
                     //TODO: Tell user no logout happened
@@ -113,11 +133,21 @@ export class ViewLogin extends LitElement {
     }
 
     updateUserStatus(res) {
-        this.loggedin = (res.res.uid != null);
+        this.loggedin = (res.uid != null);
         this.userType = res.userType;
         this.validate = res.validated;
-        this.username = res.username;
+        this.email = res.email;
+        this.student = false;
+        this.teacher = false;
+        this.admin = false;
+        switch (res.userType) {
+            case 'student': this.student = true;
+                break;
+            case 'teacher': this.teacher = true;
+                break;
+            case 'admin': this.admin = true;
+                break;
+        }
     }
-
 }
 customElements.define('view-login', ViewLogin);

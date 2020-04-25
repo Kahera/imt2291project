@@ -4,7 +4,9 @@ const initialState = {
     user: {
         uid: -1,
         email: null,
-        userType: null
+        isStudent: false,
+        isTeacher: false,
+        isAdmin: false
     }
 };
 

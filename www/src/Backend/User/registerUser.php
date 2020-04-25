@@ -1,28 +1,36 @@
 <?php
 
-require_once "classes/DB.php";
-require_once "classes/User.php";
+$http_origin = $_SERVER['HTTP_ORIGIN'];
 
+if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
+    header("Access-Control-Allow-Origin: $http_origin");
+}
+
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Origin");
+header("Content-Type: application/json; charset=utf-8");
+header("Access-Control-Allow-Credentials: true");
+
+require_once "../Classes/DB.php";
+require_once "../Classes/User.php";
 session_start();
-$header = API::header_init();
 $db = DB::getDBConnection();
 
-
-// "Listens" for posted register form
 $user = new User($db);
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 $password2 = $_POST['password_repeat'];
 
+
 // Check if user already exists
 $data['email'] = $email;
 $found = $user->getUserByEmail($data);
 
+
 // If user exists: error message
-if ($found) {
-    $msg = $email . " already exists!";
-    echo json_encode($msg);
+if ($found['uid'] > 0) {
+    $res['msg'] = $email . " already exists.";
 
     // If user doesn't exist: continue
 } else {
@@ -30,24 +38,21 @@ if ($found) {
     if (!strcmp($password, $password2)) { //strcmp returns 0 if matches
 
         // Set teacher if checkbox is ticked, otherwise set student
-        $userType = (isset($_POST['isTeacher'])) ? "teacher" : "student";
+        $userType = (isset($_POST['chk_lecturer'])) ? "teacher" : "student";
 
         // Create new user
         $userData['email'] = $email;
         $userData['password'] = password_hash($password, PASSWORD_DEFAULT);
-        if (isset($_POST['userType'])) {
-            $userData['userType'] = $userType;
-        }
+        $userData['userType'] = $userType;
         $tmp = $user->createUser($userData);
 
-        if ($tmp['errorMessage'] != 'OK') { //If user is not created
-            //Print error message
-            echo json_encode($tmp);
-        } else { //If user is created
-            $tmp['msg'] = 'User registered!';
-            echo json_encode($tmp);
+        if ($tmp['status'] == 'OK') {
+            $res['msg'] = "User created - log in!";
+        } else {
+            $res['msg'] = $tmp['errorMessage'];
         }
     } else { // Error msg if passwords don't match
-        echo json_encode("Passwords doesn't match, try again.");
+        $res['msg'] = "Passwords doesn't match, try again.";
     }
 }
+echo json_encode($res);

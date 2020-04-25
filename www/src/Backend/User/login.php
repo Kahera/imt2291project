@@ -1,13 +1,5 @@
 <?php
 
-//require_once "classes/API.php";
-require_once "../Classes/DB.php";
-require_once "../Classes/Video.php";
-
-session_start();
-//$header = API::header_init();
-$db = DB::getDBConnection();
-
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
@@ -19,11 +11,19 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-//Create playlist object
-$video = new Video($db);
+require_once "../Classes/DB.php";
+require_once "../Classes/User.php";
 
-//Get playlists
-$videos = $video->getVideos();
+session_start();
+$db = DB::getDBConnection();
 
-//Return playlists
-echo json_encode($videos);
+$email = $_POST['email'];
+$password = $_POST['password'];
+
+$user = new User($db);
+
+// Try to log on
+$status = $user->login($email, $password);
+
+// Check if status for login is OK
+echo json_encode($status);

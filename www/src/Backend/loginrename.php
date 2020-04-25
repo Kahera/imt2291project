@@ -37,7 +37,6 @@ if (isset($_POST['login'])) {
     if ($status['status'] == 'OK') {
         $playlist = new Playlist($db);
         $subscriptions = $playlist->getSubscriptions($_SESSION['uid']);
-
     } else {
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-require_once "classes/DB.php";
-require_once "classes/User.php";
+require_once "../Classes/DB.php";
+require_once "../Classes/User.php";
 
 session_start();
 $header = API::header_init();

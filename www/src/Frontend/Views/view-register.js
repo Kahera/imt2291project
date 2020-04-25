@@ -1,8 +1,12 @@
 import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-input/paper-input'
+import '@polymer/paper-input/paper-input-container'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
 import '@polymer/paper-checkbox/paper-checkbox'
+import '@polymer/paper-toast/paper-toast'
+import '@polymer/iron-ajax/iron-ajax'
+import '@polymer/iron-form/iron-form';
 
 export class ViewRegister extends LitElement {
 
@@ -23,6 +27,19 @@ export class ViewRegister extends LitElement {
             :host {
                 display: block;
                 padding: 2em;
+                align-content: center; 
+                justify-content: center; 
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            paper-input.custom {
+                --paper-input-container-label-floating: {
+                    width: auto;
+                }    
             }
 
             .card {
@@ -47,27 +64,47 @@ export class ViewRegister extends LitElement {
         <paper-card class="card">
             <div class="card-content">
                 <label for="msg">${this.msg}</label>
-                    <form onsubmit="javascript: return false;">
-                        <paper-input type="email" id="email" label="Email" autocomplete="email" required></paper-input>
-                        <paper-input type="new-password" id="password" label="Password" autocomplete="password" required></paper-input>
-                        <paper-input type="new-password" id="password_repeat" label="Password" autocomplete="password" required></paper-input>
-                        <paper-checkbox id="chk_lecturer">I am a lecturer</paper-checkbox>
-                        <paper-button class="btn" raised id="cancel" href="[[rootPath]]">Cancel</paper-button>
-                        <paper-button class="btn" raised id="register" @click="${this._register}">Register</paper-button>
-                    </form>
-                </div>
+                <form class="login" onsubmit="javascript: return false;">
+                    <paper-input-container always-float-label auto-validate>
+                        <label slot="label" for="email">Email</label>
+                        <input slot="input" type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" autocomplete><br/>
+                    </paper-input-container>
+                    <paper-input-container minlength="8" always-float-label auto-validate>
+                        <label slot="label" for="password">Password</label>
+                        <input slot="input" type="password" id="password" name="password" minlength="8" autocomplete="new-password"><br/>
+                    </paper-input-container>
+                    <paper-input-container always-float-label auto-validate>
+                        <label slot="label" for="password">Repeat password</label>
+                        <input slot="input" type="password" id="password_repeat" name="password_repeat" minlength="8" autocomplete="new-password"><br/>
+                    </paper-input-container>
+                    
+                    <a href="${window.MyAppGlobals.rootPath}login">
+                        <paper-button class="btn" raised id="cancel">Cancel</paper-button>
+                    </a>
+                    <button id="register" @click="${this.register}">Register</button>
+                </form>
+            </div>
         </paper-card>
         `;
     }
 
-    _register(e) {
+
+    register(e) {
         const data = new FormData(e.target.form);
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/register.php`, {
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/registerUser.php`, {
             method: 'POST',
             credentials: "include",
             body: data
-        }).then(res => res.json())
-            .then(data => this.msg = data['msg']);
+        }).then(res => res.json()
+        ).then(data => {
+            this.msg = data['msg'];
+            console.log(data['msg'])
+        });
+    }
+
+    _renderToast(msg) {
+        return html`<paper-toast text='${msg}'></paper-toast>`
     }
 }
 customElements.define('view-register', ViewRegister);

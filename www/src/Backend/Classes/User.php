@@ -58,24 +58,26 @@ class User
     $sth = $this->db->prepare($sql);
     $sth->execute(array($email));
 
-    $row = $sth->fetch(PDO::FETCH_ASSOC);
+    $result = $sth->fetch(PDO::FETCH_ASSOC);
 
-    if ($row) {
-      if (password_verify($password, $row['password'])) {
+    if ($result['uid'] > 0) {
+      if (password_verify($password, $result['password'])) {
         // Set user data with fetched data
-        $this->userData = $this->setUserData($row);
-        $this->setSessionData($row);
+        $this->userData = $this->setUserData($result);
+        $this->setSessionData($result);
 
         //Return OK
-        return array('status' => 'OK');
+        $result['msg'] = 'OK';
       } else {
         //Return bad password
-        return array('status' => 'FAIL', 'errorMessage' => 'Wrong password');
+        $result['msg'] = 'Wrong password';
       }
     } else {
       //Return bad user
-      return array('status' => 'FAIL', 'errorMessage' => 'No such user');
+      $result['msg'] = 'No such user';
     }
+
+    return $result;
   }
 
   /**

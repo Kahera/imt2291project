@@ -1,7 +1,7 @@
 <?php
 
-require_once "Classes/DB.php";
-require_once "Classes/Video.php";
+require_once "../Classes/DB.php";
+require_once "../Classes/Video.php";
 
 session_start();
 $header = API::header_init();
