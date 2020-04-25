@@ -9,7 +9,6 @@ services:
       - 8080:8080
     volumes:
       - ./www:/root/app
-      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
         - default
   php:
@@ -44,7 +43,6 @@ services:
       volumes:
           - ./dbInit:/docker-entrypoint-initdb.d
           - persistent:/var/lib/mysql
-          - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       networks:
           - default
   phpmyadmin:
