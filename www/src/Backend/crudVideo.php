@@ -16,23 +16,7 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-
 $db = DB::getDBConnection();
-
-//- - - - Video specific navigation - - - -
-// "Listen" for go to video home
-if (isset($_POST['videoHome'])) {
-    // Create empty video
-    $video = new Video($db);
-
-    // Get correct video
-    $results = $video->getVideos();
-
-    if ($_SESSION['userType'])
-
-        // Render video homepage
-        echo $twig->render('videoHome.html', array('results' => $results));
-}
 
 //- - - - CRUD - - - -
 // "Listen" for show video

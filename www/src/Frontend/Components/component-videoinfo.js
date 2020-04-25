@@ -60,7 +60,6 @@ export class ComponentVideoinfo extends LitElement {
                 html`
                         <!-- If video owner or admin, show input fields -->
                         //Show input with current info as placeholder
-                        //If video is empty object (uploading new video) - show help text as placeholder
                         <paper-input label="input-title" value="${this.video.title}"></paper-input>
                         <paper-input label="input-subject" value="${this.video.subject}"></paper-input>
                         <paper-input label="input-lecturer" value="${this.video.lecturer}"></paper-input>

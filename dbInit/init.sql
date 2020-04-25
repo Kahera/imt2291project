@@ -73,5 +73,8 @@ FOREIGN KEY(`playlist`) REFERENCES playlist(`pid`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 /* Insert an admin user */
-INSERT INTO user (email, password, userType, validated)
-VALUES ('admin@admin.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'admin', 1);
+INSERT INTO user (email, password, userType, validated) VALUES 
+('admin@admin.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'admin', 1), 
+('teacher@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 1), 
+('teacher2@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 0), 
+('student@student.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'student', 0);

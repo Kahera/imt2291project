@@ -169,13 +169,12 @@ class User
     //Should return one row
     if ($sth->rowCount() == 1) {
       $result = $sth->fetch();
-      $result['status'] = 'OK';
+      $result['msg'] = 'OK';
     } else {
-      $result['status'] = 'FAIL';
-      $result['errorMessage'] = 'Could not get user';
+      $result['msg'] = 'Could not get user';
     }
     if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-      $tmp['errorMessage'] = $this->db->errorInfo()[2];
+      $result['msg'] = $this->db->errorInfo()[2];
     }
     return $result;
   }

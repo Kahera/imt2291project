@@ -12,18 +12,24 @@ header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
 require_once "../Classes/DB.php";
-require_once "../Classes/User.php";
+require_once "../Classes/Video.php";
 
 session_start();
 $db = DB::getDBConnection();
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+// Create empty video
+$video = new Video($db);
 
-$user = new User($db);
+// Set video values
+$data['owner'] = $_SESSION['uid'];
+$data['title'] = $_POST['title'];
+$data['description'] = $_POST['description'];
+$data['lecturer'] = $_POST['lecturer'];
+$data['theme'] = $_POST['theme'];
+$data['subject'] = $_POST['subject'];
+$data['videofile'] = $_FILES['videofile']['tmp_name'];
 
-// Try to log on
-$res = $user->login($email, $password);
-$_SESSION['uid'] = $res['uid'];
+//Add video
+$tmp = $video->addVideo($data);
 
-echo json_encode($res);
+echo json_encode($tmp);

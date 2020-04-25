@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import store from '../Redux/store'
-import { login } from '../Redux/actions'
+import { action_login } from '../Redux/actions'
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 import '@polymer/paper-card/paper-card'
@@ -13,6 +13,9 @@ export class ViewLogin extends LitElement {
                 type: Boolean,
                 value: false
             },
+            uid: {
+                type: String
+            },
             userType: {
                 type: String,
             },
@@ -22,7 +25,19 @@ export class ViewLogin extends LitElement {
             },
             email: {
                 type: String,
-            }
+            },
+            admin: {
+                type: Boolean,
+                value: false
+            },
+            teacher: {
+                type: Boolean,
+                value: false
+            },
+            student: {
+                type: Boolean,
+                value: false
+            },
         }
     }
 
@@ -87,6 +102,19 @@ export class ViewLogin extends LitElement {
         `;
     }
 
+    firstUpdated(changedProperties) {
+        // Get user logged in status from server
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/loginStatus.php`, {
+            credentials: 'include'
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {              // User is logged in
+                this.updateUserStatus(res);         // Sets user name, user id and such
+                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
+            }
+        })
+    }
+
 
     /**
      * Called when the user clicks the log in button
@@ -96,46 +124,28 @@ export class ViewLogin extends LitElement {
      */
     login(e) {
         const data = new FormData(e.target.form); // Wrap the form in a FormData object
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/User/login.php`);
 
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/login.php`, {
             method: 'POST',
             credentials: "include",
             body: data
-        }).then(res => {
-            if (res.ok) {                   // Successfully logged in
-                res => res.json();
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {                   // Successfully logged in
                 this.updateUserStatus(res);
-                store.dispatch(login({ uid: res.uid, email: res.email, userType: res.userType }));
-                window.location.href = (window.MyAppGlobals.rootPath);
+                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
+                window.location.href = window.MyAppGlobals.rootPath;
             } else {
                 this.msg = res.msg;
             }
         })
     }
 
-    /**
-    * Called when the user clicks the log out button
-    */
-    logout() {
-        fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Utility/logout.php`, {
-            credentials: "include"
-        }
-        ).then(res => res.json())
-            .then(res => {
-                if (res.ok) {  // Successfully logged out
-                    this.updateUserStatus(res);
-                    store.dispatch(logOut());
-                } else {
-                    //TODO: Tell user no logout happened
-                }
-            })
-    }
-
     updateUserStatus(res) {
         this.loggedin = (res.uid != null);
+        this.uid = res.uid;
         this.userType = res.userType;
-        this.validate = res.validated;
+        this.validated = res.validated;
         this.email = res.email;
         this.student = false;
         this.teacher = false;
@@ -149,5 +159,6 @@ export class ViewLogin extends LitElement {
                 break;
         }
     }
+
 }
 customElements.define('view-login', ViewLogin);

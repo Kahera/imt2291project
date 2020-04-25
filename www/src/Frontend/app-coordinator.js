@@ -10,10 +10,10 @@ import '@polymer/iron-icons'
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-icon-button'
 import '@polymer/paper-button/paper-button'
+import '@polymer/paper-toast/paper-toast'
 
-
+import { action_logout } from './Redux/actions'
 import store from './Redux/store'
-
 import './Views/view-login'
 import './Views/view-homepage'
 import './Views/view-error'
@@ -50,18 +50,15 @@ export class AppCoordinator extends PolymerElement {
         }
     }
 
-    //TODO: Figure out logout
-
     constructor() {
         super();
 
         //Load user from storage
         const data = store.getState();
+        console.log(data);
         this.user = data.user;
 
-        console.log(this.user)
         //Subscribe to changes in storage
-
         store.subscribe((state) => {
             this.user = store.getState().user;
         })
@@ -162,11 +159,14 @@ export class AppCoordinator extends PolymerElement {
             <app-drawer slot="drawer" id="drawer" align="right" swipe-open="right" position="right" opened>
                 <div class="drawer-content">
                     <iron-selector slected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                        <a href="[[rootPath]]login">Log in</a>
-                        <a href="[[rootPath]]logout">Log out</a>
-                        
+                        <template is="dom-if" if="{{!user.email}}">
+                            <a href="[[rootPath]]login">Log in</a>
+                        </template>
+                        <template is="dom-if" if="{{user.email}}">
+                            <a on-click="logout">Log out</a>
+                        </template>
                         <template is="dom-if" if="{{user.isTeacher}}">
-                            <a href="[[rootPath]]videoUpload">Video upload</a>
+                            <a href="[[rootPath]]videoupload">Video upload</a>
                             <a href="[[rootPath]]playlistCreation">Playlist creation</a>
                         </template>
                         <template is="dom-if" if="{{user.isAdmin}}">
@@ -200,6 +200,7 @@ export class AppCoordinator extends PolymerElement {
                     <view-homepage name="homepage"></view-homepage>
                     <view-playlist name="playlist"></view-playlist>
                     <view-video name="video"></view-video>
+                    <view-videoupload name="videoupload"></view-videoupload>
                     <view-admin name="admin"></view-admin>
                     <view-error name="error"></view-error>
                 </iron-pages>
@@ -217,13 +218,14 @@ export class AppCoordinator extends PolymerElement {
     }
 
     _routePageChanged(page) {
+        console.log(this.user);
         // Show the corresponding page according to the route.
         //
         // If no page was found in the route data, page will be an empty string.
         // Show 'homepage' in that case. And if the page doesn't exist, show 'error'.
         if (!page) {
             this.page = 'homepage';
-        } else if (['register', 'login', 'homepage', 'playlist', 'video', 'admin', 'error'].indexOf(page) !== -1) {
+        } else if (['register', 'login', 'homepage', 'playlist', 'video', 'videoupload', 'admin', 'error'].indexOf(page) !== -1) {
             this.page = page;
         } else {
             this.page = 'error';
@@ -256,6 +258,9 @@ export class AppCoordinator extends PolymerElement {
             case 'video':
                 import('./Views/view-video.js');
                 break;
+            case 'videoupload':
+                import('./Views/view-videoupload.js');
+                break;
             case 'admin':
                 import('./Views/view-admin.js');
                 break;
@@ -268,5 +273,44 @@ export class AppCoordinator extends PolymerElement {
     _drawerToggle() {
         this.drawerOpened = !this.drawerOpened;
     }
+
+    /**
+    * Called when the user clicks the log out button
+    */
+    logout() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/logout.php`, {
+            credentials: "include"
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {  // Successfully logged out
+                this.updateUserStatus(res);
+                store.dispatch(action_logout());
+            } else {
+                return html`
+                <paper-toast text="[[res.msg]]" opened></paper-toast>`
+            }
+        })
+    }
+
+    updateUserStatus(res) {
+        this.loggedin = (res.uid != null);
+        this.uid = res.uid;
+        this.userType = res.userType;
+        this.validated = res.validated;
+        this.email = res.email;
+        this.student = false;
+        this.teacher = false;
+        this.admin = false;
+        switch (res.userType) {
+            case 'student': this.student = true;
+                break;
+            case 'teacher': this.teacher = true;
+                break;
+            case 'admin': this.admin = true;
+                break;
+        }
+    }
+
+
 }
 customElements.define('app-coordinator', AppCoordinator);

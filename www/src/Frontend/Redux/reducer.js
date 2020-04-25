@@ -4,6 +4,7 @@ const initialState = {
     user: {
         uid: -1,
         email: null,
+        userType: null,
         isStudent: false,
         isTeacher: false,
         isAdmin: false
@@ -14,22 +15,23 @@ function rootReducer(state = initialState, action) {
     switch (action.type) {
         case LOG_IN:
             //Update the state
-            return {
+            state = {
                 ...state,
-                ...action.details,
+                user: action.details,
             }
-
+            break;
         case LOG_OUT:
             //Reset the state
-            return {
+            state = {
                 ...state,
-                ...USER_INITIAL_STATE
+                user: initialState
             }
-
+            break;
         default:
             //Use existing state
-            return state
+            break;
     }
+    console.log(state);
+    return state;
 };
-
 export default rootReducer;

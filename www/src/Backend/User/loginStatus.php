@@ -1,5 +1,7 @@
 <?php
 
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
     header("Access-Control-Allow-Origin: $http_origin");
 }
@@ -15,14 +17,10 @@ require_once "../Classes/User.php";
 session_start();
 $db = DB::getDBConnection();
 
+$res['loggedIn'] = false;
+if (isset($_SESSION['uid'])) {
+    $user = new User($db);
+    $res = $user->getUserByID($_SESSION);
+}
 
-//Create new user object
-$user = new User($db);
-
-//Get unvalidated teachers
-$data['userType'] = 'teacher';
-$data['validated'] = 0;
-$newTeachers = $user->getUsersByTypeAndValidation($data);
-
-//Return result
-echo json_encode($newTeachers);
+echo json_encode($res);
