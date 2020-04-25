@@ -61,21 +61,21 @@ export class ViewRegister extends LitElement {
 
     render() {
         return html`
-        <paper-card class="card">
+        <paper-card class="card" heading="Register">
             <div class="card-content">
                 <label for="msg">${this.msg}</label>
                 <form class="login" onsubmit="javascript: return false;">
                     <paper-input-container always-float-label auto-validate>
                         <label slot="label" for="email">Email</label>
-                        <input slot="input" type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" autocomplete><br/>
+                        <input slot="input" type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" autocomplete placeholder="example@domain.com"><br/>
                     </paper-input-container>
                     <paper-input-container minlength="8" always-float-label auto-validate>
                         <label slot="label" for="password">Password</label>
-                        <input slot="input" type="password" id="password" name="password" minlength="8" autocomplete="new-password"><br/>
+                        <input slot="input" type="password" id="password" name="password" minlength="8" autocomplete="new-password" placeholder="********"><br/>
                     </paper-input-container>
                     <paper-input-container always-float-label auto-validate>
                         <label slot="label" for="password">Repeat password</label>
-                        <input slot="input" type="password" id="password_repeat" name="password_repeat" minlength="8" autocomplete="new-password"><br/>
+                        <input slot="input" type="password" id="password_repeat" name="password_repeat" minlength="8" autocomplete="new-password" placeholder="********"><br/>
                     </paper-input-container>
                     
                     <a href="${window.MyAppGlobals.rootPath}login">

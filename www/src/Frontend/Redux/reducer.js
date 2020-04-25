@@ -31,7 +31,6 @@ function rootReducer(state = initialState, action) {
             //Use existing state
             break;
     }
-    console.log(state);
     return state;
 };
 export default rootReducer;

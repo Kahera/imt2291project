@@ -18,8 +18,9 @@ CREATE TABLE `video` (
   `subject` VARCHAR(64) NOT NULL,
   `avgRating` int NOT NULL DEFAULT 0,
   `noVotes` int NOT NULL DEFAULT 0,
-  `thumbnailfile` LONGBLOB,
   `videofile` LONGBLOB NOT NULL,
+  `thumbnailfile` LONGBLOB,
+  `subtitles` text DEFAULT NULL,
   PRIMARY KEY (`vid`), 
   FOREIGN KEY (`ownerid`) REFERENCES user(`uid`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
@@ -31,7 +32,6 @@ CREATE TABLE `playlist` (
 `title` VARCHAR(64) NOT NULL,
 `theme` VARCHAR(64) NOT NULL,
 `description` VARCHAR(64) NOT NULL,
-`thumbnailfile` LONGBLOB,
 PRIMARY KEY (`pid`),
 FOREIGN KEY (`ownerid`) REFERENCES user(`uid`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;

@@ -9,6 +9,7 @@ services:
       - 8080:8080
     volumes:
       - ./www:/root/app
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
         - default
   php:
@@ -20,6 +21,7 @@ services:
       volumes:
           - ./www:/var/www/html/
           - ./logs:/var/log/apache2/
+          - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       networks:
           - default
   tests:
@@ -33,6 +35,7 @@ services:
           - default
   db:
       image: mariadb
+      command: --max_allowed_packet=1073741824
       environment:
           MYSQL_DATABASE: imt2291-proj2
           MYSQL_USER: admin
@@ -41,6 +44,7 @@ services:
       volumes:
           - ./dbInit:/docker-entrypoint-initdb.d
           - persistent:/var/lib/mysql
+          - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       networks:
           - default
   phpmyadmin:
@@ -52,6 +56,8 @@ services:
           MYSQL_PASSWORD: test
           MYSQL_ROOT_PASSWORD: test
           PMA_HOST: db
+      volumes: 
+        - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       networks:
           - default
   selenium-hub:

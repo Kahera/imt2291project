@@ -10,6 +10,18 @@ export class ViewError extends LitElement {
                 display: block;
                 padding: 10px 20px;
             }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            .btn {
+                font-size: small;
+                margin-top: 1em;
+                margin-bottom: 0.8em;
+            }
+
             `,
         ]
     }

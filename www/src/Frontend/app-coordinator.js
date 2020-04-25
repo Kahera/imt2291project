@@ -55,7 +55,6 @@ export class AppCoordinator extends PolymerElement {
 
         //Load user from storage
         const data = store.getState();
-        console.log(data);
         this.user = data.user;
 
         //Subscribe to changes in storage
@@ -218,7 +217,6 @@ export class AppCoordinator extends PolymerElement {
     }
 
     _routePageChanged(page) {
-        console.log(this.user);
         // Show the corresponding page according to the route.
         //
         // If no page was found in the route data, page will be an empty string.

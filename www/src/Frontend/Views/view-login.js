@@ -79,17 +79,17 @@ export class ViewLogin extends LitElement {
 
     render() {
         return html`
-        <paper-card class="card">
+        <paper-card class="card" heading="Login">
             <div class="card-content">
                 <label for="msg">${this.msg}</label>
                 <form onsubmit="javascript: return false;">
                     <paper-input-container always-float-label auto-validate>
                         <label slot="label" for="email">Email</label>
-                        <input slot="input" type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$"><br/>
+                        <input slot="input" type="email" id="email" name="email" placeholder="example@domain.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$"><br/>
                     </paper-input-container>
                     <paper-input-container always-float-label auto-validate>
                         <label slot="label" for="password">Password</label>
-                        <input slot="input" type="password" id="password" name="password"><br/>
+                        <input slot="input" type="password" id="password" name="password" placeholder="********"><br/>
                     </paper-input-container>
                     <a href="${window.MyAppGlobals.rootPath}register">
                         <paper-button class="btn" raised id="register">Register</paper-button>
@@ -102,14 +102,17 @@ export class ViewLogin extends LitElement {
         `;
     }
 
+    /*
+    * Makes sure the user stays logged in when the page is reloaded
+    */
     firstUpdated(changedProperties) {
-        // Get user logged in status from server
+        //Get user logged in status from server
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/loginStatus.php`, {
             credentials: 'include'
         }).then(res => res.json()
         ).then(res => {
-            if (res.msg == 'OK') {              // User is logged in
-                this.updateUserStatus(res);         // Sets user name, user id and such
+            if (res.msg == 'OK') {              //User is logged in
+                this.updateUserStatus(res);     //Set user name, user id etc
                 store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
             }
         })
@@ -123,7 +126,7 @@ export class ViewLogin extends LitElement {
      * information about the form.
      */
     login(e) {
-        const data = new FormData(e.target.form); // Wrap the form in a FormData object
+        const data = new FormData(e.target.form); //Wrap the form in a FormData object
 
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/login.php`, {
             method: 'POST',
@@ -131,9 +134,12 @@ export class ViewLogin extends LitElement {
             body: data
         }).then(res => res.json()
         ).then(res => {
-            if (res.msg == 'OK') {                   // Successfully logged in
+            //Successfully logged in
+            if (res.msg == 'OK') {
                 this.updateUserStatus(res);
                 store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
+
+                //Redirect logged in user to homepage
                 window.location.href = window.MyAppGlobals.rootPath;
             } else {
                 this.msg = res.msg;

@@ -13,25 +13,52 @@ class Video
     //------------------------------CRUD--------------------------------------
     public function addVideo($data)
     {
+        $tmp = [];
         if (is_uploaded_file($_FILES['videofile']['tmp_name'])) {
+            // Create data array to send to database
+            $sqlData = array($_SESSION['uid'], $data['title'], $data['description'], $data['lecturer'], $data['theme'], $data['subject']);
+
+            //Insert initial values
+            $sql = 'INSERT INTO video (ownerid, title, description, lecturer, theme, subject, videofile';
+            $sqlValues = ') VALUES (?, ?, ?, ?, ?, ?, ?';
+
             //Get files
             $videofile = file_get_contents($_FILES['videofile']['tmp_name']);
-            $thumbnailfile = file_get_contents($_FILES['thumbnailfile']['tmp_name']);
+            array_push($sqlData, $videofile);
+
+            // Optional fields
+            if (is_uploaded_file($_FILES['thumbnailfile']['tmp_name'])) {
+                $thumbnailfile = file_get_contents($_FILES['thumbnailfile']['tmp_name']);
+                array_push($sqlData, $thumbnailfile);
+                $sql .= ', thumbnailfile';
+                $sqlValues .= ', ?';
+            }
+            if (is_uploaded_file($_FILES['subtitles']['tmp_name'])) {
+                $subtitles = file_get_contents($_FILES['subtitles']['tmp_name']);
+                array_push($sqlData, $subtitles);
+                $sqlValues .= ', ?';
+            }
+
+            //Finish creating SQL statement
+            $sqlValues .= ')';
+            $sql .= $sqlValues;
 
             //Make and prepare statement for inserting
-            $sql = 'INSERT INTO video (ownerid, title, description, lecturer, theme, subject, thumbnailfile, videofile) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
             $sth = $this->db->prepare($sql);
 
             //Execute statement
-            $sth->execute(array($_SESSION['uid'], $data['title'], $data['description'], $data['lecturer'], $data['theme'], $data['subject'], $thumbnailfile, $videofile));
+            $sth->execute($sqlData);
+            $tmp['error'] = $sth->errorInfo();
 
             //Unset file variables to free memory
             unset($videofile);
             unset($thumbnailfile);
+            unset($subtitles);
+
 
             //Check that it was uploaded correctly
             if ($sth->rowCount() == 1) {
-                $tmp['msg'] = 'Video uploaded.';
+                $tmp['msg'] = 'OK';
             } else {
                 $tmp['msg'] = 'Could not upload video.';
             }
@@ -39,7 +66,7 @@ class Video
                 $tmp['msg'] = $this->db->errorInfo()[2];
             }
         } else {
-            $tmp['msg'] = "Could not get uploaded files";
+            $tmp['msg'] = "Could not retrieve uploaded files";
         }
         return $tmp;
     }
