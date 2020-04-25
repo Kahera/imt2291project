@@ -16,11 +16,8 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-try {
-    $db = DB::getDBConnection();
-} catch (Exception $e) {
-    //respond(500, 'Unable to connect to the database.');
-}
+
+$db = DB::getDBConnection();
 
 // "Listens" for posted form
 if (isset($_POST['login'])) {

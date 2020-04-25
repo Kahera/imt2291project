@@ -1,13 +1,5 @@
 <?php
 
-//require_once "classes/API.php";
-require_once "../Classes/DB.php";
-require_once "../Classes/Video.php";
-
-session_start();
-//$header = API::header_init();
-$db = DB::getDBConnection();
-
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
@@ -18,6 +10,12 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
+
+require_once "../Classes/DB.php";
+require_once "../Classes/Video.php";
+
+session_start();
+$db = DB::getDBConnection();
 
 //Create playlist object
 $video = new Video($db);
