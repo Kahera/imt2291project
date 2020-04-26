@@ -19,17 +19,15 @@ class Playlist
 
         //Query should create one new row
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
-            $tmp['pid'] = $this->db->lastInsertId();
+            $result['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not create new playlist';
+            $result['msg'] = 'Could not create new playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $result['msg'] = $this->db->errorInfo()[2];
         }
 
-        return $tmp;
+        return $result;
     }
 
     public function getPlaylistById($pid)
@@ -40,13 +38,13 @@ class Playlist
 
         if ($sth->rowCount() == 1) {
             $result = $sth->fetch();
-            $tmp['status'] = 'OK';
+            $result['status'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not get playlist';
+            $result['status'] = 'FAIL';
+            $result['msg'] = 'Could not get playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $result['msg'] = $this->db->errorInfo()[2];
         }
         return $result;
     }
@@ -60,10 +58,10 @@ class Playlist
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
         } else {
-            $results['rows'] = 0;
+            $results['msg'] = "No playlists to show.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $results['msg'] = $this->db->errorInfo()[2];
         }
         return $results;
     }
@@ -81,10 +79,10 @@ class Playlist
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
         } else {
-            $results = null;
+            $results['msg'] = "No playlists to get.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $results['msg'] = $this->db->errorInfo()[2];
         }
         return $results;
     }

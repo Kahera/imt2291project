@@ -60,13 +60,13 @@ class Video
             if ($sth->rowCount() == 1) {
                 $tmp['msg'] = 'OK';
             } else {
-                $tmp['msg'] = 'Could not upload video.';
+                $tmp['msg'] = 'Could not upload video. The file might be too large.';
             }
             if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
                 $tmp['msg'] = $this->db->errorInfo()[2];
             }
         } else {
-            $tmp['msg'] = "Could not retrieve uploaded files";
+            $tmp['msg'] = "Could not retrieve uploaded files. The file might be too large.";
         }
         return $tmp;
     }
@@ -79,30 +79,30 @@ class Video
 
         if ($sth->rowCount() == 1) {
             $result = $sth->fetch();
-            $tmp['status'] = 'OK';
+            $result['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not get video';
+            $result['msg'] = 'Could not get video';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $result['msg'] = $this->db->errorInfo()[2];
         }
         return $result;
     }
 
-    public function getVideos()
+    public function getVideosInfo()
     {
-        $sql = 'SELECT * FROM video';
+        $sql = 'SELECT vid, title, description, lecturer, theme, subject, avgRating FROM video';
         $sth = $this->db->prepare($sql);
         $sth->execute();
 
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
+            $results['msg'] = "OK";
         } else {
-            $results['rows'] = 0;
+            $results['msg'] = "No videos to get.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $results['msg'] = $this->db->errorInfo()[2];
         }
         return $results;
     }
@@ -119,11 +119,12 @@ class Video
         //Check
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
+            $results['msg'] = "OK";
         } else {
-            $results = null;
+            $results['msg'] = "No videos to get.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $results['msg'] = $this->db->errorInfo()[2];
         }
         return $results;
     }
@@ -140,11 +141,12 @@ class Video
         //Check
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
+            $results['msg'] = "OK";
         } else {
-            $results = null;
+            $results['msg'] = "No videos to get.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $results['errorMessage'] = $this->db->errorInfo()[2];
         }
         return $results;
     }

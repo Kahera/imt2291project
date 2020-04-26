@@ -9,16 +9,29 @@ export class ComponentVideocard extends LitElement {
         }
     }
 
+    constructor() {
+        super();
+
+        console.log(this.video);
+
+    }
+
     static get styles() {
         return [
             css`
             :host {
                 display: block;
+                padding-bottom: 1em;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
             }
 
             .card {
-                width: 30em;
-                max-width: 100%;
+                width: 40em;
+                max-width: 90%;
             }
             
             .card-title {
@@ -29,27 +42,31 @@ export class ComponentVideocard extends LitElement {
         ]
     }
 
+    //TODO: Insert image again when figuring out getting files
+    //in paper-card: image="${this.video.thumbnail}"
     render() {
         return html`
-        <paper-card class="card" image="${this.video.thumbnail}">
-            <div class="card-content">
-                <div class="card-title">
-                    ${this.video.title}
+        <a href="${window.MyAppGlobals.rootPath}video/${this.video.vid}">
+            <paper-card class="card">
+                <div class="card-content">
+                    <div class="card-title">
+                        ${this.video.title}
+                    </div>
+                    <div class="card-info">
+                        ${this.video.subject}
+                    </div>
+                    <div class="card-info-lecturer">
+                            ${this.video.lecturer}
+                    </div>
+                    <div class="card-info">
+                            ${this.video.theme}
+                    </div>
+                    <div class="card-description">
+                        ${this.video.description}
+                    </div>
                 </div>
-                <div class="card-info">
-                    ${this.video.subject}
-                </div>
-                <div class="card-info-lecturer">
-                        ${this.video.lecturer}
-                </div>
-                <div class="card-info">
-                        ${this.video.theme}
-                </div>
-                <div class="card-description">
-                    ${this.video.description}
-                </div>
-            </div>
-        </paper-card>
+            </paper-card>
+        </a>
         `;
     }
 }

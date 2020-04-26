@@ -21,6 +21,10 @@ export class ViewHomepage extends LitElement {
             user: Object,
             videos: Array,
             playlists: Array,
+            videoResulttype: String,
+            playlistResulttype: String,
+            videoMsg: String,
+            playlistMsg: String
         }
     }
 
@@ -35,16 +39,28 @@ export class ViewHomepage extends LitElement {
         this.videos = [];
         this.playlists = [];
 
+        //TODO: Figure out searched terms
+
         //Gets videos and playlists with check on which should be gotten
         if (this.user.Type == 'student') {
-            //this._getSubscribedPlaylists();
-            //this._getSubscribedVideos();
+            this.getSubscribedPlaylists();
+            this.getSubscribedVideos();
+            this.videoResulttype = "Videos from subscribed playlists";
+            this.playlistResulttype = "Subscribed playlists";
         } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
-            //this._getOwnedPlaylists();
-            //this._getOwnedVideos();
-        } else {
-            //this._getAllPlaylists();
-            //this._getAllVideos();
+            this.getOwnedPlaylists();
+            this.getOwnedVideos();
+            this.videoResulttype = "Your videos";
+            this.playlistResulttype = "Your playlists";
+        }
+
+        if (this.videos.length < 1) {
+            this.getAllVideos();
+            this.videoResulttype = "All videos";
+        }
+        if (this.playlists.length < 1) {
+            this.getAllPlaylists();
+            this.playlistResulttype = "All playlists";
         }
     }
 
@@ -74,16 +90,18 @@ export class ViewHomepage extends LitElement {
         ]
     }
 
-    //TODO: Figure out searched videos
     render() {
         return html`
         <div class="content">
             <div class="videos">
-                <h2>Videos</h2>
-                ${this.videos.map(i => html`<component-videocard video=${i}></component-videocard>`)}
+                <h2>${this.videoResulttype}</h2>
+                ${this.videoMsg ? html`<p>${this.videoMsg}` : html``}
+                ${this.videos.map(i => html`<component-videocard .video=${i}></component-videocard>`)}
+
             </div>
             <div class="playlists">
-                <h2>Playlists</h2>
+                <h2>${this.playlistResulttype}</h2>
+                ${this.playlistMsg ? html`<p>${this.playlistMsg}` : html``}
                 ${this.playlists.map(i => html`<component-playlistcard playlist=${i}></component-playlistcard>`)}
             </div>
         </div>
@@ -115,38 +133,34 @@ export class ViewHomepage extends LitElement {
         })
     }
     */
-    _getAllVideos() {
-        return html`
-        <iron-ajax
-            auto
-            url="${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php"
-            handle-as="json"
-            on-response="_handlePlaylistResponse"
-            debounce-duration = "500"
-        ></iron-ajax>
-        `
-        /*
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php`)
-            .then(res => res.text())
-            .then(text => console.log(text))
-
-        request('../../src/Backend/Video/getAllVideos.php').then(videos => this.videos = videos).catch(err => {
-            _renderToast('Failed to get all videos', err)
+    getAllVideos() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php`
+        ).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
-        */
-        
     }
 
-    _getAllPlaylists() {
-        return html`
-        <iron-ajax
-            auto
-            url="${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php"
-            handle-as="json"
-            on-response="_handlePlaylistResponse"
-            debounce-duration = "500"
-        ></iron-ajax>
-        `
+    getAllPlaylists() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php`
+        ).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.playlists = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.playlists.pop();
+            } else {
+                this.playlistMsg = res.msg;
+            }
+        })
     }
 
     /*
@@ -163,20 +177,7 @@ export class ViewHomepage extends LitElement {
     }
    */
 
-    _renderToast(msg, err) {
-        return html`<paper-toast text='${msg + ':' + err}'></paper-toast>`
-    }
-    
 
-    _handlePlaylistResponse(event, request) {
-        this.playlists = request.response;
-        console.log(this.playlists);
-    }
 
-    _handleVideoResponse(event, request) {
-        this.videos = request.response;
-        console.log(this.videos);
-    }
-    
 }
 customElements.define('view-homepage', ViewHomepage);

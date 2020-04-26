@@ -21,7 +21,7 @@ $db = DB::getDBConnection();
 $video = new Video($db);
 
 //Get playlists
-$videos = $video->getVideos();
+$videos = $video->getVideosInfo();
 
 //Return playlists
 echo json_encode($videos);
