@@ -13,9 +13,9 @@ class Playlist
     public function newPlaylist($data)
     {
         //Create statement and execute
-        $sql = 'INSERT INTO playlist (title, ownerid, description, subject, theme, thumbnailfile) VALUES (?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO playlist (title, ownerid, description, subject, theme) VALUES (?, ?, ?, ?, ?)';
         $sth = $this->db->prepare($sql);
-        $sth->execute(array($data['title'], $data['owner'], $data['description'], $data['subject'], $data['theme'], $data['thumbnail']));
+        $sth->execute(array($data['title'], $data['owner'], $data['description'], $data['subject'], $data['theme']));
 
         //Query should create one new row
         if ($sth->rowCount() == 1) {
@@ -26,7 +26,6 @@ class Playlist
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
             $result['msg'] = $this->db->errorInfo()[2];
         }
-
         return $result;
     }
 
@@ -57,6 +56,7 @@ class Playlist
 
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
+            $results['msg'] = 'OK';
         } else {
             $results['msg'] = "No playlists to show.";
         }

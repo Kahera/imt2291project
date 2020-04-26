@@ -123,6 +123,7 @@ export class AppCoordinator extends PolymerElement {
             }
 
             #btn-home {
+                color: #4C4C4C;
                 display: inline-block;
                 grid-column-start: 2;
                 align-self: center;
@@ -130,16 +131,18 @@ export class AppCoordinator extends PolymerElement {
             }
 
             #input-search {
+                color: #4C4C4C;
                 width: 80%;
                 display: inline-block;
             }
 
             #btn-search {
                 display: inline-block;
+                color: #4C4C4C;
             }
 
             #btn-drawer {
-                font-size: small;
+                color: #4C4C4C;
                 width: 50%; 
                 grid-column-start: 4;
                 align-self: center;
@@ -166,11 +169,11 @@ export class AppCoordinator extends PolymerElement {
                         </template>
                         <template is="dom-if" if="{{user.isTeacher}}">
                             <a href="[[rootPath]]videoupload">Video upload</a>
-                            <a href="[[rootPath]]playlistCreation">Playlist creation</a>
+                            <a href="[[rootPath]]playlistcreate">Playlist creation</a>
                         </template>
                         <template is="dom-if" if="{{user.isAdmin}}">
                             <a href="[[rootPath]]videoUpload">Video upload</a>
-                            <a href="[[rootPath]]playlistCreation">Playlist creation</a>
+                            <a href="[[rootPath]]playlistcreate">Playlist creation</a>
                             <a href="[[rootPath]]admin">Admin page</a>
                         </template>
                     </iron-selector>
@@ -188,7 +191,7 @@ export class AppCoordinator extends PolymerElement {
                             <paper-input id="input-search" label="Search"></paper-input>
                             <paper-icon-button icon="search" id="btn-search"></paper-icon-button>
                         </div>
-                        <paper-icon-button class="btn" icon="account-circle" id="btn-drawer" drawer-toggle></paper-icon-button>
+                        <paper-icon-button class="btn" icon="settings" id="btn-drawer" drawer-toggle></paper-icon-button>
                     </app-toolbar>
                 </app-header>
 
@@ -200,6 +203,7 @@ export class AppCoordinator extends PolymerElement {
                     <view-playlist name="playlist"></view-playlist>
                     <view-video name="video"></view-video>
                     <view-videoupload name="videoupload"></view-videoupload>
+                    <view-playlistcreate name="playlistcreate"></view-playlistcreate>
                     <view-admin name="admin"></view-admin>
                     <view-error name="error"></view-error>
                 </iron-pages>
@@ -223,7 +227,7 @@ export class AppCoordinator extends PolymerElement {
         // Show 'homepage' in that case. And if the page doesn't exist, show 'error'.
         if (!page) {
             this.page = 'homepage';
-        } else if (['register', 'login', 'homepage', 'playlist', 'video', 'videoupload', 'admin', 'error'].indexOf(page) !== -1) {
+        } else if (['register', 'login', 'homepage', 'playlist', 'video', 'videoupload', 'playlistcreate', 'admin', 'error'].indexOf(page) !== -1) {
             this.page = page;
         } else {
             this.page = 'error';
@@ -258,6 +262,9 @@ export class AppCoordinator extends PolymerElement {
                 break;
             case 'videoupload':
                 import('./Views/view-videoupload.js');
+                break;
+            case 'playlistcreate':
+                import('./Views/view-playlistcreate.js');
                 break;
             case 'admin':
                 import('./Views/view-admin.js');

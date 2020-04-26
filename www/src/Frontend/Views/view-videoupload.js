@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
 import store from '../Redux/store'
-import '../Components/component-videoinfo'
 
 export class ViewVideoupload extends LitElement {
 

@@ -9,9 +9,8 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-require_once "classes/API.php";
 require_once "classes/DB.php";
-require_once "classes/User.php";
+require_once "classes/Playlist.php";
 
 session_start();
 $db = DB::getDBConnection();

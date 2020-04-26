@@ -27,16 +27,26 @@ export class ComponentPlaylistcard extends LitElement {
             css`
             :host {
                 display: block;
+                padding-bottom: 1em;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
             }
 
             .card {
-                width: 30em;
-                max-width: 100%;
+                width: 40em;
+                max-width: 90%;
             }
             
             .card-title {
                 font-weight: bold;
                 font-size: medium;
+            }
+
+            .card-info {
+                font-size: small;
             }
             `,
         ]
@@ -45,21 +55,29 @@ export class ComponentPlaylistcard extends LitElement {
     //TODO: Check if subscribe or unsubscribe based on student subscription
     render() {
         return html`
-        <paper-card class="card" heading="${this.playlist.Title}">
-            <div class="card-content">
-                <div class="card-title">
-                    ${this.playlist.subject}
+        <a href="${window.MyAppGlobals.rootPath}playlist/${this.playlist.pid}">
+            <paper-card class="card">
+                <div class="card-content">
+                    <div class="card-title">
+                        ${this.playlist.title}
+                    </div>
+                    <div class="card-info">
+                        ${this.playlist.subject}
+                    </div>
+                    <div class="card-info">
+                        ${this.playlist.theme}
+                    </div>
+                    <div class="card-info">
+                        ${this.playlist.description}
+                    </div>
                 </div>
-                <div class="card-description">
-                    ${this.playlist.description}
-                </div>
-            </div>
-            ${this.user.userType == 'student' ?
+                ${this.user.userType == 'student' ?
                 html`
-            <paper-icon-button @click="${this._subscribe}" icon="heart"></paper-icon-button>
-            ` : html``
+                <paper-icon-button @click="${this._subscribe}" icon="heart"></paper-icon-button>
+                ` : html``
             }
-        </paper-card>
+            </paper-card>
+        </a>
         `;
     }
 

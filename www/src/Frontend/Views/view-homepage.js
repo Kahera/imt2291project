@@ -102,7 +102,7 @@ export class ViewHomepage extends LitElement {
             <div class="playlists">
                 <h2>${this.playlistResulttype}</h2>
                 ${this.playlistMsg ? html`<p>${this.playlistMsg}` : html``}
-                ${this.playlists.map(i => html`<component-playlistcard playlist=${i}></component-playlistcard>`)}
+                ${this.playlists.map(i => html`<component-playlistcard .playlist=${i}></component-playlistcard>`)}
             </div>
         </div>
         `;
@@ -149,11 +149,13 @@ export class ViewHomepage extends LitElement {
     }
 
     getAllPlaylists() {
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php`
         ).then(res => res.json()
         ).then(res => {
             //Successfully retrieved
             if (res.msg == 'OK') {
+                console.log(res);
                 this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();

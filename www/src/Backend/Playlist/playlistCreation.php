@@ -1,5 +1,7 @@
 <?php
 
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
     header("Access-Control-Allow-Origin: $http_origin");
 }
@@ -9,23 +11,23 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-require_once "classes/DB.php";
-require_once "classes/Playlist.php";
+require_once "../Classes/DB.php";
+require_once "../Classes/Playlist.php";
 
 session_start();
 $db = DB::getDBConnection();
 
-//Create playlist object
+// Create empty playlist
 $playlist = new Playlist($db);
 
-$data['pid'] = $_POST['pid'];
-$data['uid'] = $_SESSION['uid'];
+// Set playlist values
+$data['owner'] = $_SESSION['uid'];
+$data['title'] = $_POST['title'];
+$data['description'] = $_POST['description'];
+$data['theme'] = $_POST['theme'];
+$data['subject'] = $_POST['subject'];
 
-//Subscribe to playlist
-$playlist->subscribePlaylist($data);
+//Add playlist
+$tmp = $playlist->newPlaylist($data);
 
-//Get playlist subscriptions
-$subscriptions = $playlist->getSubscriptions($_SESSION['uid']);
-
-//Return subscriptions
-echo json_encode($subscriptions);
+echo json_encode($tmp);

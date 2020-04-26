@@ -9,12 +9,6 @@ export class ComponentVideocard extends LitElement {
         }
     }
 
-    constructor() {
-        super();
-
-        console.log(this.video);
-
-    }
 
     static get styles() {
         return [
@@ -38,6 +32,10 @@ export class ComponentVideocard extends LitElement {
                 font-weight: bold;
                 font-size: medium;
             }
+
+            .card-info {
+                font-size: small;
+            }
             `,
         ]
     }
@@ -53,16 +51,16 @@ export class ComponentVideocard extends LitElement {
                         ${this.video.title}
                     </div>
                     <div class="card-info">
-                        ${this.video.subject}
-                    </div>
-                    <div class="card-info-lecturer">
-                            ${this.video.lecturer}
+                        Subject: ${this.video.subject}
                     </div>
                     <div class="card-info">
-                            ${this.video.theme}
+                        Lecturer: ${this.video.lecturer}
                     </div>
-                    <div class="card-description">
-                        ${this.video.description}
+                    <div class="card-info">
+                        Theme: ${this.video.theme}
+                    </div>
+                    <div class="card-info">
+                        Description: ${this.video.description}
                     </div>
                 </div>
             </paper-card>
