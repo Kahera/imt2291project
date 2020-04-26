@@ -290,6 +290,7 @@ export class AppCoordinator extends PolymerElement {
             if (res.msg == 'OK') {  // Successfully logged out
                 this.updateUserStatus(res);
                 store.dispatch(action_logout());
+                window.location.href = window.MyAppGlobals.rootPath;
             } else {
                 return html`
                 <paper-toast text="[[res.msg]]" opened></paper-toast>`

@@ -187,11 +187,12 @@ class User
 
     if ($sth->rowCount() > 0) {
       $results = $sth->fetchAll();
+      $results['msg'] = 'OK';
     } else {
-      $results = null;
+      $results['msg'] = "No users fit the criteria.";
     }
     if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-      $tmp['errorMessage'] = $this->db->errorInfo()[2];
+      $result['msg'] = $this->db->errorInfo()[2];
     }
 
     return $results;

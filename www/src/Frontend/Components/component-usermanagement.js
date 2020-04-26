@@ -1,13 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 import '@polymer/iron-icons/iron-icons'
 import '@polymer/paper-icon-button'
+import '@polymer/paper-card'
 
 
 export class ComponentUsermanagement extends LitElement {
 
     static get properties() {
         return {
-            user: Object,
+            item: Object,
             pending: {
                 type: Boolean,
                 value: false
@@ -22,7 +23,22 @@ export class ComponentUsermanagement extends LitElement {
                 display: block;
             }
 
-            .user {
+            .card {
+                width: 40em;
+                max-width: 90%;
+            }
+            
+
+            .item {
+                display: inline-block;
+            }
+
+            .card-info {
+                display: inline-block;
+            }
+
+            .btn {
+                justify-self: right;
                 display: inline-block;
             }
 
@@ -41,29 +57,35 @@ export class ComponentUsermanagement extends LitElement {
     }
 
     render() {
+        this.checkValidation();
         return html`
-        <div class="user">
-                <p>Email</p>
-                <div class="btns"
-                        <paper-icon-button icon="remove-circle" class="red" @click="${this._approve}"></paper-icon-button>
-                        ${this.pending ?
-                html`
-                            <paper-icon-button icon="add-circle" class="green" @click="${this._reject}"></paper-icon-button>`
+        <paper-card class="card">
+            <div class="card-content">
+                <div class="card-info">
+                    Email: ${this.item.email}
+                </div>
+                    <paper-icon-button icon="remove-circle" class="btn red" @click="${this.reject}"></paper-icon-button>
+                ${this.pending ? html`
+                    <paper-icon-button icon="add-circle" class="btn green" @click="${this.approve}"></paper-icon-button>`
                 : html``
             }
-                        
-                </div>
-        </div>
+        </paper-card class="card">
         `;
     }
 
     //TODO: Finish these functions
-    _reject(e) {
+    reject() {
 
     }
 
-    _approve(e) {
+    approve() {
 
+    }
+
+    checkValidation() {
+        if (this.item.validated == 0) {
+            this.pending = true;
+        }
     }
 }
 customElements.define('component-usermanagement', ComponentUsermanagement);

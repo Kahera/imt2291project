@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-toast'
 import store from '../Redux/store'
 import '../Components/component-usermanagement'
+import '@polymer/paper-card'
 
 export class ViewAdmin extends LitElement {
 
@@ -27,9 +28,9 @@ export class ViewAdmin extends LitElement {
         this.admins = [];
 
         //Fill arrays
-        //this._getPendingTeachers();
-        //this._getValidatedTeachers();
-        //this._getAdmins();
+        this._getPendingTeachers();
+        this._getValidatedTeachers();
+        this._getAdmins();
     }
 
     static get styles() {
@@ -37,6 +38,7 @@ export class ViewAdmin extends LitElement {
             css`
             :host {
                 display: block;
+                padding: 2em;
             }
             `,
         ]
@@ -44,44 +46,73 @@ export class ViewAdmin extends LitElement {
 
     render() {
         return html`
-        <h2>Admin page</h2>
+            <h2>Admin page</h2>
 
-        ${this.teachersPending.length > 0 ?
-                html`
-                <h3>Pending teacher requests</h3>
-                ${this.teachersPending.map(i => html`<component-usermanagement .user=${i} .pending="true"></component-usermanagement>`)}
-
-            `: html`
-                <h3> No teachers pending.</h3>
-            `}
-        <h3>Teachers</h3>
-        ${this.teachersConfirmed.map(i => html`<component-usermanagement .user=${i}></component-usermanagement>`)}
-        
-        <h3>Admins</h3>
-        ${this.admins.map(i => html`<component-usermanagement .user=${i}></component-usermanagement>`)}
+            ${this.teachersPending.length > 0 ? html`
+            <h3>Pending teacher requests</h3>
+                ${this.teachersPending.map(i => html`<component-usermanagement .item=${i}></component-usermanagement>`)}
+                `: html` <p>No teachers pending.</p> `}
+            <h3>Teachers</h3>
+                ${this.teachersConfirmed.length > 0 ? html`
+                    ${this.teachersConfirmed.map(i => html`<component-usermanagement .item=${i}></component-usermanagement>`)}
+                ` : html`<p>No teachers to show.</p>`}
+            
+            <h3>Admins</h3>
+            ${this.admins.length > 0 ? html`
+                ${this.admins.map(i => html`<component-usermanagement .item=${i}></component-usermanagement>`)}
+                ` : html`<p>No admins to show.</p>`}
         `
     }
-    /*
-        _getPendingTeachers() {
-            get('../../Backend/User/getPendingTeachers.php').then(pending => this.teachersPending = pending).catch(err => {
-                _renderToast('Failed to get pending teachers', err)
-            })
-        }
-    
-        _getValidatedTeachers() {
-            get('../../Backend/User/getConfirmedTeachers.php').then(confirmed => this.teachersConfirmed = confirmed).catch(err => {
-                _renderToast('Failed to get teachers', err)
-            })
-        }
-    
-        _getAdmins() {
-            get('../../Backend/User/getAdmins.php').then(admins => this.admins = admins).catch(err => {
-                _renderToast('Failed to get admins', err)
-            })
-        }
-    */
-    _renderToast(msg, err) {
-        return html`<paper-toast text='${msg + ':' + err}'></paper-toast>`
+
+    //TODO: Fix
+    _getPendingTeachers() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getPendingTeachers.php`
+        ).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.teachersPending = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.teachersPending.pop();
+
+            } else {
+                //this.videoMsg = res.msg;
+            }
+        })
+    }
+
+    //TODO: Fix
+    _getValidatedTeachers() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getConfirmedTeachers.php`
+        ).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.teachersConfirmed = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.teachersConfirmed.pop();
+                console.log(this.teachersConfirmed);
+            } else {
+                //this.videoMsg = res.msg;
+            }
+        })
+    }
+
+    //TODO: Fix
+    _getAdmins() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getAdmins.php`
+        ).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.admins = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.admins.pop();
+                console.log(this.admins);
+            } else {
+                //this.videoMsg = res.msg;
+            }
+        })
     }
 }
 customElements.define('view-admin', ViewAdmin);

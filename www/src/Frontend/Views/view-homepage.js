@@ -149,13 +149,11 @@ export class ViewHomepage extends LitElement {
     }
 
     getAllPlaylists() {
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getAllPlaylists.php`
         ).then(res => res.json()
         ).then(res => {
             //Successfully retrieved
             if (res.msg == 'OK') {
-                console.log(res);
                 this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();
