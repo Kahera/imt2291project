@@ -1,10 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
-import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
-import '@polymer/paper-toast'
-import '@polymer/iron-ajax/iron-ajax'
 import store from '../Redux/store'
 import '../Components/component-videocard'
 import '../Components/component-playlistcard'
+import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
+import '@polymer/paper-toast'
+import '@polymer/iron-ajax/iron-ajax'
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.

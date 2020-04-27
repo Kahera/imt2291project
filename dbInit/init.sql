@@ -78,3 +78,6 @@ INSERT INTO user (email, password, userType, validated) VALUES
 ('teacher@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 1), 
 ('teacher2@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 0), 
 ('student@student.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'student', 0);
+
+/* Make sure the admin user can't be deleted */
+CREATE RULE protect_admin AS ON DELETE TO users WHERE id = 1 DO INSTEAD NOTHING;

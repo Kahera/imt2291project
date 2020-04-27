@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import '@polymer/paper-toast'
 import store from '../Redux/store'
+import '@polymer/paper-toast'
 import '../Components/component-usermanagement'
 import '@polymer/paper-card'
 
@@ -61,10 +61,10 @@ export class ViewAdmin extends LitElement {
             ${this.admins.length > 0 ? html`
                 ${this.admins.map(i => html`<component-usermanagement .item=${i}></component-usermanagement>`)}
                 ` : html`<p>No admins to show.</p>`}
+
         `
     }
 
-    //TODO: Fix
     _getPendingTeachers() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getPendingTeachers.php`
         ).then(res => res.json()
@@ -81,7 +81,6 @@ export class ViewAdmin extends LitElement {
         })
     }
 
-    //TODO: Fix
     _getValidatedTeachers() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getConfirmedTeachers.php`
         ).then(res => res.json()
@@ -91,14 +90,12 @@ export class ViewAdmin extends LitElement {
                 this.teachersConfirmed = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.teachersConfirmed.pop();
-                console.log(this.teachersConfirmed);
             } else {
                 //this.videoMsg = res.msg;
             }
         })
     }
 
-    //TODO: Fix
     _getAdmins() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getAdmins.php`
         ).then(res => res.json()
@@ -108,7 +105,6 @@ export class ViewAdmin extends LitElement {
                 this.admins = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.admins.pop();
-                console.log(this.admins);
             } else {
                 //this.videoMsg = res.msg;
             }

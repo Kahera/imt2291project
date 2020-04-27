@@ -45,45 +45,7 @@ if (isset($_POST['emailSearch'])) {
   echo $twig->render("adminPage.html", array('user' => $result));
 }
 
-//------------------------------User validation/rejection--------------------------------------
-//Validate teacher
-if (isset($_POST['validateTeacher'])) {
-  $user = new User($db);
 
-  $data['uid'] = $_POST['uid'];
-  $data['userType'] = $_POST['userType'];
-  $data['validate'] = 1;
-
-  $msg = $user->updateUser($data);
-
-  echo $twig->render("adminPage.html", array('msg' => $msg['msg']));
-}
-
-//Reject teacher
-if (isset($_POST['rejectTeacher'])) {
-  $user = new User($db);
-
-  $data['uid'] = $_POST['uid'];
-  $data['userType'] = 'teacher';
-  $data['validate'] = 0;
-
-  $msg = $user->updateUser($data);
-
-  echo $twig->render("adminPage.html", array('msg' => $msg['msg']));
-}
-
-//Set new user as admin
-if (isset($_POST['setAdmin'])) {
-  $user = new User($db);
-
-  $data['uid'] = $_POST['uid'];
-  $data['userType'] = 'admin';
-  $data['validate'] = 1;
-
-  $msg = $user->updateUser($data);
-
-  echo $twig->render("adminPage.html", array('msg' => $msg['msg']));
-}
 
 //Remove existing admin
 if (isset($_POST['removeAdmin'])) {

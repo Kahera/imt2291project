@@ -73,12 +73,12 @@ export class ViewVideo extends LitElement {
         <div class="teacherButtons">
         ${(this.user.type == 'teacher' || this.user.type == 'admin') ?
                 html`
-            <paper-button class="btn" id="btn_delete" @click=${this._deleteVideo}>Delete video</paper-button>
+            <paper-button class="btn" id="btn_delete" @click=${this.deleteVideo}>Delete video</paper-button>
 
             <paper-dropdown-menu id="dropdown">
                 ${this.userPlaylists.map(i => html`<paper-item video=${i}.title></paper-item>`)}
             </paper-dropdown-menu>
-            <paper-button class="btn" id="btn_add" @click="${this._addVideo}" raised>Add to playlist</paper-button>`
+            <paper-button class="btn" id="btn_add" @click="${this.addVideo}" raised>Add to playlist</paper-button>`
                 : html``
             }
         </div>
@@ -89,7 +89,11 @@ export class ViewVideo extends LitElement {
         `;
     }
 
-    _addVideo(e) {
+    getVideo() {
+
+    }
+
+    addVideo(e) {
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/addVideoToPlaylist.php`, {
             method: 'POST',
@@ -99,11 +103,11 @@ export class ViewVideo extends LitElement {
             .then(data => this.msg = data['msg']);
     }
 
-    _getComments() {
+    getComments() {
 
     }
 
-    _getUsersPlaylists() {
+    getUsersPlaylists() {
 
     }
 

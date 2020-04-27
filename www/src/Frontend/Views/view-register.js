@@ -104,7 +104,7 @@ export class ViewRegister extends LitElement {
     }
 
     _renderToast(msg) {
-        return html`<paper-toast text='${msg}'></paper-toast>`
+        return html`<paper-toast text="${msg}" opened></paper-toast>`
     }
 }
 customElements.define('view-register', ViewRegister);

@@ -228,8 +228,7 @@ class User
 
     // Query should return one row
     if ($sth->rowCount() == 1) {
-      $tmp['msg'] = 'User updated.';
-      $tmp['status'] = 'OK';
+      $tmp['msg'] = 'OK';
     } else {
       $tmp['msg'] = 'Could not update user permissions.';
     }
