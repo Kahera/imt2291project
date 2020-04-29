@@ -38,7 +38,7 @@ if ($found['uid'] > 0) {
     if (!strcmp($password, $password2)) { //strcmp returns 0 if matches
 
         // Set teacher if checkbox is ticked, otherwise set student
-        $userType = (isset($_POST['chk_lecturer'])) ? "teacher" : "student";
+        $userType = (isset($_POST['isTeacher'])) ? "teacher" : "student";
 
         // Create new user
         $userData['email'] = $email;
