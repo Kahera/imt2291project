@@ -41,11 +41,10 @@ export class ViewPlaylist extends LitElement {
             if (this.user.userType == 'teacher' || this.user.userType == 'admin') {
                 this.getUsersVideos();
             }
-
-            //Get playlist info and videos in it
-            this.getPlaylist();
-            this.getPlaylistVideos();
         })
+        //Get playlist info and videos in it
+        this.getPlaylist();
+        this.getPlaylistVideos();
     }
 
 
