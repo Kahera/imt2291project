@@ -7,7 +7,6 @@ export class ComponentVideoplayer extends LitElement {
     static get properties() {
         return {
             videofile: String,
-            videotype: String,
             vttfile: String,
             thumbnail: String,
             cues: Array,
@@ -17,7 +16,6 @@ export class ComponentVideoplayer extends LitElement {
     constructor() {
         super();
         this.videofile = '';
-        this.videotype = '';
         this.vttfile = '';
         this.cues = [];
     }
@@ -41,7 +39,8 @@ export class ComponentVideoplayer extends LitElement {
         return html`
         <video poster="${this.thumbnail}" controls>
             <source src="${this.videofile}">
-            <track kind="subtitles" src="${this.vttfile}" @load='${this._loadCaption}' default></track>
+            ${this.vttfile != "" ?
+                html`<track kind="subtitles" src="${this.vttfile}" @load='${this._loadCaption}' default></track>` : ``} 
         </video>
         <div class="speed">
             <iron-selector slected="1">

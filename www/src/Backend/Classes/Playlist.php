@@ -37,9 +37,8 @@ class Playlist
 
         if ($sth->rowCount() == 1) {
             $result = $sth->fetch();
-            $result['status'] = 'OK';
+            $result['msg'] = 'OK';
         } else {
-            $result['status'] = 'FAIL';
             $result['msg'] = 'Could not get playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
@@ -170,9 +169,9 @@ class Playlist
 
         //Check that it was uploaded correctly
         if ($sth->rowCount() == 1) {
-            $tmp['msg'] = 'Playlist upated. ';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['msg'] = 'Could not update playlist data. ';
+            $tmp['msg'] = 'Could not update playlist data.';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
             $tmp['msg'] = $this->db->errorInfo()[2];
@@ -198,8 +197,13 @@ class Playlist
         $sth = $this->db->prepare($sql);
         $sth->execute(array($data['newPosition'], $data['pid'], $data['vid']));
 
+        if ($sth->rowCount() > 0) {
+            $tmp['msg'] = 'OK';
+        } else {
+            $tmp['msg'] = 'Could not update playlist data. ';
+        }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
         //Not checking return here as it could return any amount of rows
         return $tmp;
@@ -215,13 +219,12 @@ class Playlist
 
         // Query should create one new row
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not delete playlist';
+            $tmp['msg'] = 'Could not delete playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         //Then delete all subscriptions to playlist
@@ -254,7 +257,7 @@ class Playlist
 
         // Query should create one new row
         if ($sth->rowCount() == 1) {
-            $tmp['msg'] = 'Video added to playlist';
+            $tmp['msg'] = 'OK';
         } else {
             $tmp['msg'] = 'Could not add video to playlist';
         }

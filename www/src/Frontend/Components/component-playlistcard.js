@@ -19,7 +19,6 @@ export class ComponentPlaylistcard extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
-
     }
 
     static get styles() {
@@ -30,9 +29,8 @@ export class ComponentPlaylistcard extends LitElement {
                 padding-bottom: 1em;
             }
 
-            a {
-                text-decoration: none;
-                color: black;
+            paper-card {
+                cursor: pointer;
             }
 
             .card {
@@ -55,8 +53,7 @@ export class ComponentPlaylistcard extends LitElement {
     //TODO: Check if subscribe or unsubscribe based on student subscription
     render() {
         return html`
-        <a href="${window.MyAppGlobals.rootPath}playlist/${this.playlist.pid}">
-            <paper-card class="card">
+            <paper-card class="card" @click="${this.goto}">
                 <div class="card-content">
                     <div class="card-title">
                         ${this.playlist.title}
@@ -73,15 +70,19 @@ export class ComponentPlaylistcard extends LitElement {
                 </div>
                 ${this.user.userType == 'student' ?
                 html`
-                <paper-icon-button @click="${this._subscribe}" icon="heart"></paper-icon-button>
+                <paper-icon-button @click="${this.subscribe}" icon="heart"></paper-icon-button>
                 ` : html``
             }
             </paper-card>
-        </a>
         `;
     }
 
-    _subscribe(e) {
+    goto() {
+        const url = window.MyAppGlobals.rootPath + "playlist?pid=" + this.playlist.pid;
+        window.location.href = url;
+    }
+
+    subscribe(e) {
         /*
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Playlist/subscribe.php`, {
@@ -93,7 +94,7 @@ export class ComponentPlaylistcard extends LitElement {
             */
     }
 
-    _unsubscribe(e) {
+    unsubscribe(e) {
         /*
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}/src/Backend/Playlist/unsubscribe.php`, {

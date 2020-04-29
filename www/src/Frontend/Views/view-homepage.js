@@ -108,31 +108,95 @@ export class ViewHomepage extends LitElement {
         `;
     }
 
-    /*
-    _getSubscribedVideos() {
-        get('../../Backend/Playlist/getSubscribedVideos.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get subscribed videos', err)
+
+    getSubscribedVideos() {
+        //Append uid to form
+        const data = new FormData();
+        data.append('uid', this.user.uid);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedVideos.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
     }
 
-    _getSubscribedPlaylists() {
-        get('../../Backend/Playlist/getSubscribedPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get subscribed playlists', err)
+    getSubscribedPlaylists() {
+        //Append uid to form
+        const data = new FormData();
+        data.append('uid', this.user.uid);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedPlaylists.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
     }
 
-    _getOwnedVideos() {
-        get('../../Backend/Playlist/getOwnedVideos.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get owned videos', err)
+    getOwnedVideos() {
+        //Append uid to form
+        const data = new FormData();
+        data.append('uid', this.user.uid);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getOwnedVideos.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
     }
 
-    _getOwnedPlaylists() {
-        get('../../src/Backend/Playlist/getOwnedPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get owned playlists', err)
+    getOwnedPlaylists() {
+        //Append uid to form
+        const data = new FormData();
+        data.append('uid', this.user.uid);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getOwnedPlaylists.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
     }
-    */
+
     getAllVideos() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getAllVideos.php`
         ).then(res => res.json()

@@ -71,9 +71,28 @@ class Video
         return $tmp;
     }
 
-    public function getVideo($vid)
+    public function getVideoFileById($vid)
     {
-        $sql = "SELECT * FROM video WHERE vid=?";
+        $sql = "SELECT videofile FROM video WHERE vid=?";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($vid));
+
+        if ($sth->rowCount() == 1) {
+            $result = $sth->fetch();
+            $result['msg'] = 'OK';
+        } else {
+            $result['msg'] = 'Could not get video';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $result['msg'] = $this->db->errorInfo()[2];
+        }
+        return $result;
+    }
+
+
+    public function getVideoInfoById($vid)
+    {
+        $sql = "SELECT ownerid, title, description, lecturer, theme, subject, avgRating FROM video WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -110,7 +129,7 @@ class Video
     public function getVideosByOwner($uid)
     {
         //Make and prepare statement
-        $sql = 'SELECT * FROM video WHERE ownerid=?';
+        $sql = 'SELECT vid, title, description, lecturer, theme, subject, avgRating FROM video WHERE ownerid=?';
         $sth = $this->db->prepare($sql);
 
         //Execute statement
@@ -132,7 +151,7 @@ class Video
     public function getVideosByPlaylist($pid)
     {
         //Make and prepare statement
-        $sql = 'SELECT * FROM video INNER JOIN playlistVideo ON video.vid = playlistVideo.vid WHERE playlistVideo.pid=? ORDER BY position';
+        $sql = 'SELECT video.vid, ownerid, title, description, lecturer, theme, subject, avgRating FROM video INNER JOIN playlistVideo ON video.vid = playlistVideo.vid WHERE playlistVideo.pid=? ORDER BY position';
         $sth = $this->db->prepare($sql);
 
         //Execute statement
@@ -146,7 +165,7 @@ class Video
             $results['msg'] = "No videos to get.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $results['errorMessage'] = $this->db->errorInfo()[2];
+            $results['msg'] = $this->db->errorInfo()[2];
         }
         return $results;
     }

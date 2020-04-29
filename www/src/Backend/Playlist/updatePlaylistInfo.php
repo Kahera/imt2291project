@@ -20,11 +20,25 @@ $db = DB::getDBConnection();
 //Create playlist object
 $playlist = new Playlist($db);
 
+// Set values
 $data['pid'] = $_POST['pid'];
-$data['vid'] = $_POST['vid'];
 
-//Get playlists
-$result = $playlist->addVideoToPlaylist($data);
+// Check which fields are set with $_POST 
+if ($_POST['title'] != null || trim($_POST['title']) != '') {
+    $data['title'] = $_POST['title'];
+}
+if ($_POST['description'] != null || trim($_POST['description']) != '') {
+    $data['description'] = $_POST['description'];
+}
+if ($_POST['theme'] != null || trim($_POST['theme']) != '') {
+    $data['theme'] = $_POST['theme'];
+}
+if ($_POST['subject'] != null || trim($_POST['subject']) != '') {
+    $data['subject'] = $_POST['subject'];
+}
 
-//Return playlists
+// Update playlist
+$result = $playlist->editPlaylist($data);
+
+// Respond
 echo json_encode($result);

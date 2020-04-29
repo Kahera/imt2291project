@@ -10,9 +10,9 @@ export class ViewVideo extends LitElement {
         return {
             user: Object,
             userPlaylists: Array,
+            video: Object,
             comments: Array,
             videofile: String,
-            videotype: String,
             vttfile: String,
             cues: String,
             activecues: Array
@@ -25,6 +25,9 @@ export class ViewVideo extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
+
+        this.getVideo();
+
 
         //Initialise properties with empty arrays
         this.comments = [];
@@ -41,12 +44,13 @@ export class ViewVideo extends LitElement {
         this.addEventListener('jumpToTimecode', e => this.shadowRoot.querySelector('video-viewer').setTime(e.detail.timeCode));
 
         //Get comments
-        this._getComments();
+        //this.getComments();
 
         //Check if user is teacher or admin - if yes, get that users owned playlists
-        if (this.user.type == 'teacher' || this.user.type == 'admin') {
-            this._getUsersPlaylists();
+        /*if (this.user.type == 'teacher' || this.user.type == 'admin') {
+            this.getUsersPlaylists();
         }
+        */
     }
 
     static get styles() {
@@ -65,8 +69,9 @@ export class ViewVideo extends LitElement {
     //TODO: If teacher - add to playlist
     render() {
         return html`
+        <p>heihei</p>
         <div class="info">
-            <component-videoplayer videofile="${this.videofile}" videotype="${this.videotype}" vttfile="${this.vttfile}></component-videocard>
+            <component-videoplayer videofile="${this.videofile}" vttfile="${this.vttfile}></component-videocard>
             <component-videocueviewer cues="${this.cues}" activecues="${this.activecues}"></component-videocueviewer>
         </div>
 
@@ -78,7 +83,7 @@ export class ViewVideo extends LitElement {
             <paper-dropdown-menu id="dropdown">
                 ${this.userPlaylists.map(i => html`<paper-item video=${i}.title></paper-item>`)}
             </paper-dropdown-menu>
-            <paper-button class="btn" id="btn_add" @click="${this.addVideo}" raised>Add to playlist</paper-button>`
+            <paper-button class="btn" id="btn_add" @click="${this.addVideoToPlaylist}" raised>Add to playlist</paper-button>`
                 : html``
             }
         </div>
@@ -90,17 +95,51 @@ export class ViewVideo extends LitElement {
     }
 
     getVideo() {
+        //Get vid from URL and append to form
+        var vid = location.search.split('vid=')[1];
 
+        const data = new FormData();
+        data.append('vid', vid);
+
+        //Then fetch the video info
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideo.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully logged in
+            if (res.msg == 'OK') {
+                this.video = res;
+            } else {
+                this.msg = res.msg;
+            }
+        })
+
+        //And fetch videofile
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.arrayBuffer()
+        ).then(res => {
+            //Successfully logged in
+            if (res.msg == 'OK') {
+                this.videofile = res;
+            } else {
+                this.msg = res.msg;
+            }
+        })
     }
 
-    addVideo(e) {
+    addVideoToPlaylist(e) {
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/addVideoToPlaylist.php`, {
             method: 'POST',
             credentials: "include",
             body: data
-        }).then(res => res.json())
-            .then(data => this.msg = data['msg']);
+        }).then(res => res.json()
+        ).then(data => this.msg = data['msg']);
     }
 
     getComments() {

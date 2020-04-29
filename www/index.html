@@ -6,12 +6,12 @@
 		<title>Lecture video platform</title>
 		<script>
 			window.process = {
-				env: {
-				NODE_ENV: 'production'
-				}
-			};
+env: {
+NODE_ENV: 'production'
+}
+};
 
-			/**
+/**
 			* [polymer-root-path]
 			*
 			* Leave this line unchanged if you intend to serve your app from the root
@@ -22,16 +22,17 @@
 			* to indicate the path from which you'll be serving, including leading
 			* and trailing slashes (e.g., `/my-app/`).
 			*/
-			window.MyAppGlobals = {
-				rootPath: '/',
-				serverURL: 'http://localhost:8081/'
-				// serverURL: 'http://php/'
-			};
+window.MyAppGlobals = {
+rootPath: '/',
+serverURL: 'http://localhost:8081/'
+// serverURL: 'http://php/'
+};
 		</script>
 
 
 		<!-- load webcomponents bundle, which includes all the necessary polyfills -->
 		<script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+		<script src="./node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
 
 		<!-- Import the component -->
 		<script type="module" src="./src/Frontend/app-coordinator.js"></script>

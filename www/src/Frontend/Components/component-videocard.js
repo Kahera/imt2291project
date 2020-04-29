@@ -16,11 +16,11 @@ export class ComponentVideocard extends LitElement {
             :host {
                 display: block;
                 padding-bottom: 1em;
+
             }
 
-            a {
-                text-decoration: none;
-                color: black;
+            paper-card {
+                cursor: pointer;
             }
 
             .card {
@@ -44,8 +44,7 @@ export class ComponentVideocard extends LitElement {
     //in paper-card: image="${this.video.thumbnail}"
     render() {
         return html`
-        <a href="${window.MyAppGlobals.rootPath}video/${this.video.vid}">
-            <paper-card class="card">
+            <paper-card class="card" @click="${this.goto}">
                 <div class="card-content">
                     <div class="card-title">
                         ${this.video.title}
@@ -64,8 +63,13 @@ export class ComponentVideocard extends LitElement {
                     </div>
                 </div>
             </paper-card>
-        </a>
         `;
+    }
+
+
+    goto() {
+        const url = window.MyAppGlobals.rootPath + "video?vid=" + this.video.vid;
+        window.location.href = url;
     }
 }
 customElements.define('component-videocard', ComponentVideocard);

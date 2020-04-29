@@ -24,7 +24,7 @@ $data['pid'] = $_POST['pid'];
 $data['vid'] = $_POST['vid'];
 
 //Get playlists
-$result = $playlist->addVideoToPlaylist($data);
+$result = $playlist->removeVideoFromPlaylist($data);
 
 //Return playlists
 echo json_encode($result);

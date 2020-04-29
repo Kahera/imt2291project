@@ -20,11 +20,8 @@ $db = DB::getDBConnection();
 //Create playlist object
 $playlist = new Playlist($db);
 
-$data['pid'] = $_POST['pid'];
-$data['vid'] = $_POST['vid'];
-
 //Get playlists
-$result = $playlist->addVideoToPlaylist($data);
+$result = $playlist->getPlaylistById($_POST['pid']);
 
 //Return playlists
 echo json_encode($result);

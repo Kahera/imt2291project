@@ -22,7 +22,7 @@ CREATE TABLE `video` (
   `thumbnailfile` LONGBLOB,
   `subtitles` text DEFAULT NULL,
   PRIMARY KEY (`vid`), 
-  FOREIGN KEY (`ownerid`) REFERENCES user(`uid`)
+  FOREIGN KEY (`ownerid`) REFERENCES user(`uid`) ON DELETE SET NULL
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 CREATE TABLE `playlist` (
@@ -41,8 +41,8 @@ CREATE TABLE `videoRating` (
 `video` BIGINT(8) NOT NULL,
 `user` BIGINT(8) NOT NULL,
 `rating` TINYINT(1),
-FOREIGN KEY (`user`) REFERENCES user(`uid`),
-FOREIGN KEY(`video`) REFERENCES video(`vid`)
+FOREIGN KEY (`user`) REFERENCES user(`uid`) ON DELETE SET NULL,
+FOREIGN KEY(`video`) REFERENCES video(`vid`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 CREATE TABLE `videoComment` (
@@ -51,8 +51,8 @@ CREATE TABLE `videoComment` (
 `user` BIGINT(8) NOT NULL,
 `comment` VARCHAR(20000),
 PRIMARY KEY (`cid`),
-FOREIGN KEY (`user`) REFERENCES user(`uid`),
-FOREIGN KEY(`video`) REFERENCES video(`vid`)
+FOREIGN KEY (`user`) REFERENCES user(`uid`) ON DELETE SET NULL,
+FOREIGN KEY(`video`) REFERENCES video(`vid`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 /* Extra playlist tables */
@@ -61,15 +61,15 @@ CREATE TABLE `playlistVideo` (
 `vid` BIGINT(8) NOT NULL, 
 `position` BIGINT(8) NOT NULL,
 PRIMARY KEY (`pid`, `vid`), 
-FOREIGN KEY (`pid`) REFERENCES playlist(`pid`),
-FOREIGN KEY (`vid`) REFERENCES video(`vid`)
+FOREIGN KEY (`pid`) REFERENCES playlist(`pid`) ON DELETE CASCADE,
+FOREIGN KEY (`vid`) REFERENCES video(`vid`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 CREATE TABLE `subscription` (
 `playlist` BIGINT(8) NOT NULL,
 `user` BIGINT(8) NOT NULL,
-FOREIGN KEY (`user`) REFERENCES user(`uid`),
-FOREIGN KEY(`playlist`) REFERENCES playlist(`pid`)
+FOREIGN KEY (`user`) REFERENCES user(`uid`) ON DELETE CASCADE,
+FOREIGN KEY(`playlist`) REFERENCES playlist(`pid`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
 
 /* Insert an admin user */

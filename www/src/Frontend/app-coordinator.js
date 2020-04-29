@@ -122,8 +122,11 @@ export class AppCoordinator extends PolymerElement {
                 justify-self: right;
             }
 
-            #btn-home {
+            .btn {
                 color: #4C4C4C;
+            }
+
+            #btn-home {
                 display: inline-block;
                 grid-column-start: 2;
                 align-self: center;
@@ -138,12 +141,9 @@ export class AppCoordinator extends PolymerElement {
 
             #btn-search {
                 display: inline-block;
-                color: #4C4C4C;
             }
 
             #btn-drawer {
-                color: #4C4C4C;
-                width: 50%; 
                 grid-column-start: 4;
                 align-self: center;
                 justify-self: right;
@@ -189,7 +189,7 @@ export class AppCoordinator extends PolymerElement {
                         </a>
                         <div class="searchbar">
                             <paper-input id="input-search" label="Search"></paper-input>
-                            <paper-icon-button icon="search" id="btn-search"></paper-icon-button>
+                            <paper-icon-button class="btn" icon="search" id="btn-search"></paper-icon-button>
                         </div>
                         <paper-icon-button class="btn" icon="settings" id="btn-drawer" drawer-toggle></paper-icon-button>
                     </app-toolbar>
@@ -257,9 +257,7 @@ export class AppCoordinator extends PolymerElement {
             case 'playlist':
                 import('./Views/view-playlist.js');
                 break;
-            case 'video':
-                import('./Views/view-video.js');
-                break;
+
             case 'videoupload':
                 import('./Views/view-videoupload.js');
                 break;

@@ -12,19 +12,16 @@ header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
 require_once "../Classes/DB.php";
-require_once "../Classes/Playlist.php";
+require_once "../Classes/Video.php";
 
 session_start();
 $db = DB::getDBConnection();
 
 //Create playlist object
-$playlist = new Playlist($db);
-
-$data['pid'] = $_POST['pid'];
-$data['vid'] = $_POST['vid'];
+$video = new Video($db);
 
 //Get playlists
-$result = $playlist->addVideoToPlaylist($data);
+$result = $video->getVideoInfoById($_POST['vid']);
 
 //Return playlists
 echo json_encode($result);

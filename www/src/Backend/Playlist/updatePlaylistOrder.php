@@ -20,11 +20,22 @@ $db = DB::getDBConnection();
 //Create playlist object
 $playlist = new Playlist($db);
 
+$index = $playlist->getPlaylistLength($_POST['pid']) - 1;
+$order = $_POST['order'] - 1;
+
+// Check data values
+if ($order < 0) {
+    $data['newPosition'] = 0;
+} else if ($order > $index) {
+    $data['newPosition'] = $index;
+} else {
+    $data['newPosition'] = $order;
+}
+
 $data['pid'] = $_POST['pid'];
 $data['vid'] = $_POST['vid'];
+$data['oldPosition'] = $playlist->getOldPlaylistPosition($_POST['pid'], $_POST['vid']);
 
-//Get playlists
-$result = $playlist->addVideoToPlaylist($data);
+$result = $playlist->updatePlaylistOrder($data);
 
-//Return playlists
 echo json_encode($result);

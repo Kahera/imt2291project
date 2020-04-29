@@ -99,9 +99,8 @@ export class ViewPlaylistcreate extends LitElement {
             console.log(res);
             //Successfully uploaded
             if (res.msg == 'OK') {
-                //Toast OK
-                return html`
-                <paper-toast text="Playlist successfully created" opened></paper-toast>`
+                //Go to home page
+                window.location = window.MyAppGlobals.rootPath;
             } else {
                 return html`
                 <paper-toast text="${this.msg}" opened></paper-toast>`
