@@ -77,6 +77,10 @@ export class ViewRegister extends LitElement {
                         <label slot="label" for="password">Repeat password</label>
                         <input slot="input" type="password" id="password_repeat" name="password_repeat" minlength="8" autocomplete="new-password" placeholder="********"><br/>
                     </paper-input-container>
+                    <div class="tickbox">
+                        <label class="checkIsTeacher">I'm a teacher</label>
+                        <input name="isTeacher" type="checkbox">
+                    </div>
                     
                     <a href="${window.MyAppGlobals.rootPath}login">
                         <paper-button class="btn" raised id="cancel">Cancel</paper-button>
