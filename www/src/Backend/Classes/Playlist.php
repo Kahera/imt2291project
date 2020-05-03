@@ -77,8 +77,9 @@ class Playlist
         //Check results
         if ($sth->rowCount() > 0) {
             $results = $sth->fetchAll();
+            $results['msg'] = 'OK';
         } else {
-            $results['msg'] = "No playlists to get.";
+            $results['msg'] = "No playlists to get";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
             $results['msg'] = $this->db->errorInfo()[2];

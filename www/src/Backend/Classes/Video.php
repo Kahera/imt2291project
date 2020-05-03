@@ -16,26 +16,36 @@ class Video
         $tmp = [];
         if (is_uploaded_file($_FILES['videofile']['tmp_name'])) {
             // Create data array to send to database
-            $sqlData = array($_SESSION['uid'], $data['title'], $data['description'], $data['lecturer'], $data['theme'], $data['subject']);
+            $sqlData = array($data['owner'], $data['title'], $data['description'], $data['lecturer'], $data['theme'], $data['subject']);
 
             //Insert initial values
-            $sql = 'INSERT INTO video (ownerid, title, description, lecturer, theme, subject, videofile';
-            $sqlValues = ') VALUES (?, ?, ?, ?, ?, ?, ?';
+            $sql = 'INSERT INTO video (ownerid, title, description, lecturer, theme, subject, videofile, vmime, vsize';
+            $sqlValues = ') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?';
 
             //Get files
             $videofile = file_get_contents($_FILES['videofile']['tmp_name']);
+            $vsize = $_FILES['videofile']['size'];
+            $vmime = $_FILES['videofile']['type'];
             array_push($sqlData, $videofile);
+            array_push($sqlData, $vmime);
+            array_push($sqlData, $vsize);
 
             // Optional fields
             if (is_uploaded_file($_FILES['thumbnailfile']['tmp_name'])) {
                 $thumbnailfile = file_get_contents($_FILES['thumbnailfile']['tmp_name']);
+                $tsize = $_FILES['thumbnailfile']['size'];
+                $tmime = $_FILES['thumbnailfile']['type'];
                 array_push($sqlData, $thumbnailfile);
-                $sql .= ', thumbnailfile';
-                $sqlValues .= ', ?';
+                array_push($sqlData, $tmime);
+                array_push($sqlData, $tsize);
+
+                $sql .= ', thumbnailfile, tmime, tsize';
+                $sqlValues .= ', ?, ?, ?';
             }
             if (is_uploaded_file($_FILES['subtitles']['tmp_name'])) {
                 $subtitles = file_get_contents($_FILES['subtitles']['tmp_name']);
                 array_push($sqlData, $subtitles);
+                $sql .= ', subtitles';
                 $sqlValues .= ', ?';
             }
 
@@ -48,19 +58,17 @@ class Video
 
             //Execute statement
             $sth->execute($sqlData);
-            $tmp['error'] = $sth->errorInfo();
 
             //Unset file variables to free memory
             unset($videofile);
             unset($thumbnailfile);
             unset($subtitles);
 
-
             //Check that it was uploaded correctly
             if ($sth->rowCount() == 1) {
                 $tmp['msg'] = 'OK';
             } else {
-                $tmp['msg'] = 'Could not upload video. The file might be too large.';
+                $tmp['msg'] = "I failed.";
             }
             if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
                 $tmp['msg'] = $this->db->errorInfo()[2];
@@ -73,7 +81,7 @@ class Video
 
     public function getVideoFileById($vid)
     {
-        $sql = "SELECT videofile FROM video WHERE vid=?";
+        $sql = "SELECT videofile, vmime, vsize FROM video WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -93,6 +101,24 @@ class Video
     public function getVideoInfoById($vid)
     {
         $sql = "SELECT ownerid, title, description, lecturer, theme, subject, avgRating FROM video WHERE vid=?";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($vid));
+
+        if ($sth->rowCount() == 1) {
+            $result = $sth->fetch();
+            $result['msg'] = 'OK';
+        } else {
+            $result['msg'] = 'Could not get video';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $result['msg'] = $this->db->errorInfo()[2];
+        }
+        return $result;
+    }
+
+    public function getVideoThumbnailById($vid)
+    {
+        $sql = "SELECT thumbnailfile, tmime, tsize FROM video WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -231,16 +257,14 @@ class Video
         //Prepare and execute SQL
         $sql = 'DELETE FROM video WHERE vid =?';
         $sth = $this->db->prepare($sql);
-        $sth->execute($vid);
+        $sth->execute(array($vid));
 
         //Check that it's actually removed
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
-            $tmp['id'] = $this->db->lastInsertId();
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not delete user';
-            $tmp['errorInfo'] = $sth->errorInfo();
+            $tmp['msg'] = 'Could not delete user';
+            $tmp['msg'] = $sth->errorInfo();
         }
         return $tmp;
     }

@@ -10,7 +10,7 @@ $db = DB::getDBConnection();
 $video = new Video($db);
 
 //Get playlists
-$result = $video->getVideoFileById($_GET['vid']);
+$result = $video->getVideoThumbnailById($_GET['vid']);
 
 //Return playlists
 $http_origin = $_SERVER['HTTP_ORIGIN'];
@@ -25,4 +25,4 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: " . $result['vmime']);
 header("Content-Length: " . $result['vsize']);
 
-echo $result['videofile'];
+echo $result['thumbnailfile'];

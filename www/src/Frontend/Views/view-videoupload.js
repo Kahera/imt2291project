@@ -82,7 +82,7 @@ export class ViewVideoupload extends LitElement {
                         </paper-input-container>
                         <paper-input-container always-float-label>
                             <label slot="label" for="video">Video [must be video file]</label>
-                            <input slot="input" type="file" class="fileselect" name="videofile" accept="video/*" required>
+                            <input slot="input" type="file" name="videofile" accept="video/*" required>
                         </paper-input-container>
                         <paper-input-container always-float-label>
                             <label slot="label" for="thumbnail">Thumbnail [must be image file]</label>

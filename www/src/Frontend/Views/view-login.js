@@ -113,7 +113,7 @@ export class ViewLogin extends LitElement {
         ).then(res => {
             if (res.msg == 'OK') {              //User is logged in
                 this.updateUserStatus(res);     //Set user name, user id etc
-                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
+                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, validated: this.validated }));
             }
         })
     }
@@ -137,10 +137,10 @@ export class ViewLogin extends LitElement {
             //Successfully logged in
             if (res.msg == 'OK') {
                 this.updateUserStatus(res);
-                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin }));
+                store.dispatch(action_login({ uid: res.uid, email: res.email, userType: res.userType, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, validated: this.validated }));
 
                 //Redirect logged in user to homepage
-                window.location.href = window.MyAppGlobals.rootPath;
+                window.location = window.MyAppGlobals.rootPath;
             } else {
                 this.msg = res.msg;
             }

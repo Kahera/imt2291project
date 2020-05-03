@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import '@polymer/iron-selector/iron-selector'
 
 export class ComponentVideoplayer extends LitElement {
@@ -6,7 +6,7 @@ export class ComponentVideoplayer extends LitElement {
 
     static get properties() {
         return {
-            videofile: String,
+            vid: String,
             vttfile: String,
             thumbnail: String,
             cues: Array,
@@ -15,7 +15,6 @@ export class ComponentVideoplayer extends LitElement {
 
     constructor() {
         super();
-        this.videofile = '';
         this.vttfile = '';
         this.cues = [];
     }
@@ -37,11 +36,12 @@ export class ComponentVideoplayer extends LitElement {
 
     render() {
         return html`
-        <video poster="${this.thumbnail}" controls>
-            <source src="${this.videofile}">
-            ${this.vttfile != "" ?
-                html`<track kind="subtitles" src="${this.vttfile}" @load='${this._loadCaption}' default></track>` : ``} 
+        <video controls poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
+            <source src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php?vid=${this.vid}" type="video/mp4">
+            <track kind="subtitles" src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}" @load='${this._loadCaption}' default></track>
         </video>
+        
+        <!--
         <div class="speed">
             <iron-selector slected="1">
                 <b>Speed</b>
@@ -54,6 +54,7 @@ export class ComponentVideoplayer extends LitElement {
                 <div @click="${this._adjustSpeed}" data-speed='0.5'>0.5x</div>
             </iron-selector>
         </div>
+        -->
         `;
     }
 

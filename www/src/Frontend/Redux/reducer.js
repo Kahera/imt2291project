@@ -7,7 +7,8 @@ const initialState = {
         userType: null,
         isStudent: false,
         isTeacher: false,
-        isAdmin: false
+        isAdmin: false,
+        validated: false,
     }
 };
 

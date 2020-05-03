@@ -28,6 +28,12 @@ $data['lecturer'] = $_POST['lecturer'];
 $data['theme'] = $_POST['theme'];
 $data['subject'] = $_POST['subject'];
 $data['videofile'] = $_FILES['videofile']['tmp_name'];
+if ($_FILES['thumbnailfile']['tmp_name']) {
+    $data['thumbnailfile'] = $_FILES['thumbnailfile']['tmp_name'];
+}
+if ($_FILES['subtitles']['tmp_name']) {
+    $data['subtitles'] = $_FILES['subtitles']['tmp_name'];
+}
 
 //Add video
 $tmp = $video->addVideo($data);

@@ -10,7 +10,7 @@ CREATE TABLE `user` (
 
 CREATE TABLE `video` (
   `vid` BIGINT(8) NOT NULL AUTO_INCREMENT,
-  `ownerid` BIGINT(8) NOT NULL,
+  `ownerid` BIGINT(8),
   `title` VARCHAR(64) NOT NULL,
   `description` VARCHAR(64) NOT NULL,
   `lecturer` VARCHAR(64) NOT NULL, 
@@ -19,7 +19,11 @@ CREATE TABLE `video` (
   `avgRating` int NOT NULL DEFAULT 0,
   `noVotes` int NOT NULL DEFAULT 0,
   `videofile` LONGBLOB NOT NULL,
+  `vmime` VARCHAR(16) NOT NULL,
+  `vsize` int NOT NULL,
   `thumbnailfile` LONGBLOB,
+  `tmime` VARCHAR(16),
+  `tsize` int,
   `subtitles` text DEFAULT NULL,
   PRIMARY KEY (`vid`), 
   FOREIGN KEY (`ownerid`) REFERENCES user(`uid`) ON DELETE SET NULL
@@ -39,7 +43,7 @@ FOREIGN KEY (`ownerid`) REFERENCES user(`uid`)
 /* Extra video tables */
 CREATE TABLE `videoRating` (
 `video` BIGINT(8) NOT NULL,
-`user` BIGINT(8) NOT NULL,
+`user` BIGINT(8),
 `rating` TINYINT(1),
 FOREIGN KEY (`user`) REFERENCES user(`uid`) ON DELETE SET NULL,
 FOREIGN KEY(`video`) REFERENCES video(`vid`) ON DELETE CASCADE
@@ -48,7 +52,7 @@ FOREIGN KEY(`video`) REFERENCES video(`vid`) ON DELETE CASCADE
 CREATE TABLE `videoComment` (
 `cid` BIGINT(8) NOT NULL AUTO_INCREMENT,
 `video` BIGINT(8) NOT NULL,
-`user` BIGINT(8) NOT NULL,
+`user` BIGINT(8),
 `comment` VARCHAR(20000),
 PRIMARY KEY (`cid`),
 FOREIGN KEY (`user`) REFERENCES user(`uid`) ON DELETE SET NULL,
@@ -78,6 +82,3 @@ INSERT INTO user (email, password, userType, validated) VALUES
 ('teacher@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 1), 
 ('teacher2@teacher.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'teacher', 0), 
 ('student@student.no', '$2y$10$Jjj1AJlo6vgSL8npLxqcNO2NZXAvB4FWujQ7NYQ3pugvVXzAGxegy', 'student', 0);
-
-/* Make sure the admin user can't be deleted */
-CREATE RULE protect_admin AS ON DELETE TO users WHERE id = 1 DO INSTEAD NOTHING;
