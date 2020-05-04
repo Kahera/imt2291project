@@ -119,14 +119,15 @@ class Playlist
 
         //Check results
         if ($sth->rowCount() > 0) {
-            $results = $sth->fetchAll();
+            $tmp = $sth->fetchAll();
+            $tmp['msg'] = "OK";
         } else {
-            $results = null;
+            $tmp['msg'] = "No subscriptions for user.";
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
-        return $results;
+        return $tmp;
     }
 
     public function editPlaylist($data)
@@ -299,13 +300,12 @@ class Playlist
 
         // Query should return one row
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not subscribe to playlist';
+            $tmp['msg'] = 'Could not subscribe to playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         return $tmp;
@@ -314,22 +314,34 @@ class Playlist
     public function unsubscribePlaylist($data)
     {
         //Create statement and execute
-        $sql = 'DELETE FROM subscription WHERE uid=? AND pid=?';
+        $sql = 'DELETE FROM subscription WHERE user=? AND playlist=?';
         $sth = $this->db->prepare($sql);
         $sth->execute(array($data['uid'], $data['pid']));
 
-        // Query should return one row
+        //Query should return one row
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not unsubscribe from playlist';
+            $tmp['msg'] = 'Could not unsubscribe from playlist';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         return $tmp;
+    }
+
+    public function checkSubsciption($data)
+    {
+        $sql = "SELECT * FROM subscription WHERE user=? AND playlist=?";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($data['uid'], $data['pid']));
+
+        if ($sth->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //------------------------------SEARCH--------------------------------------

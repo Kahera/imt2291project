@@ -1,5 +1,7 @@
 <?php
 
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
     header("Access-Control-Allow-Origin: $http_origin");
 }
@@ -9,24 +11,20 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Credentials: true");
 
-require_once "classes/DB.php";
-require_once "classes/Playlist.php";
+require_once "../Classes/DB.php";
+require_once "../Classes/Video.php";
 
 session_start();
 $db = DB::getDBConnection();
 
+//Create playlist object
+$video = new Video($db);
 
-// Create playlist object
-$playlist = new Playlist($db);
-
-$data['pid'] = $_POST['pid'];
+//Set needed variables
 $data['uid'] = $_SESSION['uid'];
 
-// Get playlist
-$playlist->unsubscribePlaylist($data);
+//Get playlist subscriptions
+$subscriptions = $video->getVideosBySubscription($_SESSION['uid']);
 
-// Get playlists
-$subscriptions = $playlist->getSubscriptions($_SESSION['uid']);
-
-// Return subscriptions
+//Return result
 echo json_encode($subscriptions);

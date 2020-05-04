@@ -32,44 +32,43 @@ export class ViewHomepage extends LitElement {
     constructor() {
         super();
 
-        //Load user from storage
-        const state = store.getState();
-        this.user = state.user;
-
         //Initialise properties with empty arrays
         this.videos = [];
         this.playlists = [];
 
-        this.search = location.search.split('search=')[1];
+        //Load user from storage
+        const state = store.getState();
+        this.user = state.user;
 
-        if (this.search) {
-            this.getSearchedVideos();
-            this.getSearchedPlaylists();
-            this.videoResulttype = "Searched videos";
-            this.playlistResulttype = "Searched playlists";
-        } else {
-            //Gets videos and playlists with check on which should be gotten
-            if (this.user.Type == 'student') {
-                this.getSubscribedPlaylists();
-                this.getSubscribedVideos();
-                this.videoResulttype = "Videos from subscribed playlists";
-                this.playlistResulttype = "Subscribed playlists";
-            } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
-                this.getOwnedPlaylists();
-                this.getOwnedVideos();
-                this.videoResulttype = "Your videos";
-                this.playlistResulttype = "Your playlists";
-            }
+        //Subscribe to changes in storage
+        store.subscribe((state) => {
+            this.user = store.getState().user;
 
-            if (this.videos.length < 1) {
-                this.getAllVideos();
-                this.videoResulttype = "All videos";
+            this.search = location.search.split('search=')[1];
+
+            if (this.search) {
+                this.getSearchedVideos();
+                this.getSearchedPlaylists();
+            } else {
+                console.log(this.user);
+                //Gets videos and playlists with check on which should be gotten
+                if (this.user.userType == 'student') {
+                    this.getSubscribedPlaylists();
+                    this.getSubscribedVideos();
+                } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
+                    this.getOwnedPlaylists();
+                    this.getOwnedVideos();
+                }
+                if (this.videos.length < 1) {
+                    this.getAllVideos();
+                }
+                if (this.playlists.length < 1) {
+                    this.getAllPlaylists();
+                }
             }
-            if (this.playlists.length < 1) {
-                this.getAllPlaylists();
-                this.playlistResulttype = "All playlists";
-            }
-        }
+        })
+
+
     }
 
     static get styles() {
@@ -126,7 +125,7 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('uid', this.user.uid);
 
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedVideos.php`, {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getSubscribedVideos.php`, {
             method: 'POST',
             credentials: "include",
             body: data
@@ -137,6 +136,7 @@ export class ViewHomepage extends LitElement {
                 this.videos = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
+                this.videoResulttype = "Videos from subscribed playlists";
             } else {
                 this.videoMsg = res.msg;
             }
@@ -148,6 +148,7 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('uid', this.user.uid);
 
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedPlaylists.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedPlaylists.php`, {
             method: 'POST',
             credentials: "include",
@@ -156,11 +157,13 @@ export class ViewHomepage extends LitElement {
         ).then(res => {
             //Successfully retrieved
             if (res.msg == 'OK') {
-                this.videos = Object.values(res);
+                console.log(res);
+                this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
-                this.videos.pop();
+                this.playlists.pop();
+                this.playlistResulttype = "Subscribed playlists";
             } else {
-                this.videoMsg = res.msg;
+                this.playlistMsg = res.msg;
             }
         })
     }
@@ -181,6 +184,7 @@ export class ViewHomepage extends LitElement {
                 this.videos = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
+                this.videoResulttype = "Your videos";
             } else {
                 this.videoMsg = res.msg;
             }
@@ -200,11 +204,12 @@ export class ViewHomepage extends LitElement {
         ).then(res => {
             //Successfully retrieved
             if (res.msg == 'OK') {
-                this.videos = Object.values(res);
+                this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
-                this.videos.pop();
+                this.playlists.pop();
+                this.playlistResulttype = "Your playlists";
             } else {
-                this.videoMsg = res.msg;
+                this.playlistMsg = res.msg;
             }
         })
     }
@@ -218,6 +223,7 @@ export class ViewHomepage extends LitElement {
                 this.videos = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
+                this.videoResulttype = "All videos";
             } else {
                 this.videoMsg = res.msg;
             }
@@ -233,6 +239,7 @@ export class ViewHomepage extends LitElement {
                 this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();
+                this.playlistResulttype = "All playlists";
             } else {
                 this.playlistMsg = res.msg;
             }
@@ -244,7 +251,6 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('searchTerm', this.search);
 
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/searchPlaylists.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/searchPlaylists.php`, {
             method: 'POST',
             credentials: "include",
@@ -257,6 +263,7 @@ export class ViewHomepage extends LitElement {
                 this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();
+                this.playlistResulttype = "Searched playlists";
             } else {
                 this.playlistMsg = res.msg;
             }
@@ -279,6 +286,7 @@ export class ViewHomepage extends LitElement {
                 this.videos = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
+                this.videoResulttype = "Searched videos";
             } else {
                 this.videoMsg = res.msg;
             }

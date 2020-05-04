@@ -186,9 +186,7 @@ export class AppCoordinator extends PolymerElement {
             <app-header-layout>
                 <app-header reveals>
                     <app-toolbar class="toolbar">
-                        <a href="[[rootPath]]">
-                            <paper-icon-button class="btn" icon="home" id="btn-home"></paper-icon-button>
-                        </a>
+                        <paper-icon-button class="btn" icon="home" id="btn-home" on-click="goHome"></paper-icon-button>
                         <div class="searchbar">
                             <paper-input id="searchInput" label="Search" value="{{searchTerm}}"></paper-input>
                             <paper-icon-button class="btn" icon="search" id="btn-search" on-click="search"></paper-icon-button>
@@ -224,7 +222,11 @@ export class AppCoordinator extends PolymerElement {
 
     search() {
         var search = this.searchTerm;
-        window.location.href = window.MyAppGlobals.rootPath + "?search=" + search;
+        window.location = window.MyAppGlobals.rootPath + "?search=" + search;
+    }
+
+    goHome() {
+        window.location = window.MyAppGlobals.rootPath;
     }
 
     _routePageChanged(page) {

@@ -214,6 +214,28 @@ class Video
         return $results;
     }
 
+    public function getVideosBySubscription($uid)
+    {
+        //Make and prepare statement
+        $sql = 'SELECT video.title, video.description, video.lecturer, video.theme, video.subject, video.avgRating FROM video INNER JOIN playlistVideo ON video.vid = playlistVideo.vid INNER JOIN subscription ON subscription.playlist = playlistVideo.pid WHERE subscription.user=?';
+        $sth = $this->db->prepare($sql);
+
+        //Execute statement
+        $sth->execute(array($uid));
+
+        //Check
+        if ($sth->rowCount() > 0) {
+            $results = $sth->fetchAll();
+            $results['msg'] = "OK";
+        } else {
+            $results['msg'] = "No videos to get.";
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $results['msg'] = $this->db->errorInfo()[2];
+        }
+        return $results;
+    }
+
 
     public function updateVideo($data)
     {
