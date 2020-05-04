@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import store from '../Redux/store'
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
 
@@ -17,8 +18,9 @@ export class ComponentComment extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
-    }
 
+        this.vid = location.search.split('vid=')[1];
+    }
 
     static get styles() {
         return [
@@ -34,21 +36,34 @@ export class ComponentComment extends LitElement {
     //TODO: disable button until input is filled
     render() {
         return html`
-        <paper-input type="text" id="input_comment" label="Add a comment"></paper-input>
-        <paper-button id="btn_comment" @click="${this._comment}">Comment</paper-button>
+        <div class="container">
+            <form id="form" onsubmit="javascript: return false;" enctype="multipart/form-data">
+                <paper-input-container id="input" always-float-label>
+                    <label slot="label" for="comment">Add a comment</label>
+                    <input slot="input" type="text" id="comment" name="comment"></paper-input>
+                </paper-input-container>
+                <button id="btn_comment" @click="${this.comment}" raised>Comment</button>
+            </form>
+        </div>
         `;
     }
 
-    _comment(e) {
+    comment(e) {
         const data = new FormData(e.target.form);
         data.append('vid', this.vid);
-        data.append('user', this.user.uid);
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/comment.php`, {
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/addComment.php`, {
             method: 'POST',
             credentials: "include",
             body: data
-        }).then(res => res.json())
-            .then(data => this.msg = data['msg']);
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {
+                window.location.reload();
+            } else {
+                this.msg = res.msg;
+            }
+        })
     }
 }
 customElements.define('component-comment', ComponentComment);

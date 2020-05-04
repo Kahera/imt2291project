@@ -100,7 +100,7 @@ class Video
 
     public function getVideoInfoById($vid)
     {
-        $sql = "SELECT ownerid, title, description, lecturer, theme, subject, avgRating FROM video WHERE vid=?";
+        $sql = "SELECT vid, ownerid, title, description, lecturer, theme, subject, avgRating FROM video WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -119,6 +119,24 @@ class Video
     public function getVideoThumbnailById($vid)
     {
         $sql = "SELECT thumbnailfile, tmime, tsize FROM video WHERE vid=?";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array($vid));
+
+        if ($sth->rowCount() == 1) {
+            $result = $sth->fetch();
+            $result['msg'] = 'OK';
+        } else {
+            $result['msg'] = 'Could not get video';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $result['msg'] = $this->db->errorInfo()[2];
+        }
+        return $result;
+    }
+
+    public function getVideoSubtitlesById($vid)
+    {
+        $sql = "SELECT subtitles FROM video WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -491,7 +509,7 @@ class Video
         $sth = $this->db->prepare($sql);
 
         //Execute statement
-        $sth->execute(array($data['vid'], $_SESSION['uid'], $data['comment']));
+        $sth->execute(array($data['video'], $_SESSION['uid'], $data['comment']));
 
         //Check that it was uploaded correctly
         if ($sth->rowCount() == 1) {
@@ -513,9 +531,21 @@ class Video
 
         //Execute statement
         $sth->execute(array($vid));
-        $comments = $sth->fetchall();
 
-        return $comments;
+        //Check that it was uploaded correctly
+        if ($sth->rowCount() > 0) {
+            $tmp = $sth->fetchAll();
+            $tmp['msg'] = 'OK';
+        } else if ($sth->rowCount() == 0) {
+            $tmp['msg'] = 'No comments yet.';
+        } else {
+            $tmp['msg'] = 'Could not get comments.';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $tmp['msg'] .= $this->db->errorInfo()[2];
+        }
+
+        return $tmp;
     }
 
     //-----------------------------SEARCH------------------------------------

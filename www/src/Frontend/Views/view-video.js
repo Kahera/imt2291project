@@ -2,6 +2,9 @@ import { LitElement, html, css } from 'lit-element';
 import store from '../Redux/store'
 import '../Components/component-videoplayer'
 import '../Components/component-videoinfo'
+import '../Components/component-comment'
+import '../Components/component-comments'
+
 
 export class ViewVideo extends LitElement {
     //Some code borrowed from videoVTT example
@@ -16,7 +19,8 @@ export class ViewVideo extends LitElement {
             videofile: String,
             vttfile: String,
             cues: String,
-            activecues: Array
+            activecues: Array,
+            selectedPlaylist: Number,
         }
     }
 
@@ -46,14 +50,13 @@ export class ViewVideo extends LitElement {
         this.cues = [];
         this.activecues = [];
 
-        this.getVideoInfo();
-
         //Set event listeners
         this.addEventListener('cuesUpdated', e => this.cues = JSON.stringify(e.detail.cues));
         this.addEventListener('cuechange', e => this.activecues = JSON.stringify(e.detail.activeCues));
-        this.addEventListener('jumpToTimecode', e => this.shadowRoot.querySelector('video-viewer').setTime(e.detail.timeCode));
+        this.addEventListener('jumpToTimecode', e => this.shadowRoot.querySelector('component-videoplayer').setTime(e.detail.timeCode));
 
-        //Get comments
+        //Get info
+        this.getVideoInfo();
         this.getComments();
     }
 
@@ -92,6 +95,21 @@ export class ViewVideo extends LitElement {
                 grid-row-start: 2;
             }
 
+            component-videocard {
+                grid-column-start: 2;
+                grid-row-start: 2;
+            }
+
+            component-comment {
+                grid-column-start: 2;
+                grid-row-start: 3;
+            }
+
+            component-comments {
+                grid-column-start: 2;
+                grid-row-start: 4;
+            }
+
             li {
                 list-style-type: none;
                 padding-top: 0.5em;
@@ -100,14 +118,12 @@ export class ViewVideo extends LitElement {
                 padding-left: 1em;
             }
 
-
             `,
         ]
     }
 
     //TODO: Comment component
     //TODO: Texting
-    //TODO: If teacher - add to playlist
     render() {
         return html`
         <div class="container">
@@ -119,67 +135,66 @@ export class ViewVideo extends LitElement {
                 <component-videocueviewer .cues="${this.cues}" .activecues="${this.activecues}"></component-videocueviewer>
             </div>
 
-            ${(this.user.userType == 'teacher' || this.user.userType == 'admin') ?
-                html`
-            <div class="teacherButtons">
-                <paper-button class="btn" id="btn_delete" @click=${this.deleteVideo} raised>Delete video</paper-button>
+            ${(this.user.userType == 'teacher' || this.user.userType == 'admin') ? html`
+                <div class="teacherButtons">
+                    <paper-button class="btn" id="btn_delete" @click=${this.deleteVideo} raised>Delete video</paper-button>
 
-                ${this.userPlaylists.length < 1 ? html`
-                    <paper-dropdown-menu id="dropdown" label="No playlists to add to" disabled></paper-dropdown-menu>
-                `: html`
-                    <paper-dropdown-menu id="dropdown">
-                        <paper-listbox slot="dropdown-content" class="dropdown-content" id="listbox" @iron-select="${this.getValue}">
-                            ${this.userPlaylists.map(i => html`<li><paper-item playlist=${i.pid}>${i.title}</paper-item><li>`)}
-                        </paper-listbox>
-                    </paper-dropdown-menu>
-                    <paper-button class="btn" id="btn_add" @click="${this.addVideoToPlaylist}" raised>Add to playlist</paper-button>`}
-            </div>
-
-            <paper-card class="card">
-                <div class="card-content">
-                    <label for="msg">${this.msg}</label>
-                    <form onsubmit="javascript: return false;" enctype="multipart/form-data">
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="title">Title</label>
-                            <input slot="input" type="text" name="title" placeholder="${this.videoInfo.title}" required>
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="description">Description</label>
-                            <input slot="input" type="text" id="description" name="description" placeholder="${this.videoInfo.description}" required>
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="lecturer">Lecturer</label>
-                            <input slot="input" type="text" id="lecturer" name="lecturer" placeholder="${this.videoInfo.lecturer}" required>
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="theme">Theme</label>
-                            <input slot="input" type="text" name="theme" placeholder="${this.videoInfo.theme}" required>
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="subject">Subject</label>
-                            <input slot="input" type="text" name="subject" placeholder="${this.videoInfo.subject}" required>
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="thumbnail">New thumbnail [must be image file]</label>
-                            <input slot="input" type="file" name="thumbnailfile" accept="image/*">
-                        </paper-input-container>
-                        <paper-input-container always-float-label>
-                            <label slot="label" for="subtitles">New subtitles [must be .vtt file]</label>
-                            <input slot="input" type="file" name="subtitles" accept="text/vtt">
-                        </paper-input-container>
-                        <button id="register" @click="${this.updateVideo}">Update</button>
-                    </form>
+                    ${this.userPlaylists.length < 1 ? html`
+                        <paper-dropdown-menu id="dropdown" label="No playlists to add to" disabled></paper-dropdown-menu>
+                    `: html`
+                        <paper-dropdown-menu id="dropdown">
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" id="listbox" @iron-select="${this.getPidValue}">
+                                ${this.userPlaylists.map(i => html`<li><paper-item playlist=${i.pid}>${i.title}</paper-item><li>`)}
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-button class="btn" id="btn_add" @click="${this.addVideoToPlaylist}" raised>Add to playlist</paper-button>
+                    `}
                 </div>
-            </paper-card>
+
+                <paper-card class="card">
+                    <div class="card-content">
+                        <label for="msg">${this.msg}</label>
+                        <form onsubmit="javascript: return false;" enctype="multipart/form-data">
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="title">Title</label>
+                                <input slot="input" type="text" name="title" placeholder="${this.videoInfo.title}" required>
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="description">Description</label>
+                                <input slot="input" type="text" id="description" name="description" placeholder="${this.videoInfo.description}" required>
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="lecturer">Lecturer</label>
+                                <input slot="input" type="text" id="lecturer" name="lecturer" placeholder="${this.videoInfo.lecturer}" required>
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="theme">Theme</label>
+                                <input slot="input" type="text" name="theme" placeholder="${this.videoInfo.theme}" required>
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="subject">Subject</label>
+                                <input slot="input" type="text" name="subject" placeholder="${this.videoInfo.subject}" required>
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="thumbnail">New thumbnail [must be image file]</label>
+                                <input slot="input" type="file" name="thumbnailfile" accept="image/*">
+                            </paper-input-container>
+                            <paper-input-container always-float-label>
+                                <label slot="label" for="subtitles">New subtitles [must be .vtt file]</label>
+                                <input slot="input" type="file" name="subtitles" accept="text/vtt">
+                            </paper-input-container>
+                            <button id="register" @click="${this.updateVideo}">Update</button>
+                        </form>
+                    </div>
+                </paper-card>
             
                 `: html`
-                <component-videocard .video=${this.videoinfo}></component-videocard>
-
-                <!--Rating -->
+                <!-- Student/not logged in -->
+                <component-videocard .video=${this.videoInfo}></component-videocard>
             `}
-            
-            <!-- comments -->
-            <!-- -->
+
+            <component-comment></component-comment>
+            <component-comments></component-comments>
         </div>
         `
     }
@@ -205,21 +220,25 @@ export class ViewVideo extends LitElement {
         })
     }
 
+    getCues() {
+        //Get vid from URL and append to form
+        this.vid = location.search.split('vid=')[1];
+        const data = new FormData();
+        data.append('vid', this.vid);
 
-    addVideoToPlaylist(e) {
-        const data = new FormData(e.target.form);
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/addVideoToPlaylist.php`, {
+        //Then fetch the video info
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php`, {
             method: 'POST',
             credentials: "include",
             body: data
         }).then(res => res.json()
         ).then(res => {
             if (res.msg == 'OK') {
-                window.location.reload();
+                this.cues = res;
             } else {
-                this.msg = res['msg']
+                this.msg = res.msg;
             }
-        });
+        })
     }
 
     getComments() {
@@ -254,6 +273,30 @@ export class ViewVideo extends LitElement {
                 this.userPlaylists.pop();
             }
         })
+    }
+
+    getPidValue(e) {
+        const index = e.target.selected;
+        this.selectedPlaylist = this.userPlaylists[index];
+    }
+
+    addVideoToPlaylist(e) {
+        const data = new FormData(e.target.form);
+        data.append('vid', this.vid);
+        data.append('pid', this.selectedPlaylist.pid);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/addVideoToPlaylist.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {
+                this.msg = "Video added to playlist!";
+            } else {
+                this.msg = res['msg'];
+            }
+        });
     }
 
     deleteVideo() {

@@ -7,11 +7,9 @@ export class ComponentVideoinfo extends LitElement {
 
     properties() {
         return {
-            //User must contain: 
-            //uid (for checking against video owner)
-            //userType (for checking against admin)
             user: Object,
-            video: Object
+            video: Object,
+            rating: Number,
         }
     }
 
@@ -20,6 +18,8 @@ export class ComponentVideoinfo extends LitElement {
 
         const state = store.getState();
         this.user = state.user;
+
+        this.getRating();
     }
 
     static get styles() {
@@ -56,50 +56,36 @@ export class ComponentVideoinfo extends LitElement {
         return html`
         <paper-card class="rate" id="card">
                 <div class="card-content">
-                ${this.user.userType == 'admin' || this.user.uid == this.video.ownerid ?
-                html`
-                        <!-- If video owner or admin, show input fields -->
-                        //Show input with current info as placeholder
-                        <paper-input label="input-title" value="${this.video.title}"></paper-input>
-                        <paper-input label="input-subject" value="${this.video.subject}"></paper-input>
-                        <paper-input label="input-lecturer" value="${this.video.lecturer}"></paper-input>
-                        <paper-input label="input-theme" value="${this.video.theme}"></paper-input>
-                        <paper-input label="input-description" value="${this.video.description}"></paper-input>
-                        
-                        `: html`
-                        <!-- If student or not logged in, show "plain" info-->
-                        <div class="card-info-title">
-                                ${this.video.title}
-                        </div>
-                        <div class="card-info">
-                                ${this.video.subject}
-                        </div>
-                        <div class="card-info-lecturer">
-                                ${this.video.lecturer}
-                        </div>
-                        <div class="card-info">
-                                ${this.video.theme}
-                        </div>
-                        <div class="card-info">
-                                ${this.video.description}
-                        </div>
-                `}
+                    <div class="card-info-title">
+                            ${this.video.title}
+                    </div>
+                    <div class="card-info">
+                            ${this.video.subject}
+                    </div>
+                    <div class="card-info-lecturer">
+                            ${this.video.lecturer}
+                    </div>
+                    <div class="card-info">
+                            ${this.video.theme}
+                    </div>
+                    <div class="card-info">
+                            ${this.video.description}
+                    </div>
                 </div>
-                <!-- Rating -->
-                <div class="card-content">
-                        <paper-icon-button @click="${this._rate}" class="rate-icon" icon="star" value="1"></paper-icon-button>
-                        <paper-icon-button @click="${this._rate}" class="rate-icon" icon="star" value="2"></paper-icon-button>
-                        <paper-icon-button @click="${this._rate}" class="rate-icon" icon="star" value="3"></paper-icon-button>
-                        <paper-icon-button @click="${this._rate}" class="rate-icon" icon="star" value="4"></paper-icon-button>
-                        <paper-icon-button @click="${this._rate}" class="rate-icon" icon="star" value="5"></paper-icon-button>
+
+                <div class="btn-rating">
+                        <paper-icon-button @click="${this.rate}" class="rate-icon" icon="star" value="1"></paper-icon-button>
+                        <paper-icon-button @click="${this.rate}" class="rate-icon" icon="star" value="2"></paper-icon-button>
+                        <paper-icon-button @click="${this.rate}" class="rate-icon" icon="star" value="3"></paper-icon-button>
+                        <paper-icon-button @click="${this.rate}" class="rate-icon" icon="star" value="4"></paper-icon-button>
+                        <paper-icon-button @click="${this.rate}" class="rate-icon" icon="star" value="5"></paper-icon-button>
                 </div>
-                <div class="rate-image"></div>
-                <div>Avg. rating: </div>
+                <div>Avg. rating: ${this.rating}</div>
         </paper-card>
         `
     }
 
-    _rate(e) {
+    rate(e) {
         const data = new FormData(e.target.form);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/rate.php`, {
             method: 'POST',
@@ -109,8 +95,26 @@ export class ComponentVideoinfo extends LitElement {
             .then(data => this.msg = data['msg']);
     }
 
-    _loadRating(e) {
-        //TODO: API call get video avg. rating
+    getRating() {
+        //Get vid from URL and append to form
+        const data = new FormData();
+        data.append('vid', this.video.vid);
+
+
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/getRating.php`);
+        //Then fetch the video rating
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getRating.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {
+                this.rating = res['rating'];
+            } else {
+                this.msg = res.msg;
+            }
+        })
     }
 }
 customElements.define('component-videoinfo', ComponentVideoinfo)

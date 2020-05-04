@@ -38,27 +38,27 @@ export class ComponentVideoplayer extends LitElement {
         return html`
         <video controls poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
             <source src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php?vid=${this.vid}" type="video/mp4">
-            <track kind="subtitles" src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}" @load='${this._loadCaption}' default></track>
+            <track kind="subtitles" label="Subtitles" src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}" @load='${this.loadCaption}' default></track>
         </video>
         
         <!--
         <div class="speed">
             <iron-selector slected="1">
                 <b>Speed</b>
-                <div @click="${this._adjustSpeed}" data-speed='2'>2x</div>
-                <div @click="${this._adjustSpeed}" data-speed='1.75'>1.75x</div>
-                <div @click="${this._adjustSpeed}" data-speed='1.5'>1.5x</div>
-                <div @click="${this._adjustSpeed}" data-speed='1.25'>1.25x</div>
-                <div @click="${this._adjustSpeed}" data-speed='1'>1x</div>
-                <div @click="${this._adjustSpeed}" data-speed='0.75'>0.75x</div>
-                <div @click="${this._adjustSpeed}" data-speed='0.5'>0.5x</div>
+                <div @click="${this.adjustSpeed}" data-speed='2'>2x</div>
+                <div @click="${this.adjustSpeed}" data-speed='1.75'>1.75x</div>
+                <div @click="${this.adjustSpeed}" data-speed='1.5'>1.5x</div>
+                <div @click="${this.adjustSpeed}" data-speed='1.25'>1.25x</div>
+                <div @click="${this.adjustSpeed}" data-speed='1'>1x</div>
+                <div @click="${this.adjustSpeed}" data-speed='0.75'>0.75x</div>
+                <div @click="${this.adjustSpeed}" data-speed='0.5'>0.5x</div>
             </iron-selector>
         </div>
         -->
         `;
     }
 
-    _adjustSpeed(e) {
+    adjustSpeed(e) {
         let target = (e.originalTarget || e.path[0]);
         const video = this.shadowRoot.querySelector('video');
         video.playbackRate = target.dataset.speed;
@@ -70,6 +70,36 @@ export class ComponentVideoplayer extends LitElement {
    */
     setTime(time) {
         this.shadowRoot.querySelector('video').currentTime = time;
+    }
+
+    /**
+     * Triggered when the track is loaded in the view.
+     * Loads, hides and stores the original cues, then injects elements into the 'caption' list.
+     */
+    loadCaption(e) {
+        const video = this.shadowRoot.querySelector('video');
+        const list = this.shadowRoot.querySelector('#caption ul')
+
+        // hide the original track on load
+        const track = (e.target.track || video.textTracks[0])
+        track.mode = 'hidden'
+
+        // listen to cue changes
+        track.addEventListener('cuechange', e => this._updateCaption(e))
+
+        // store the cues
+        for (let i = 0; i < track.cues.length; i++) {
+            const cue = track.cues[i]
+            this.cues.push(cue)
+
+            // create and inject cue element(s)
+            const li = document.createElement('li')
+            li.dataset.id = cue.id
+            li.innerHTML = cue.text
+            li.addEventListener('click', e => this._selectCaption(e))
+
+            list.appendChild(li)
+        }
     }
 
     /**
