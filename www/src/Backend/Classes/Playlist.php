@@ -335,11 +335,31 @@ class Playlist
     //------------------------------SEARCH--------------------------------------
     public function searchPlaylist($data)
     {
+        //Get search term with % around for likeness-search
+        $searchTerm = "'%" . $data['searchTerm'] . "%'";
+
         //Create statement and execute
-        $sql = 'SELECT * FROM playlists WHERE ' . $data['searchType'] . 'LIKE ' . $data['searchTerm'];
+        $sql = 'SELECT * FROM playlist WHERE title LIKE ' . $searchTerm . ' OR description LIKE ' . $searchTerm . ' OR theme LIKE ' . $searchTerm . ' OR subject LIKE ' . $searchTerm;
+
+        //Looks like this when built
+        //SELECT * FROM video WHERE title LIKE '%x%' OR description LIKE '%x%' OR theme LIKE '%x%' OR subject LIKE '%x%'
+
+        //Prepare and execute
         $sth = $this->db->prepare($sql);
         $sth->execute();
-        $playlists = $sth->fetchAll();
+
+        //Check that it was uploaded correctly
+        if ($sth->rowCount() > 0) {
+            $playlists = $sth->fetchAll();
+            $playlists['msg'] = 'OK';
+        } else if ($sth->rowCount() == 0) {
+            $playlists['msg'] = 'No matches.';
+        } else {
+            $playlists['msg'] = 'Could not get searches.';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $playlists['msg'] .= $this->db->errorInfo()[2];
+        }
 
         return $playlists;
     }

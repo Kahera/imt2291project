@@ -224,26 +224,6 @@ export class ViewVideo extends LitElement {
         })
     }
 
-    getCues() {
-        //Get vid from URL and append to form
-        this.vid = location.search.split('vid=')[1];
-        const data = new FormData();
-        data.append('vid', this.vid);
-
-        //Then fetch the video info
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php`, {
-            method: 'POST',
-            credentials: "include",
-            body: data
-        }).then(res => res.json()
-        ).then(res => {
-            if (res.msg == 'OK') {
-                this.cues = res;
-            } else {
-                this.msg = res.msg;
-            }
-        })
-    }
 
     getComments() {
         const data = new FormData();

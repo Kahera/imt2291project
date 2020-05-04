@@ -46,7 +46,9 @@ export class AppCoordinator extends PolymerElement {
                 type: Object,
                 value: { student: false, teacher: false, admin: false }
             },
-            drawerOpened: Boolean
+            drawerOpened: Boolean,
+            searchTerm: String,
+            searchResults: Array
         }
     }
 
@@ -133,7 +135,7 @@ export class AppCoordinator extends PolymerElement {
                 justify-self: left;
             }
 
-            #input-search {
+            #searchInput {
                 color: #4C4C4C;
                 width: 80%;
                 display: inline-block;
@@ -188,8 +190,8 @@ export class AppCoordinator extends PolymerElement {
                             <paper-icon-button class="btn" icon="home" id="btn-home"></paper-icon-button>
                         </a>
                         <div class="searchbar">
-                            <paper-input id="input-search" label="Search"></paper-input>
-                            <paper-icon-button class="btn" icon="search" id="btn-search"></paper-icon-button>
+                            <paper-input id="searchInput" label="Search" value="{{searchTerm}}"></paper-input>
+                            <paper-icon-button class="btn" icon="search" id="btn-search" on-click="search"></paper-icon-button>
                         </div>
                         <paper-icon-button class="btn" icon="settings" id="btn-drawer" drawer-toggle></paper-icon-button>
                     </app-toolbar>
@@ -218,6 +220,11 @@ export class AppCoordinator extends PolymerElement {
         return [
             '_routePageChanged(routeData.page)'
         ];
+    }
+
+    search() {
+        var search = this.searchTerm;
+        window.location.href = window.MyAppGlobals.rootPath + "?search=" + search;
     }
 
     _routePageChanged(page) {
@@ -277,9 +284,6 @@ export class AppCoordinator extends PolymerElement {
         this.drawerOpened = !this.drawerOpened;
     }
 
-    /**
-    * Called when the user clicks the log out button
-    */
     logout() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/logout.php`, {
             credentials: "include"
@@ -314,7 +318,5 @@ export class AppCoordinator extends PolymerElement {
                 break;
         }
     }
-
-
 }
 customElements.define('app-coordinator', AppCoordinator);

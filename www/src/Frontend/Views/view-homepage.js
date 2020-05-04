@@ -24,7 +24,8 @@ export class ViewHomepage extends LitElement {
             videoResulttype: String,
             playlistResulttype: String,
             videoMsg: String,
-            playlistMsg: String
+            playlistMsg: String,
+            search: String
         }
     }
 
@@ -39,28 +40,35 @@ export class ViewHomepage extends LitElement {
         this.videos = [];
         this.playlists = [];
 
-        //TODO: Figure out searched terms
+        this.search = location.search.split('search=')[1];
 
-        //Gets videos and playlists with check on which should be gotten
-        if (this.user.Type == 'student') {
-            this.getSubscribedPlaylists();
-            this.getSubscribedVideos();
-            this.videoResulttype = "Videos from subscribed playlists";
-            this.playlistResulttype = "Subscribed playlists";
-        } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
-            this.getOwnedPlaylists();
-            this.getOwnedVideos();
-            this.videoResulttype = "Your videos";
-            this.playlistResulttype = "Your playlists";
-        }
+        if (this.search) {
+            this.getSearchedVideos();
+            this.getSearchedPlaylists();
+            this.videoResulttype = "Searched videos";
+            this.playlistResulttype = "Searched playlists";
+        } else {
+            //Gets videos and playlists with check on which should be gotten
+            if (this.user.Type == 'student') {
+                this.getSubscribedPlaylists();
+                this.getSubscribedVideos();
+                this.videoResulttype = "Videos from subscribed playlists";
+                this.playlistResulttype = "Subscribed playlists";
+            } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
+                this.getOwnedPlaylists();
+                this.getOwnedVideos();
+                this.videoResulttype = "Your videos";
+                this.playlistResulttype = "Your playlists";
+            }
 
-        if (this.videos.length < 1) {
-            this.getAllVideos();
-            this.videoResulttype = "All videos";
-        }
-        if (this.playlists.length < 1) {
-            this.getAllPlaylists();
-            this.playlistResulttype = "All playlists";
+            if (this.videos.length < 1) {
+                this.getAllVideos();
+                this.videoResulttype = "All videos";
+            }
+            if (this.playlists.length < 1) {
+                this.getAllPlaylists();
+                this.playlistResulttype = "All playlists";
+            }
         }
     }
 
@@ -231,21 +239,51 @@ export class ViewHomepage extends LitElement {
         })
     }
 
-    /*
-    _getSearchedPlaylists() {
-        get('../../src/Backend/Playlist/getSearchedPlaylists.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get searched playlists', err)
+    getSearchedPlaylists() {
+        //Append search term to form
+        const data = new FormData();
+        data.append('searchTerm', this.search);
+
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/searchPlaylists.php`);
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/searchPlaylists.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            console.log(res);
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.playlists = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.playlists.pop();
+            } else {
+                this.playlistMsg = res.msg;
+            }
         })
     }
 
-    _getSearchedVideos() {
-        get('../../src/Backend/Playlist/getSearchedVideos.php').then(playlists => this.playlists = playlists).catch(err => {
-            _renderToast('Failed to get searched videos', err)
+    getSearchedVideos() {
+        //Append search term to form
+        const data = new FormData();
+        data.append('searchTerm', this.search);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/searchVideos.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            //Successfully retrieved
+            if (res.msg == 'OK') {
+                this.videos = Object.values(res);
+                //Because msg becomes it's own element, pop one to remove this before mapping
+                this.videos.pop();
+            } else {
+                this.videoMsg = res.msg;
+            }
         })
     }
-   */
-
-
 
 }
 customElements.define('view-homepage', ViewHomepage);

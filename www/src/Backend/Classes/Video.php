@@ -565,11 +565,31 @@ class Video
     //-----------------------------SEARCH------------------------------------
     public function searchVideo($data)
     {
+        //Get search term with % around for likeness-search
+        $searchTerm = "'%" . $data['searchTerm'] . "%'";
+
         //Create statement and execute
-        $sql = 'SELECT * FROM video WHERE ' . $data['searchType'] . 'LIKE ' . $data['searchTerm'];
+        $sql = 'SELECT vid, title, description, lecturer, theme, subject, avgRating FROM video WHERE title LIKE ' . $searchTerm . ' OR description LIKE ' . $searchTerm . ' OR lecturer LIKE ' . $searchTerm . ' OR theme LIKE ' . $searchTerm . ' OR subject LIKE ' . $searchTerm;
+
+        //Looks like this when built
+        //SELECT * FROM video WHERE title LIKE '%x%' OR description LIKE '%x%' OR lecturer LIKE '%x%' OR theme LIKE '%x%' OR subject LIKE '%x%'
+
+        //Prepare and execute
         $sth = $this->db->prepare($sql);
         $sth->execute();
-        $videos = $sth->fetchAll();
+
+        //Check that it was uploaded correctly
+        if ($sth->rowCount() > 0) {
+            $videos = $sth->fetchAll();
+            $videos['msg'] = 'OK';
+        } else if ($sth->rowCount() == 0) {
+            $videos['msg'] = 'No matches.';
+        } else {
+            $videos['msg'] = 'Could not get searches.';
+        }
+        if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
+            $videos['msg'] .= $this->db->errorInfo()[2];
+        }
 
         return $videos;
     }
