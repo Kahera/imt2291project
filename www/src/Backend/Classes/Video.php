@@ -219,34 +219,49 @@ class Video
     {
         //Make and prepare statement for inserting
         $sql = "UPDATE video SET ";
+        $sqlArray = array();
         $sqlData = array();
 
         // Check which fields are set and add to SQL and array
-        if (isset($data['ownerid'])) {
-            $sql .= ', ownerid=?';
-            array_push($sqlData, $data['ownerid']);
-        }
         if (isset($data['title'])) {
-            $sql .= ', title=?';
+            array_push($sqlArray, 'title=?');
             array_push($sqlData, $data['title']);
         }
         if (isset($data['description'])) {
-            $sql .= ', description=?';
+            array_push($sqlArray, 'description=?');
             array_push($sqlData, $data['description']);
         }
         if (isset($data['lecturer'])) {
-            $sql .= ', lecturer=?';
+            array_push($sqlArray, 'lecturer=?');
             array_push($sqlData, $data['lecturer']);
         }
         if (isset($data['theme'])) {
-            $sql .= ', theme=?';
+            array_push($sqlArray, 'theme=?');
             array_push($sqlData, $data['theme']);
         }
         if (isset($data['subject'])) {
-            $sql .= ', subject=?';
+            array_push($sqlArray, 'subject=?');
             array_push($sqlData, $data['subject']);
         }
+        if (is_uploaded_file($_FILES['thumbnailfile']['tmp_name'])) {
+            $thumbnailfile = file_get_contents($_FILES['thumbnailfile']['tmp_name']);
+            $tsize = $_FILES['thumbnailfile']['size'];
+            $tmime = $_FILES['thumbnailfile']['type'];
+            array_push($sqlData, $thumbnailfile);
+            array_push($sqlData, $tmime);
+            array_push($sqlData, $tsize);
 
+            array_push($sqlArray, 'thumbnailfile=?');
+            array_push($sqlArray, 'tmime=?');
+            array_push($sqlArray, 'tsize=?');
+        }
+        if (is_uploaded_file($_FILES['subtitles']['tmp_name'])) {
+            $subtitles = file_get_contents($_FILES['subtitles']['tmp_name']);
+            array_push($sqlData, $subtitles);
+            array_push($sqlArray, 'subtitles=?');
+        }
+
+        $sql .= implode(", ", $sqlArray);
         array_push($sqlData, $data['vid']);
 
         //Finish creating SQL statement and prepare
@@ -258,13 +273,12 @@ class Video
 
         //Check that it was uploaded correctly
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not update video data';
+            $tmp['msg'] = 'Could not update video data';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         return $tmp;

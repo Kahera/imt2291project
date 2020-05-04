@@ -64,6 +64,10 @@ export class ViewPlaylist extends LitElement {
                 padding-left: 1em;
             }
 
+            .videocard {
+                width: 90%;
+            }
+
             .editpage {
                 display: grid;
                 grid-template-columns: 1em 3fr 1fr 1em;
@@ -186,7 +190,7 @@ export class ViewPlaylist extends LitElement {
         <div class="videos-teacher">
         ${this.videos.length > 0 ? html`
             ${this.videos.map(i => html`
-                <component-videocard .video=${i}></component-videocard>
+                <component-videocard class="videocard" .video=${i}></component-videocard>
                 <div class="teacherButtons">
                     <form class="videoOrder" onsubmit="javascript: return false;">
                         <button @click="${this.removeVideo}" raised>Remove from playlist</button>
@@ -209,7 +213,7 @@ export class ViewPlaylist extends LitElement {
             <hr>
             <div class="videos">
                 ${this.videos.length > 0 ? html`
-                    ${this.videos.map(i => html`<component-videocard .video=${i}></component-videocard>`)}
+                    ${this.videos.map(i => html`<component-videocard class="videocard" .video=${i}></component-videocard>`)}
                 ` : html`
                     <p>${this.videoMsg}</p>
                 `}`}`

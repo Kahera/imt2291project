@@ -73,13 +73,17 @@ export class ViewHomepage extends LitElement {
 
             .content {
                 display: grid;
-                grid-template-columns: 3em 50% 50% 3em;
+                grid-template-columns: 1fr 20fr 20fr 1fr;
                 grid-template-rows: auto;
             }
 
             .videos {
                 grid-column-start: 2;
                 grid-row-start: 1;
+            }
+
+            .card {
+                width: 90%;
             }
 
             .playlists {
@@ -96,13 +100,13 @@ export class ViewHomepage extends LitElement {
             <div class="videos">
                 <h2>${this.videoResulttype}</h2>
                 ${this.videoMsg ? html`<p>${this.videoMsg}` : html``}
-                ${this.videos.map(i => html`<component-videocard .video=${i}></component-videocard>`)}
+                ${this.videos.map(i => html`<component-videocard class="card" .video=${i}></component-videocard>`)}
 
             </div>
             <div class="playlists">
                 <h2>${this.playlistResulttype}</h2>
                 ${this.playlistMsg ? html`<p>${this.playlistMsg}` : html``}
-                ${this.playlists.map(i => html`<component-playlistcard .playlist=${i}></component-playlistcard>`)}
+                ${this.playlists.map(i => html`<component-playlistcard class="card" .playlist=${i}></component-playlistcard>`)}
             </div>
         </div>
         `;

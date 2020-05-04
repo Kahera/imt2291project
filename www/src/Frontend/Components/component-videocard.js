@@ -21,11 +21,7 @@ export class ComponentVideocard extends LitElement {
 
             paper-card {
                 cursor: pointer;
-            }
-
-            .card {
-                width: 40em;
-                max-width: 90%;
+                width: 100%;
             }
             
             .card-title {
@@ -44,7 +40,7 @@ export class ComponentVideocard extends LitElement {
     //in paper-card: image="${this.video.thumbnail}"
     render() {
         return html`
-            <paper-card class="card" @click="${this.goto}">
+            <paper-card class="card" image="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}" @click="${this.goto}">
                 <div class="card-content">
                     <div class="card-title">
                         ${this.video.title}

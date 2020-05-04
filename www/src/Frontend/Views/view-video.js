@@ -4,6 +4,7 @@ import '../Components/component-videoplayer'
 import '../Components/component-videoinfo'
 import '../Components/component-comment'
 import '../Components/component-comments'
+import '@polymer/paper-toast/paper-toast'
 
 
 export class ViewVideo extends LitElement {
@@ -88,6 +89,8 @@ export class ViewVideo extends LitElement {
                 width: 95%;
                 grid-column-start: 2;
                 grid-row-start: 2;
+                margin-left: 1.5em;
+                margin-right: 1.5em;
             }
 
             .teacherButtons {
@@ -95,7 +98,10 @@ export class ViewVideo extends LitElement {
                 grid-row-start: 2;
             }
 
+
             component-videocard {
+                width: 100%;
+                margin-left: 1em;
                 grid-column-start: 2;
                 grid-row-start: 2;
             }
@@ -127,7 +133,6 @@ export class ViewVideo extends LitElement {
     render() {
         return html`
         <div class="container">
-            ${this.msg ? html`${this.msg}` : html``}
             <div class="player">
                 <component-videoplayer vid="${this.vid}"></component-videocard>
             </div>
@@ -153,27 +158,26 @@ export class ViewVideo extends LitElement {
 
                 <paper-card class="card">
                     <div class="card-content">
-                        <label for="msg">${this.msg}</label>
                         <form onsubmit="javascript: return false;" enctype="multipart/form-data">
                             <paper-input-container always-float-label>
                                 <label slot="label" for="title">Title</label>
-                                <input slot="input" type="text" name="title" placeholder="${this.videoInfo.title}" required>
+                                <input slot="input" type="text" name="title" placeholder="${this.videoInfo.title}">
                             </paper-input-container>
                             <paper-input-container always-float-label>
                                 <label slot="label" for="description">Description</label>
-                                <input slot="input" type="text" id="description" name="description" placeholder="${this.videoInfo.description}" required>
+                                <input slot="input" type="text" id="description" name="description" placeholder="${this.videoInfo.description}">
                             </paper-input-container>
                             <paper-input-container always-float-label>
                                 <label slot="label" for="lecturer">Lecturer</label>
-                                <input slot="input" type="text" id="lecturer" name="lecturer" placeholder="${this.videoInfo.lecturer}" required>
+                                <input slot="input" type="text" id="lecturer" name="lecturer" placeholder="${this.videoInfo.lecturer}">
                             </paper-input-container>
                             <paper-input-container always-float-label>
                                 <label slot="label" for="theme">Theme</label>
-                                <input slot="input" type="text" name="theme" placeholder="${this.videoInfo.theme}" required>
+                                <input slot="input" type="text" name="theme" placeholder="${this.videoInfo.theme}">
                             </paper-input-container>
                             <paper-input-container always-float-label>
                                 <label slot="label" for="subject">Subject</label>
-                                <input slot="input" type="text" name="subject" placeholder="${this.videoInfo.subject}" required>
+                                <input slot="input" type="text" name="subject" placeholder="${this.videoInfo.subject}">
                             </paper-input-container>
                             <paper-input-container always-float-label>
                                 <label slot="label" for="thumbnail">New thumbnail [must be image file]</label>
@@ -297,6 +301,30 @@ export class ViewVideo extends LitElement {
                 this.msg = res['msg'];
             }
         });
+    }
+
+    updateVideo(e) {
+        const data = new FormData(e.target.form);
+        var vid = location.search.split('vid=')[1];
+        data.append('vid', vid);
+
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/updateVideo.php`);
+
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/updateVideo.php`, {
+            method: 'POST',
+            credentials: "include",
+            body: data
+        }).then(res => res.json()
+        ).then(res => {
+            if (res.msg == 'OK') {
+                //Reload to update page
+                window.location.reload();
+            } else {
+                this.msg = res.msg;
+                return html`
+                <paper-toast text="${this.msg}" opened></paper-toast> `
+            }
+        })
     }
 
     deleteVideo() {

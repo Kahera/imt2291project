@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import store from '../Redux/store'
 import '@polymer/paper-input/paper-input'
 import '@polymer/paper-button/paper-button'
+import '@polymer/paper-card/paper-card'
 
 export class ComponentComment extends LitElement {
 
@@ -29,6 +30,11 @@ export class ComponentComment extends LitElement {
                 display: block;
                 padding: 10px 20px;
             }
+
+            paper-card {
+                width: 100%;
+                padding: 1em;
+            }
             `,
         ]
     }
@@ -36,7 +42,7 @@ export class ComponentComment extends LitElement {
     //TODO: disable button until input is filled
     render() {
         return html`
-        <div class="container">
+        <paper-card class="container">
             <form id="form" onsubmit="javascript: return false;" enctype="multipart/form-data">
                 <paper-input-container id="input" always-float-label>
                     <label slot="label" for="comment">Add a comment</label>
@@ -44,7 +50,7 @@ export class ComponentComment extends LitElement {
                 </paper-input-container>
                 <button id="btn_comment" @click="${this.comment}" raised>Comment</button>
             </form>
-        </div>
+        </paper-card>
         `;
     }
 

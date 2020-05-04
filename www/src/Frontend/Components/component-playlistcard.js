@@ -31,11 +31,7 @@ export class ComponentPlaylistcard extends LitElement {
 
             paper-card {
                 cursor: pointer;
-            }
-
-            .card {
-                width: 40em;
-                max-width: 90%;
+                width: 100%;
             }
             
             .card-title {

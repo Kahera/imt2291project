@@ -40,6 +40,7 @@ export class ComponentComments extends LitElement {
             paper-card {
                 width: 100%;
                 padding: 1em;
+                margin-bottom: 1em;
             }
             `,
         ]
@@ -67,7 +68,6 @@ export class ComponentComments extends LitElement {
         const data = new FormData();
         data.append('vid', this.vid);
 
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/getComments.php`);
         //Then fetch the video info
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getComments.php`, {
             method: 'POST',
