@@ -17,14 +17,19 @@ require_once "../Classes/User.php";
 session_start();
 $db = DB::getDBConnection();
 
-
 //Create new user object
 $user = new User($db);
 
-$data['uid'] = $_POST['uid'];
-$data['userType'] = 'admin';
-$data['validate'] = 0;
+$admincount = $user->checkAdminCount();
 
-$msg = $user->updateUser($data);
+if ($admincount > 1) {
+    $data['uid'] = $_POST['uid'];
+    $data['userType'] = 'admin';
+    $data['validate'] = 0;
+
+    $msg = $user->updateUser($data);
+} else {
+    $msg = "Cannot remove last admin";
+}
 
 echo json_encode($msg);

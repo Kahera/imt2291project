@@ -28,9 +28,9 @@ export class ViewAdmin extends LitElement {
         this.admins = [];
 
         //Fill arrays
-        this._getPendingTeachers();
-        this._getValidatedTeachers();
-        this._getAdmins();
+        this.getPendingTeachers();
+        this.getValidatedTeachers();
+        this.getAdmins();
     }
 
     static get styles() {
@@ -65,7 +65,7 @@ export class ViewAdmin extends LitElement {
         `
     }
 
-    _getPendingTeachers() {
+    getPendingTeachers() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getPendingTeachers.php`
         ).then(res => res.json()
         ).then(res => {
@@ -81,7 +81,7 @@ export class ViewAdmin extends LitElement {
         })
     }
 
-    _getValidatedTeachers() {
+    getValidatedTeachers() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getConfirmedTeachers.php`
         ).then(res => res.json()
         ).then(res => {
@@ -96,7 +96,7 @@ export class ViewAdmin extends LitElement {
         })
     }
 
-    _getAdmins() {
+    getAdmins() {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/User/getAdmins.php`
         ).then(res => res.json()
         ).then(res => {

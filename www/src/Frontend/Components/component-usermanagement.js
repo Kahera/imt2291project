@@ -19,27 +19,42 @@ export class ComponentUsermanagement extends LitElement {
                 display: inline-block;
             }
 
+            .container {
+                padding: 1em;
+                display: grid;
+                grid-template-columns: 9fr 1fr 1fr;
+                grid-template-rows: auto;
+            }
+
+            .card-content {
+                grid-column-start: 1;
+                grid-row-start: 1;
+                align-self: center;
+            }
+
+            .btn1 {
+                grid-column-start: 2;
+                grid-row-start: 1;
+                justify-self: center;
+                align-self: center;
+            }
+
+            .btn2 {
+                grid-column-start: 3;
+                grid-row-start: 1;
+                justify-self: center;
+                align-self: center;
+            }
+
             .card {
-                width: 40em;
-                max-width: 90%;
-            }
-
-            .card-info {
-                display: inline-block;
-            }
-
-            .btn {
-                justify-self: right;
-                display: inline-block;
+                max-width: 100%;
             }
 
             paper-icon-button.red {
-                display: inline-block;
                 color: var(--paper-red-500);
             }
 
             paper-icon-button.green {
-                display: inline-block;
                 color: var(--paper-green-500);
             }
 
@@ -50,13 +65,13 @@ export class ComponentUsermanagement extends LitElement {
     render() {
         return html`
             <paper-card class="card">
-                <div class="card-content">
-                    <div class="card-info">
+                <div class="container">
+                    <div class="card-content">
                         Email: ${this.item.email}
                     </div>
-                        <paper-icon-button icon="remove-circle" class="btn red" @click="${this.reject}"></paper-icon-button>
+                        <paper-icon-button icon="remove-circle" class="btn1 red" @click="${this.reject}"></paper-icon-button>
                     ${this.item.userType == 'teacher' ? html`
-                        <paper-icon-button icon="add-circle" class="btn green" @click="${this.approve}"></paper-icon-button>`
+                        <paper-icon-button icon="add-circle" class="btn2 green" @click="${this.approve}"></paper-icon-button>`
                 : html``}
                 </div>
             </paper-card class="card">
@@ -99,8 +114,6 @@ export class ComponentUsermanagement extends LitElement {
                 if (res.msg == 'OK') {
                     //Reload page to see updated status
                     window.location.reload();
-                } else {
-                    this.msg = res.msg;
                 }
             })
             //If something is wrong with the logic

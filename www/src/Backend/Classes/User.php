@@ -198,6 +198,14 @@ class User
     return $results;
   }
 
+  public function checkAdminCount()
+  {
+    $sql = 'SELECT * FROM user WHERE userType=admin';
+    $sth = $this->db->prepare($sql);
+
+    return $sth->rowCount();
+  }
+
   /**
    * Update user function
    * @param String $uid: for user to update

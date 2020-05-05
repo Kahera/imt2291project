@@ -50,25 +50,19 @@ export class ViewHomepage extends LitElement {
                 this.getSearchedVideos();
                 this.getSearchedPlaylists();
             } else {
-                console.log(this.user);
                 //Gets videos and playlists with check on which should be gotten
                 if (this.user.userType == 'student') {
                     this.getSubscribedPlaylists();
                     this.getSubscribedVideos();
-                } else if (this.user.Type == 'teacher' || this.user.Type == 'admin') {
+                } else if (this.user.userType == 'teacher' || this.user.userType == 'admin') {
                     this.getOwnedPlaylists();
                     this.getOwnedVideos();
-                }
-                if (this.videos.length < 1) {
+                } else {
                     this.getAllVideos();
-                }
-                if (this.playlists.length < 1) {
                     this.getAllPlaylists();
                 }
             }
         })
-
-
     }
 
     static get styles() {
@@ -119,6 +113,15 @@ export class ViewHomepage extends LitElement {
         `;
     }
 
+    firstUpdated(changedProperties) {
+        if (this.videos.length < 1) {
+            this.getAllVideos();
+        }
+        if (this.playlists.length < 1) {
+            this.getAllPlaylists();
+        }
+    }
+
 
     getSubscribedVideos() {
         //Append uid to form
@@ -137,8 +140,6 @@ export class ViewHomepage extends LitElement {
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
                 this.videoResulttype = "Videos from subscribed playlists";
-            } else {
-                this.videoMsg = res.msg;
             }
         })
     }
@@ -148,7 +149,6 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('uid', this.user.uid);
 
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedPlaylists.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getSubscribedPlaylists.php`, {
             method: 'POST',
             credentials: "include",
@@ -157,13 +157,10 @@ export class ViewHomepage extends LitElement {
         ).then(res => {
             //Successfully retrieved
             if (res.msg == 'OK') {
-                console.log(res);
                 this.playlists = Object.values(res);
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();
                 this.playlistResulttype = "Subscribed playlists";
-            } else {
-                this.playlistMsg = res.msg;
             }
         })
     }
@@ -173,7 +170,7 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('uid', this.user.uid);
 
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getOwnedVideos.php`, {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideosByOwner.php`, {
             method: 'POST',
             credentials: "include",
             body: data
@@ -185,8 +182,6 @@ export class ViewHomepage extends LitElement {
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.videos.pop();
                 this.videoResulttype = "Your videos";
-            } else {
-                this.videoMsg = res.msg;
             }
         })
     }
@@ -196,7 +191,7 @@ export class ViewHomepage extends LitElement {
         const data = new FormData();
         data.append('uid', this.user.uid);
 
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getOwnedPlaylists.php`, {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Playlist/getPlaylistByOwner.php`, {
             method: 'POST',
             credentials: "include",
             body: data
@@ -208,8 +203,6 @@ export class ViewHomepage extends LitElement {
                 //Because msg becomes it's own element, pop one to remove this before mapping
                 this.playlists.pop();
                 this.playlistResulttype = "Your playlists";
-            } else {
-                this.playlistMsg = res.msg;
             }
         })
     }
@@ -257,7 +250,6 @@ export class ViewHomepage extends LitElement {
             body: data
         }).then(res => res.json()
         ).then(res => {
-            console.log(res);
             //Successfully retrieved
             if (res.msg == 'OK') {
                 this.playlists = Object.values(res);
