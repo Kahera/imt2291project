@@ -134,7 +134,9 @@ export class ViewVideo extends LitElement {
         return html`
         <div class="container">
             <div class="player">
-                <component-videoplayer vid="${this.vid}"></component-videocard>
+                <component-videoplayer 
+                    vid="${this.vid}"
+                ></component-videocard>
             </div>
             <div class="cues">
                 <component-videocueviewer .cues="${this.cues}" .activecues="${this.activecues}"></component-videocueviewer>

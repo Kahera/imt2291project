@@ -90,7 +90,7 @@ export class ViewVideoupload extends LitElement {
                         </paper-input-container>
                         <paper-input-container always-float-label>
                             <label slot="label" for="subtitles">Subtitles [must be .vtt file]</label>
-                            <input slot="input" type="file" name="subtitles" accept="text/vtt">
+                            <input slot="input" type="file" name="subtitles" accept=".vtt">
                         </paper-input-container>
                         <a href="${window.MyAppGlobals.rootPath}">
                             <paper-button class="btn" raised id="cancel">Cancel</paper-button>

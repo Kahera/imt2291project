@@ -10,6 +10,7 @@ export class ComponentVideoplayer extends LitElement {
             vttfile: String,
             thumbnail: String,
             cues: Array,
+            sbturl: String,
         }
     }
 
@@ -36,9 +37,9 @@ export class ComponentVideoplayer extends LitElement {
 
     render() {
         return html`
-        <video controls poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
+        <video controls crossorigin="anonymous" poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
             <source src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php?vid=${this.vid}" type="video/mp4">
-            <track kind="subtitles" label="Subtitles" src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}" @load='${this.loadCaption}' default></track>
+            <track kind="subtitles" id="subtitle" src="data:text/vtt;base64, ${this.sbturl}" label="Subtitles" srclang="en" default></track>
         </video>
         
         <!--
@@ -58,6 +59,22 @@ export class ComponentVideoplayer extends LitElement {
         `;
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        console.log("heieh");
+        this.getSubtitles();
+    }
+
+
+    getSubtitles() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}`
+        ).then(res => res.text()
+        ).then(res => {
+            this.sbturl = res;
+        })
+    }
+
+
     adjustSpeed(e) {
         let target = (e.originalTarget || e.path[0]);
         const video = this.shadowRoot.querySelector('video');
@@ -70,36 +87,6 @@ export class ComponentVideoplayer extends LitElement {
    */
     setTime(time) {
         this.shadowRoot.querySelector('video').currentTime = time;
-    }
-
-    /**
-     * Triggered when the track is loaded in the view.
-     * Loads, hides and stores the original cues, then injects elements into the 'caption' list.
-     */
-    loadCaption(e) {
-        const video = this.shadowRoot.querySelector('video');
-        const list = this.shadowRoot.querySelector('#caption ul')
-
-        // hide the original track on load
-        const track = (e.target.track || video.textTracks[0])
-        track.mode = 'hidden'
-
-        // listen to cue changes
-        track.addEventListener('cuechange', e => this._updateCaption(e))
-
-        // store the cues
-        for (let i = 0; i < track.cues.length; i++) {
-            const cue = track.cues[i]
-            this.cues.push(cue)
-
-            // create and inject cue element(s)
-            const li = document.createElement('li')
-            li.dataset.id = cue.id
-            li.innerHTML = cue.text
-            li.addEventListener('click', e => this._selectCaption(e))
-
-            list.appendChild(li)
-        }
     }
 
     /**

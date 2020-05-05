@@ -39,7 +39,7 @@ export class ComponentVideocard extends LitElement {
     //TODO: Insert image again when figuring out getting files
     //in paper-card: image="${this.video.thumbnail}"
     render() {
-        //console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}`);
+        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}`);
         return html`
             <paper-card class="card" image="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}" @click="${this.goto}">
                 <div class="card-content">

@@ -44,9 +44,13 @@ class Video
             }
             if (is_uploaded_file($_FILES['subtitles']['tmp_name'])) {
                 $subtitles = file_get_contents($_FILES['subtitles']['tmp_name']);
+                $ssize = $_FILES['subtitles']['size'];
+                $smime = "text/vtt";
                 array_push($sqlData, $subtitles);
-                $sql .= ', subtitles';
-                $sqlValues .= ', ?';
+                array_push($sqlData, $smime);
+                array_push($sqlData, $ssize);
+                $sql .= ', subtitles, smime, ssize';
+                $sqlValues .= ', ?, ?, ?';
             }
 
             //Finish creating SQL statement
@@ -68,7 +72,8 @@ class Video
             if ($sth->rowCount() == 1) {
                 $tmp['msg'] = 'OK';
             } else {
-                $tmp['msg'] = "I failed.";
+                $tmp['msg'] = "Could not upload video.";
+                $tmp['msg'] = $sth->errorInfo();
             }
             if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
                 $tmp['msg'] = $this->db->errorInfo()[2];
@@ -136,7 +141,7 @@ class Video
 
     public function getVideoSubtitlesById($vid)
     {
-        $sql = "SELECT subtitles FROM video WHERE vid=?";
+        $sql = "SELECT subtitles, smime, ssize FROM `video` WHERE vid=?";
         $sth = $this->db->prepare($sql);
         $sth->execute(array($vid));
 
@@ -144,7 +149,7 @@ class Video
             $result = $sth->fetch();
             $result['msg'] = 'OK';
         } else {
-            $result['msg'] = 'Could not get video';
+            $result['msg'] = 'Could not get subtitles';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
             $result['msg'] = $this->db->errorInfo()[2];
@@ -279,8 +284,15 @@ class Video
         }
         if (is_uploaded_file($_FILES['subtitles']['tmp_name'])) {
             $subtitles = file_get_contents($_FILES['subtitles']['tmp_name']);
+            $ssize = $_FILES['subtitles']['size'];
+            $smime = $_FILES['subtitles']['type'];
             array_push($sqlData, $subtitles);
+            array_push($sqlData, $smime);
+            array_push($sqlData, $ssize);
+
             array_push($sqlArray, 'subtitles=?');
+            array_push($sqlArray, 'smime=?');
+            array_push($sqlArray, 'ssize=?');
         }
 
         $sql .= implode(", ", $sqlArray);

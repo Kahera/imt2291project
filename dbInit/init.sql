@@ -24,7 +24,9 @@ CREATE TABLE `video` (
   `thumbnailfile` LONGBLOB,
   `tmime` VARCHAR(16),
   `tsize` int,
-  `subtitles` text DEFAULT NULL,
+  `subtitles` LONGBLOB DEFAULT NULL,
+  `smime` VARCHAR(16),
+  `ssize` int,
   PRIMARY KEY (`vid`), 
   FOREIGN KEY (`ownerid`) REFERENCES user(`uid`) ON DELETE SET NULL
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE utf8_bin;
