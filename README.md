@@ -33,27 +33,33 @@ Student login:
 ### Good solutions:
 - Using mostly finished webcomponents, so it looks relatively good. 
 - Project functionality is almost entirely complete. 
+- Since I had well defined class functions from the last project, I was able to reuse almost the entirety of that, making me able to focus on the frontend. 
+- The project is well structured and should be easy to navigate. The full views is in a seperate folder, while other, smaller, litelements are in the components folder. The naming scheme is consistent throughout. 
+- I've created what I'd call a lazy fussy search, where the first letter of a search is removed before searching in the database. This avoid most issues related to capitalization. 
+- The project relies entirely on the database for saving and retrieving, there's no local saving of any files. 
 
 
 ### Challenges: 
 - Picking a thumbnail from a video is not implemented. 
 - As the project text did not mention anything about testing, that's not something I've focused on at all. I preferred trying to get as much of a completed project as possible. 
 - There is some inconsistent commenting. 
+- I have a few places where I should probably just do an event dispatch to update info, but instead I reload the page. This was done for ease of implementation, such as for rating. 
+
+
+### Self-created components: 
+The components created specifically for this project is mainly all the views. These are created for gathering all the components needed for a single page. In addition, I've created some smaller components. These are mainly used for showing information (such as videocard, videoinfo, playlistcard and comments which all show information about the video, a playlist, or shows an existing comment). In addition, the video view required a few extra components for the player itself and the cues to show beside the video. Those are structurally copied from the videoVTT-example we were given.
 
 
 ### API endpoints: 
-My endpoints are everything listed under the ./Backend/Playlist, ./Backend/Video and ./Backend/User folders. They are all very similarly written, so explaining each one seems overkill. Instead, I'll explain them by group. 
+My endpoints are everything listed under the ./Backend/Playlist, ./Backend/Video and ./Backend/User folders. They are all named clarly, and is very similarly written, so explaining each one individually seems overkill. Instead, I'll explain them by group. 
 
-Valid for all except getting files, is that they return a msg property that is set to "OK", simply to be able to check that everything happend as it should. The files simply return the file blob. 
+For all except getting files, is that they return a msg property that is set to "OK", simply to be able to check that everything happend as it should. The files simply return the file blob. 
 
-For getting or deleting, the object ID is required (vid for videos, uid for users and pid for playlists, plus cid for comments). 
+For getting or deleting, the object ID is required (vid for videos, uid for users and pid for playlists, plus cid for comments). Getting will, in addition to "OK", return the requested information. 
 
 For updating, the object ID plus the new info is required. 
 
-For creating, only the new information is required.
-
-Search has a extra feature where it removes the first letter of a search to make it a little bit more like a fuzzy search, just to avoid most issues related to capitalization. 
-
+For creating, only the information to be uploaded is required.
 
 ### Models
 [Wireframe sketch](https://cdn.discordapp.com/attachments/499627643746910219/707907492541366312/wireframeProj2.jpg)
