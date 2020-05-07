@@ -144,7 +144,7 @@ export class ViewPlaylist extends LitElement {
 
     render() {
         return html`
-        ${(this.user.userType == 'teacher' || this.user.userType == 'admin') ? html`
+        ${((this.user.userType == 'teacher' && this.user.validated) || this.user.userType == 'admin') ? html`
         <div class="editpage">
             <paper-card>
                 <form onsubmit="javascript: return false;" enctype="multipart/form-data">
@@ -203,7 +203,7 @@ export class ViewPlaylist extends LitElement {
                     : html`<p>${this.videoMsg}</p>`}
         </div>
 
-        <!-- Student/not logged in -->
+        <!-- Student/not validated teacher/not logged in -->
         `: html`
             <div class="info">
                 <component-playlistcard .playlist=${this.playlist}></component-playlistcard>

@@ -153,7 +153,7 @@ export class ViewVideo extends LitElement {
                 </component-videocueviewer>
             </div>
 
-            ${(this.user.userType == 'teacher' || this.user.userType == 'admin') ? html`
+            ${((this.user.userType == 'teacher' && this.user.validated) || this.user.userType == 'admin') ? html`
                 <div class="teacherButtons">
                     <paper-button class="btn" id="btn_delete" @click=${this.deleteVideo} raised>Delete video</paper-button>
 
@@ -206,7 +206,7 @@ export class ViewVideo extends LitElement {
                 </paper-card>
             
                 `: html`
-                <!-- Student/not logged in -->
+                <!-- Student/not validated teacher/not logged in -->
                 <component-videoinfo .video=${this.videoInfo}></component-videoinfo>
             `}
 

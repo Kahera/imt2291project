@@ -16,6 +16,11 @@ export class ViewVideoupload extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
+
+        //Subscribe to changes in storage
+        store.subscribe((state) => {
+            this.user = store.getState().user;
+        })
     }
 
     static get styles() {
@@ -56,6 +61,9 @@ export class ViewVideoupload extends LitElement {
 
     render() {
         return html`
+        ${this.user.validated == 0 ? html`
+            <p>This page will be shown when you have been validated by an admin.</p>
+        ` : html`
             <paper-card class="card" heading="Upload video">
                 <div class="card-content">
                     <label for="msg">${this.msg}</label>
@@ -99,7 +107,7 @@ export class ViewVideoupload extends LitElement {
                     </form>
                 </div>
             </paper-card>
-            `;
+            `} `;
     }
 
     uploadVideo(e) {

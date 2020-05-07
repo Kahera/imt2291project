@@ -17,6 +17,11 @@ export class ViewPlaylistcreate extends LitElement {
         //Load user from storage
         const state = store.getState();
         this.user = state.user;
+
+        //Subscribe to changes in storage
+        store.subscribe((state) => {
+            this.user = store.getState().user;
+        })
     }
 
     static get styles() {
@@ -57,7 +62,10 @@ export class ViewPlaylistcreate extends LitElement {
 
     render() {
         return html`
-            <paper-card class="card" heading="Create playlist">
+        ${this.user.validated == 0 ? html`
+            <p>This page will be shown when you have been validated by an admin.</p>
+        ` : html`
+        <paper-card class="card" heading="Create playlist">
                 <div class="card-content">
                     <label for="msg">${this.msg}</label>
                     <form onsubmit="javascript: return false;" enctype="multipart/form-data">
@@ -84,7 +92,7 @@ export class ViewPlaylistcreate extends LitElement {
                     </form>
                 </div>
             </paper-card>
-            `;
+        `} `;
     }
 
     createPlaylist(e) {
