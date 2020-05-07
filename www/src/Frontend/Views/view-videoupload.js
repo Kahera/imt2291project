@@ -103,6 +103,11 @@ export class ViewVideoupload extends LitElement {
     }
 
     uploadVideo(e) {
+        //Check if thumbnail is uploaded - if not, create one
+        if (!FormData.has('thumbnailfile')) {
+            this.createThumbnail();
+        }
+
         const data = new FormData(e.target.form); //Wrap the form in a FormData object
         console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/videoUpload.php`);
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/videoUpload.php`, {
@@ -124,6 +129,10 @@ export class ViewVideoupload extends LitElement {
                 <paper-toast text="${this.msg}" opened></paper-toast>`
             }
         })
+    }
+
+    createThumbnail() {
+
     }
 }
 customElements.define('view-videoupload', ViewVideoupload);

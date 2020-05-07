@@ -15,7 +15,6 @@ export class ViewPlaylist extends LitElement {
             videos: Array,
             userVideos: Array,
             videoMsg: String,
-            testArray: Array,
             selectedVideo: Number
         }
     }
@@ -31,7 +30,6 @@ export class ViewPlaylist extends LitElement {
         //Initialise properties with empty arrays
         this.videos = [];
         this.userVideos = [];
-        this.testArray = ['this', 'is', 'a', 'test'];
 
         //Subscribe to changes in storage
         store.subscribe((state) => {

@@ -346,8 +346,6 @@ class Video
      */
     public function rateVideo($data)
     {
-        echo "uid: " . $data['uid'] . "    vid: " . $data['vid'];
-
         //Check if user has already rated this video
         //Make and prepare statement for inserting
         $sql = "SELECT * FROM videoRating WHERE user=? AND video=?";
@@ -380,7 +378,7 @@ class Video
             $tmp = $this->newRating($data, $video);
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
         return $tmp;
     }
@@ -402,13 +400,12 @@ class Video
 
         //Check that it was uploaded correctly
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not add new rating';
+            $tmp['msg'] = 'Could not add new rating';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         //Calculate new values
@@ -426,13 +423,13 @@ class Video
 
         //Check that it was uploaded correctly
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
+            $tmp['avgRating'] = $newAvgRating;
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not add new rating';
+            $tmp['msg'] = 'Could not add new rating';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
 
         return $tmp;
@@ -473,11 +470,9 @@ class Video
 
         //Check that it's actually updated
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not update rating';
-            $tmp['errorInfo'] = $sth->errorInfo();
+            $tmp['msg'] = 'Could not update rating';
         }
 
         //Then update video
@@ -488,11 +483,10 @@ class Video
 
         //Check that it's actually updated
         if ($sth->rowCount() == 1) {
-            $tmp['status'] = 'OK';
+            $tmp['msg'] = 'OK';
+            $tmp['avgRating'] = $newAvgRating;
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not update video';
-            $tmp['errorInfo'] = $sth->errorInfo();
+            $tmp['msg'] = 'Could not update video';
         }
         return $tmp;
     }
@@ -516,11 +510,10 @@ class Video
 
             //Couldn't get correctly: error
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not get old rating';
+            $tmp['msg'] = 'Could not get old rating';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
         return $tmp;
     }
@@ -540,11 +533,10 @@ class Video
 
             //Couldn't get correctly: error
         } else {
-            $tmp['status'] = 'FAIL';
-            $tmp['errorMessage'] = 'Could not get old rating';
+            $tmp['msg'] = 'Could not get old rating';
         }
         if ($this->db->errorInfo()[1] != 0) { // Error in SQL?
-            $tmp['errorMessage'] = $this->db->errorInfo()[2];
+            $tmp['msg'] = $this->db->errorInfo()[2];
         }
         return $tmp;
     }

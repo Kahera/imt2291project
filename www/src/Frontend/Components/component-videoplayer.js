@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import '@polymer/iron-selector/iron-selector'
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu'
+import '@polymer/paper-listbox/paper-listbox'
 
 export class ComponentVideoplayer extends LitElement {
     //A lot of code borrowed from videoVTT example
@@ -10,14 +12,15 @@ export class ComponentVideoplayer extends LitElement {
             vttfile: String,
             thumbnail: String,
             cues: Array,
-            sbturl: String,
+            speed: Array,
         }
     }
 
     constructor() {
         super();
-        this.vttfile = '';
         this.cues = [];
+
+        this.speed = [2, 1.75, 1.5, 1.25, 1, 0.75, 0.5];
     }
 
     static get styles() {
@@ -31,6 +34,13 @@ export class ComponentVideoplayer extends LitElement {
             video, p {
                 width: 100%
             }
+
+            .speedvalue {
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+                padding-right: 1em;
+                padding-left: 1em;
+            }
             `,
         ]
     }
@@ -39,30 +49,41 @@ export class ComponentVideoplayer extends LitElement {
         return html`
         <video controls crossorigin="anonymous" poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
             <source src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php?vid=${this.vid}" type="video/mp4">
-            <track kind="subtitles" id="subtitle" src="data:text/vtt;base64, ${this.sbturl}" label="Subtitles" srclang="en" default></track>
+            <track kind="subtitles" id="subtitle" src="data:text/vtt;base64, ${this.vttfile}" label="Subtitles" srclang="en" default></track>
         </video>
         
-        <!--
-        <div class="speed">
-            <iron-selector slected="1">
-                <b>Speed</b>
-                <div @click="${this.adjustSpeed}" data-speed='2'>2x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.75'>1.75x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.5'>1.5x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1.25'>1.25x</div>
-                <div @click="${this.adjustSpeed}" data-speed='1'>1x</div>
-                <div @click="${this.adjustSpeed}" data-speed='0.75'>0.75x</div>
-                <div @click="${this.adjustSpeed}" data-speed='0.5'>0.5x</div>
-            </iron-selector>
-        </div>
-        -->
+        
+        <paper-dropdown-menu label="Speed" class="speed">
+            <paper-listbox slot="dropdown-content" class="dropdown-content" id="listbox" @iron-select="${this.adjustSpeed}">
+                ${this.speed.map(i => html`<div class="speedvalue" value=${i}>${i}x</div>`)}
+            </paper-listbox>
+        </paper-dropdown-menu>
+    
         `;
     }
 
+
     connectedCallback() {
         super.connectedCallback();
-        console.log("heieh");
+
         this.getSubtitles();
+
+        //Then update cues
+        const track = document.querySelector('video track');    // The html track element
+        const cues = [];
+
+        track.addEventListener('load', e => {                       // When the text track has been loaded we can access the cues
+            console.log(e, 'Text track loaded');                  // Show the event
+            const trackCues = e.path[0].track.cues;
+            for (let i = 0; i < trackCues.length; i++) {               // Go through the cue list
+                cues.push(trackCues[i]);                             // Add all cues to an array
+            };
+            showSubtitles();                                       // Show all cues alongside the video
+        });
+
+        function showSubtitles() {
+            console.log(cues);
+        }
     }
 
 
@@ -70,15 +91,16 @@ export class ComponentVideoplayer extends LitElement {
         fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}`
         ).then(res => res.text()
         ).then(res => {
-            this.sbturl = res;
+            this.vttfile = res;
         })
     }
 
-
     adjustSpeed(e) {
-        let target = (e.originalTarget || e.path[0]);
+        const index = e.target.selected;
+        var seletedSpeed = this.speed[index];
+
         const video = this.shadowRoot.querySelector('video');
-        video.playbackRate = target.dataset.speed;
+        video.playbackRate = seletedSpeed;
     }
 
     /**

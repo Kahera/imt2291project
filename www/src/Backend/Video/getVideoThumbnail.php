@@ -22,7 +22,8 @@ if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
-header("Content-Type: " . $result['vmime']);
-header("Content-Length: " . $result['vsize']);
+header("Content-Type: image/jpeg");
+header("Content-Length: " . $result['tsize']);
 
+//Return image
 echo $result['thumbnailfile'];

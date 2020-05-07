@@ -9,7 +9,6 @@ export class ComponentVideocard extends LitElement {
         }
     }
 
-
     static get styles() {
         return [
             css`
@@ -36,12 +35,9 @@ export class ComponentVideocard extends LitElement {
         ]
     }
 
-    //TODO: Insert image again when figuring out getting files
-    //in paper-card: image="${this.video.thumbnail}"
     render() {
-        console.log(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}`);
         return html`
-            <paper-card class="card" image="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}" @click="${this.goto}">
+            <paper-card image="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.video.vid}" class="card" @click="${this.goto}">
                 <div class="card-content">
                     <div class="card-title">
                         ${this.video.title}
@@ -62,7 +58,6 @@ export class ComponentVideocard extends LitElement {
             </paper-card>
         `;
     }
-
 
     goto() {
         const url = window.MyAppGlobals.rootPath + "video?vid=" + this.video.vid;

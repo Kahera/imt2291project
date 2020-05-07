@@ -26,7 +26,7 @@ $data['uid'] = $_SESSION['uid'];
 $data['rating'] = $_POST['rating'];
 
 // Update video
-$video->rateVideo($data);
+$res = $video->rateVideo($data);
 
 // Render video page
-echo json_encode("Rating updated!");
+echo json_encode($res);

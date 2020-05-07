@@ -1,6 +1,5 @@
 <?php
 
-
 require_once "../Classes/DB.php";
 require_once "../Classes/Video.php";
 
@@ -12,7 +11,6 @@ $video = new Video($db);
 
 //Get playlists
 $result = $video->getVideoSubtitlesById($_GET['vid']);
-
 
 //Return playlists
 $http_origin = $_SERVER['HTTP_ORIGIN'];
@@ -27,5 +25,5 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: text/vtt");
 header("Content-Length: " . $result['ssize']);
 
-//Return playlists
+//Return subtitles
 echo base64_encode($result['subtitles']);

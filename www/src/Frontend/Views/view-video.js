@@ -21,7 +21,7 @@ export class ViewVideo extends LitElement {
             vttfile: String,
             cues: String,
             activecues: Array,
-            selectedPlaylist: Number,
+            selectedPlaylist: Number
         }
     }
 
@@ -98,10 +98,10 @@ export class ViewVideo extends LitElement {
                 grid-row-start: 2;
             }
 
-
-            component-videocard {
-                width: 100%;
-                margin-left: 1em;
+            component-videoinfo {
+                width: 95%;
+                margin-left: 1.2em;
+                margin-right: 0.5em;
                 grid-column-start: 2;
                 grid-row-start: 2;
             }
@@ -196,13 +196,22 @@ export class ViewVideo extends LitElement {
             
                 `: html`
                 <!-- Student/not logged in -->
-                <component-videocard .video=${this.videoInfo}></component-videocard>
+                <component-videoinfo .video=${this.videoInfo}></component-videoinfo>
             `}
 
             <component-comment></component-comment>
             <component-comments></component-comments>
         </div>
         `
+    }
+
+    firstUpdated() {
+        const video = document.querySelector('component-videoplayer');
+
+        video.addEventListener('cuesUpdated', e => {
+            console.log(e);
+            document.querySelector('component-videocueviewer').setAttribute('cues', JSON.stringify(e.detail.cues));
+        });
     }
 
     getVideoInfo() {
@@ -225,7 +234,6 @@ export class ViewVideo extends LitElement {
             }
         })
     }
-
 
     getComments() {
         const data = new FormData();
