@@ -47,9 +47,9 @@ export class ComponentVideoplayer extends LitElement {
 
     render() {
         return html`
-        <video controls crossorigin="anonymous" poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
+        <video controls crossorigin="anonymous" preload="auto" poster="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoThumbnail.php?vid=${this.vid}">
             <source src="${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoFile.php?vid=${this.vid}" type="video/mp4">
-            <track kind="subtitles" id="subtitle" src="data:text/vtt;base64, ${this.vttfile}" label="Subtitles" srclang="en" default></track>
+            <track kind="subtitles" id="kake" src="data:text/vtt;base64, ${this.vttfile}" label="Subtitles" srclang="en" default></track>
         </video>
         
         
@@ -62,39 +62,9 @@ export class ComponentVideoplayer extends LitElement {
         `;
     }
 
-
-    connectedCallback() {
-        super.connectedCallback();
-
-        this.getSubtitles();
-
-        //Then update cues
-        const track = document.querySelector('video track');    // The html track element
-        const cues = [];
-
-        track.addEventListener('load', e => {                       // When the text track has been loaded we can access the cues
-            console.log(e, 'Text track loaded');                  // Show the event
-            const trackCues = e.path[0].track.cues;
-            for (let i = 0; i < trackCues.length; i++) {               // Go through the cue list
-                cues.push(trackCues[i]);                             // Add all cues to an array
-            };
-            showSubtitles();                                       // Show all cues alongside the video
-        });
-
-        function showSubtitles() {
-            console.log(cues);
-        }
-    }
-
-
-    getSubtitles() {
-        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}`
-        ).then(res => res.text()
-        ).then(res => {
-            this.vttfile = res;
-        })
-    }
-
+    /*
+    * Allows user to ajust playback speed
+    */
     adjustSpeed(e) {
         const index = e.target.selected;
         var seletedSpeed = this.speed[index];
@@ -104,9 +74,9 @@ export class ComponentVideoplayer extends LitElement {
     }
 
     /**
-   * Set the current time of the video to the given time.
-   * @param {[Number]} time the time to set as the current time.
-   */
+    * Set the current time of the video to the given time.
+    * @param {[Number]} time the time to set as the current time.
+    */
     setTime(time) {
         this.shadowRoot.querySelector('video').currentTime = time;
     }
@@ -129,7 +99,6 @@ export class ComponentVideoplayer extends LitElement {
             for (let i = 0; i < trackCues.length; i++) {               // Go through the cue list
                 this.cues.push({ text: trackCues[i].text, id: trackCues[i].id, startTime: trackCues[i].startTime });
             };
-            // console.log (this.cues);
 
             this.dispatchEvent(new CustomEvent("cuesUpdated", {
                 bubbles: true,

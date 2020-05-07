@@ -1,0 +1,265 @@
+﻿WEBVTT - https://subtitletools.com
+
+00:00:00.989 --> 00:00:06.979
+So, what it the best method for learning JavaScript?
+
+00:00:06.979 --> 00:00:13.790
+When you are a complete beginner, I will recommend to look at examples, tweak them,
+
+00:00:13.790 --> 00:00:19.460
+change small things, try to understand how the syntax looks like.
+
+00:00:19.460 --> 00:00:26.130
+Even without deep explanations, without reading a book, or studying in details
+
+00:00:26.130 --> 00:00:30.609
+the different concepts of language, you can learn a lot.
+
+00:00:30.609 --> 00:00:36.010
+So, in this section, I propose that you look at a small example
+
+00:00:36.010 --> 00:00:40.590
+without understanding the details, and try to tweak it.
+
+00:00:40.590 --> 00:00:44.300
+So here is the example we provide.
+
+00:00:44.300 --> 00:00:50.160
+It's just an example that draws, that plots, a mathematical function.
+
+00:00:50.160 --> 00:00:56.840
+So you can use the mouse wheel to zoom in, zoom out, and you can look at the HTML code.
+
+00:00:56.840 --> 00:01:04.239
+There is only very few CSS and very few lines of JavaScript.
+
+00:01:04.239 --> 00:01:08.859
+So how can we do the such a complex result?
+
+00:01:08.859 --> 00:01:14.531
+Complex thing drawing the grid with axes, with labels, with a curve,
+
+00:01:14.531 --> 00:01:18.531
+and interact with the mouse.
+
+00:01:18.531 --> 00:01:26.800
+With only 10 lines of code: it's because we are using what we call an external JavaScript library.
+
+00:01:26.800 --> 00:01:29.289
+Actually, we are using 2 of them here.
+
+00:01:29.289 --> 00:01:37.201
+Because, this one: the "function-plot" JavaScript library, is using internally another one
+
+00:01:37.201 --> 00:01:40.159
+you must include also in the document.
+
+00:01:40.159 --> 00:01:45.580
+So, what I propose is that we will start looking at this example.
+
+00:01:45.580 --> 00:01:50.280
+The best way is to click on "Edit on CodePen" label here,
+
+00:01:50.280 --> 00:02:03.060
+it will open the code in the CodePen.io online editor. And... just look at the HTML part here.
+
+00:02:03.060 --> 00:02:07.969
+Okay, we can just look at the HTML part and zoom in a little bit.
+
+00:02:07.969 --> 00:02:09.900
+What do we see?
+
+00:02:09.900 --> 00:02:16.730
+We can see that it uses 2 libraries here between &lt;script&gt; and &lt;/script&gt; elements.
+
+00:02:16.730 --> 00:02:23.600
+This is how we can insert in the document an external JavaScript file.
+
+00:02:23.600 --> 00:02:30.560
+In that case, it's a remote JavaScript file because we are downloading it using http.
+
+00:02:30.560 --> 00:02:38.590
+So it uses this "d3js" JavaScript library that is located at "d3js.org".
+
+00:02:38.590 --> 00:02:48.200
+You can open this in another tab and you will see the documentation and the Web site,
+
+00:02:48.200 --> 00:02:53.560
+the homepage of the Web site, for the "d3js" library.
+
+00:02:53.560 --> 00:03:03.330
+By the way "d3js"is one of the most popular JavaScript library for visualizing data.
+
+00:03:03.330 --> 00:03:11.600
+So let's go back to our example, so you can just tweak the different elements.
+
+00:03:11.600 --> 00:03:16.160
+If I want to plot a cosinus instead of a sinus, I don’t need to understand the whole
+
+00:03:16.160 --> 00:03:23.310
+syntax here, but I guess that by just typing "cos" here, it will do something.
+
+00:03:23.310 --> 00:03:30.610
+And indeed I have just drawn a cosinus.
+
+00:03:30.610 --> 00:03:34.900
+If I change this for "green", it changes the color.
+
+00:03:34.900 --> 00:03:43.690
+If I change the grid, that is by default "true", if I say "false", I don't have a grid anymore.
+
+00:03:43.690 --> 00:03:50.820
+Okay let's put it back. And I've got some "xAxis" domain : "-1, +1".
+
+00:03:50.820 --> 00:03:57.860
+If I change that for "-10, +10", I can see the result.
+
+00:03:57.860 --> 00:04:06.780
+So it's more interesting, if you change this for the x values... instead of going from PI to 2 PI.
+
+00:04:06.780 --> 00:04:10.120
+I went from 0 to 10 PI.
+
+00:04:10.120 --> 00:04:13.840
+So I can see the result here, and so on...
+
+00:04:13.840 --> 00:04:20.789
+So now that you tweak the example, you can try to understand what is going on.
+
+00:04:20.789 --> 00:04:25.699
+Okay, this thing is a name followed by a parenthesis.
+
+00:04:25.699 --> 00:04:31.530
+an open parenthesis with a closing parenthesis.
+
+00:04:31.530 --> 00:04:33.879
+It's a function call.
+
+00:04:33.879 --> 00:04:40.440
+When you've got something like that, in JavaScript, function parenthesis with something in the
+
+00:04:40.440 --> 00:04:43.150
+middle, it's called a "function call".
+
+00:04:43.150 --> 00:04:46.479
+We're going to call a function, that, in this case,
+
+00:04:46.479 --> 00:04:52.770
+we haven’t written, so it's coming from one on the external libraries.
+
+00:04:52.770 --> 00:04:56.219
+In that case, it's the "function-plot" library.
+
+00:04:56.219 --> 00:04:59.520
+What is inside? There are the parameters.
+
+00:04:59.520 --> 00:05:03.759
+And I can use an external name.
+
+00:05:03.759 --> 00:05:10.289
+I can declare that, here, it's equivalent.
+
+00:05:10.289 --> 00:05:15.160
+You see that it works the same here, but I’ve just separated the two things.
+
+00:05:15.160 --> 00:05:24.610
+If I put directly this thing inside here, like it was before, it still works.
+
+00:05:24.610 --> 00:05:27.180
+Okay, so what is this syntax?
+
+00:05:27.180 --> 00:05:34.020
+In JavaScript, when you’ve got braces like that, opening braces and closing braces,
+
+00:05:34.020 --> 00:05:36.740
+it’s called an object.
+
+00:05:36.740 --> 00:05:40.819
+And inside an object, you've got properties and values.
+
+00:05:40.819 --> 00:05:46.189
+The properties have names: target, data, function, color, grid.
+
+00:05:46.189 --> 00:05:50.129
+And the values are after a column characters.
+
+00:05:50.129 --> 00:05:51.770
+The target is my function.
+
+00:05:51.770 --> 00:05:54.319
+The data is this thing.
+
+00:05:54.319 --> 00:05:57.439
+The grid is true, and so on...
+
+00:05:57.439 --> 00:06:03.580
+So you separate the different properties of the object using a comma
+
+00:06:03.580 --> 00:06:10.360
+and sometimes, you can have some properties that in turn, have a value that is an object.
+
+00:06:10.360 --> 00:06:16.280
+So the xAxis property is equal to an object that has a property domain,
+
+00:06:16.280 --> 00:06:22.550
+that has for values: "-1, 1".
+
+00:06:22.550 --> 00:06:30.870
+And when you've got brackets, opening and closing brackets, it's like that...
+
+00:06:30.870 --> 00:06:32.270
+That will define arrays of things in JavaScript.
+
+00:06:32.270 --> 00:06:38.389
+And an array of things is a list of enumerable elements.
+
+00:06:38.389 --> 00:06:46.199
+So in that case, the domain has two elements: the minimum value and the maximum value.
+
+00:06:46.199 --> 00:06:50.129
+And here you can see that the data that are plotted, the cosinus function,
+
+00:06:50.129 --> 00:06:54.919
+is also an array.
+
+00:06:54.919 --> 00:07:00.419
+So, if I use the comma and I introduce a second element here.
+
+00:07:00.419 --> 00:07:12.499
+For example, the sinus function, and if I change the color, let's make it pink... Look at the result:
+
+00:07:12.499 --> 00:07:18.529
+I've got 2 different functions that have been plotted in my graph.
+
+00:07:18.529 --> 00:07:30.590
+So I can, instead of using this, I can maybe plot x2 (x square 2), like this, okay.
+
+00:07:30.590 --> 00:07:35.030
+It should work. Ok, we can see a little bit of it here.
+
+00:07:35.030 --> 00:07:42.559
+So maybe we will change the domain, so instead of stopping at 1, we go to 10.
+
+00:07:42.559 --> 00:07:44.599
+Here we go!
+
+00:07:44.599 --> 00:07:51.150
+And if we look at the values, we see the x square function that is a bit better,
+
+00:07:51.150 --> 00:08:03.490
+and if we just plot it for x=0 to x=2...
+
+00:08:03.490 --> 00:08:10.360
+...In that case, i've got another scale for looking at the functions.
+
+00:08:10.360 --> 00:08:15.710
+So, in this first example, you saw how to use an external library,
+
+00:08:15.710 --> 00:08:23.830
+what is the syntax to call a function, and how we can define objects in JavaScript
+
+00:08:23.830 --> 00:08:30.449
+by using a set of properties and values, separated by a comma.
+
+00:08:30.449 --> 00:08:42.570
+And we also had a first encounter with what we call arrays, that are elements separated by commas inside brackets.

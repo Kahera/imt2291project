@@ -1,0 +1,55 @@
+﻿WEBVTT - https://subtitletools.com
+
+00:00:01.260 --> 00:00:06.060
+Hello everyone, welcome to the wonderful world of JavaScript!
+
+00:00:06.060 --> 00:00:11.110
+In this module, after giving a brief history of JavaScript and Web browsers,
+
+00:00:11.110 --> 00:00:16.930
+we will explain how HTML, CSS and JavaScript are related to one another.
+
+00:00:16.930 --> 00:00:20.850
+We will see JavaScript in action through numerous interactive examples.
+
+00:00:20.850 --> 00:00:27.590
+We have made sure that all examples can be run directly in the course’s Web pages.
+
+00:00:27.590 --> 00:00:31.360
+Hey, we’re teaching Web technologies, after all!
+
+00:00:31.360 --> 00:00:36.859
+We will do that throughout the course, as you will be asked to change some code,
+
+00:00:36.859 --> 00:00:42.769
+tweak this or that example, even if the code details are not fully explained at first.
+
+00:00:42.769 --> 00:00:49.190
+Because, this is how we recommend beginners to learn JavaScript: first look at examples,
+
+00:00:49.190 --> 00:00:53.659
+then tweak some code and see the results of the changes.
+
+00:00:53.659 --> 00:00:59.640
+You will certainly encounter error messages, but no worries, as I will teach you how to
+
+00:00:59.640 --> 00:01:03.460
+debug JavaScript code using your browser’s devtool console.
+
+00:01:03.460 --> 00:01:11.140
+In this first module, you will also learn about JavaScript variables, operators and
+
+00:01:11.140 --> 00:01:17.180
+expressions, and have a first lesson about functions, objects, arrays and strings.
+
+00:01:17.180 --> 00:01:23.180
+These are the basic concepts of JavaScript and are shared by many other programming languages.
+
+00:01:23.180 --> 00:01:29.530
+We’ll then develop together, and step by step, an interactive graphic tool that will
+
+00:01:29.530 --> 00:01:34.800
+use many different features from JavaScript, HTML and CSS.
+
+00:01:34.800 --> 00:01:37.900
+Let’s start having fun with JavaScript, now :-)

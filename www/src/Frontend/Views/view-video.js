@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import store from '../Redux/store'
 import '../Components/component-videoplayer'
+import '../Components/component-videocueviewer'
 import '../Components/component-videoinfo'
 import '../Components/component-comment'
 import '../Components/component-comments'
@@ -19,7 +20,7 @@ export class ViewVideo extends LitElement {
             comments: Array,
             videofile: String,
             vttfile: String,
-            cues: String,
+            cues: Array,
             activecues: Array,
             selectedPlaylist: Number
         }
@@ -59,6 +60,7 @@ export class ViewVideo extends LitElement {
         //Get info
         this.getVideoInfo();
         this.getComments();
+        this.getSubtitles();
     }
 
     static get styles() {
@@ -67,12 +69,13 @@ export class ViewVideo extends LitElement {
             :host {
                 display: block;
                 padding: 10px 20px;
+                width: 85%;
             }
 
             .container {
                 display: grid;
                 grid-template-columns: 1em 4fr 1fr 1em;
-                grid-template-rows: auto; 
+                grid-template-rows: minmax(auto, 800px); 
             }
 
             .cues {
@@ -93,9 +96,12 @@ export class ViewVideo extends LitElement {
                 margin-right: 1.5em;
             }
 
-            .teacherButtons {
-                grid-column-start: 3; 
-                grid-row-start: 2;
+            component-videocueviewer {
+                grid-column-start: 3;
+                grid-row-start: 1;
+                grid-row-end: 1;
+                align-self: start; 
+                padding-bottom: 100px;
             }
 
             component-videoinfo {
@@ -103,6 +109,11 @@ export class ViewVideo extends LitElement {
                 margin-left: 1.2em;
                 margin-right: 0.5em;
                 grid-column-start: 2;
+                grid-row-start: 2;
+            }
+
+            .teacherButtons {
+                grid-column-start: 3; 
                 grid-row-start: 2;
             }
 
@@ -116,30 +127,30 @@ export class ViewVideo extends LitElement {
                 grid-row-start: 4;
             }
 
-            li {
-                list-style-type: none;
+            paper-item {
                 padding-top: 0.5em;
                 padding-bottom: 0.5em;
                 padding-right: 1em;
                 padding-left: 1em;
             }
-
             `,
         ]
     }
 
-    //TODO: Comment component
-    //TODO: Texting
     render() {
         return html`
         <div class="container">
             <div class="player">
                 <component-videoplayer 
                     vid="${this.vid}"
-                ></component-videocard>
+                    vttfile="${this.vttfile}">
+                    </component-videoplayer>
             </div>
             <div class="cues">
-                <component-videocueviewer .cues="${this.cues}" .activecues="${this.activecues}"></component-videocueviewer>
+                <component-videocueviewer 
+                cues="${this.cues}" 
+                activecues="${this.activecues}">
+                </component-videocueviewer>
             </div>
 
             ${(this.user.userType == 'teacher' || this.user.userType == 'admin') ? html`
@@ -150,8 +161,8 @@ export class ViewVideo extends LitElement {
                         <paper-dropdown-menu id="dropdown" label="No playlists to add to" disabled></paper-dropdown-menu>
                     `: html`
                         <paper-dropdown-menu id="dropdown">
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" id="listbox" @iron-select="${this.getPidValue}">
-                                ${this.userPlaylists.map(i => html`<li><paper-item playlist=${i.pid}>${i.title}</paper-item><li>`)}
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" id="listbox" label="Add to playlist" @iron-select="${this.getPidValue}">
+                                ${this.userPlaylists.map(i => html`<paper-item playlist=${i.pid}>${i.title}</paper-item>`)}
                             </paper-listbox>
                         </paper-dropdown-menu>
                         <paper-button class="btn" id="btn_add" @click="${this.addVideoToPlaylist}" raised>Add to playlist</paper-button>
@@ -205,13 +216,36 @@ export class ViewVideo extends LitElement {
         `
     }
 
+
     firstUpdated() {
         const video = document.querySelector('component-videoplayer');
 
         video.addEventListener('cuesUpdated', e => {
-            console.log(e);
             document.querySelector('component-videocueviewer').setAttribute('cues', JSON.stringify(e.detail.cues));
         });
+    }
+
+    getSubtitles() {
+        fetch(`${window.MyAppGlobals.serverURL}src/Backend/Video/getVideoSubtitles.php?vid=${this.vid}`
+        ).then(res => res.text()
+        ).then(res => {
+            this.vttfile = res;
+            this.createCues();
+        })
+    }
+
+    createCues() {
+        const videoplayer = this.shadowRoot.querySelector('component-videoplayer');
+        const track = videoplayer.shadowRoot.querySelector('video track');
+
+        track.addEventListener('load', e => {
+            const tempcues = [];
+            const trackCues = e.path[0].track.cues;
+            for (let i = 0; i < trackCues.length; i++) {               // Go through the cue list
+                tempcues.push(trackCues[i]);                             // Add all cues to an array
+            };
+            this.cues = tempcues;
+        })
     }
 
     getVideoInfo() {

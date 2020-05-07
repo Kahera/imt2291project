@@ -24,5 +24,7 @@ header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: " . $result['vmime']);
 header("Content-Length: " . $result['vsize']);
+header("Accept-Ranges: bytes");
+header("Content-Range: bytes 0-" . $result['vsize']);
 
 echo $result['videofile'];

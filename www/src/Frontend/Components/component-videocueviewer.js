@@ -25,11 +25,11 @@ export class ComponentVideocueviewer extends LitElement {
       
               ul {
                 list-style-type: none;
-                width: 300px;
-                height: 90vh;
+                width: 100%;
+                height: 60vh;
                 padding: 0;
                 margin: 0;
-                overflow-y: auto;
+                overflow-y: scroll;
                 padding: 10px;
               }
       
@@ -38,23 +38,22 @@ export class ComponentVideocueviewer extends LitElement {
               }
       
               li.active {
-                background: #ddd;
+                background: #dddddd;
               }
             `
         ]
     }
 
-    // Creates unnumbered list with all cues
-    // Returns the list
+    // Creates unnumbered list with all cues and returns it
     render() {
         return html`
             <ul>
-            ${this.cues.map(cue => {
-            return html`<li cue_id="${cue.id}" cue_starttime="${cue.startTime}">
-                ${cue.text}
-            </li>`;
-        })}
-        </ul>
+            ${JSON.parse(this.cues).map(cue =>
+            html`
+                <li cue_starttime="${cue.startTime}">
+                   ${cue.text}
+                </li>`)}
+            </ul>
         `;
     }
 
@@ -65,12 +64,14 @@ export class ComponentVideocueviewer extends LitElement {
      */
     firstUpdated() {
         this.shadowRoot.querySelector('ul').addEventListener('click', e => {
-            if (e.path[0].tagName == 'LI') { // User clicked on a cue
+            let time = Math.trunc(e.path[0].attributes[0].value);
+
+            if (e.path[0].tagName == 'LI') {            // User clicked on a cue
                 this.dispatchEvent(new CustomEvent("jumpToTimecode", {
                     bubbles: true,
                     composed: true,
                     detail: {
-                        timeCode: e.path[0].dataset.starttime
+                        timeCode: time
                     }
                 }));
             }
@@ -85,6 +86,7 @@ export class ComponentVideocueviewer extends LitElement {
      * @param  {[Array]} changedProperties [description]
      */
     updated(changedProperties) {
+        console.log(changedProperties);
         changedProperties.forEach((oldValue, propName) => {
             if (propName == 'activecues') {   // Only act when the activecues property changes
                 this.shadowRoot.querySelectorAll('li').forEach(li => {  // Remove class=active from all items in list

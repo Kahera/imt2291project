@@ -1,0 +1,190 @@
+﻿WEBVTT - https://subtitletools.com
+
+00:00:00.250 --> 00:00:01.250
+Hi!
+
+00:00:01.250 --> 00:00:09.420
+We're going to work from an example we already saw in the course: the math function plotter.
+
+00:00:09.420 --> 00:00:16.940
+So, in this version, you can see that we added some input fields for changing the color
+
+00:00:16.940 --> 00:00:27.689
+of the curve, for changing the range of the x values, changing interactively
+
+00:00:27.689 --> 00:00:31.340
+the functions we are going to plot, and so on.
+
+00:00:31.340 --> 00:00:38.340
+Let's start from the very basic example we saw earlier on the course.
+
+00:00:38.340 --> 00:00:43.810
+We saw that, the function is located in a "div".
+
+00:00:43.810 --> 00:00:51.700
+And we just added a "section" tag from HTML5, just to identify the part
+
+00:00:51.700 --> 00:00:55.120
+of the document where the function is plotted.
+
+00:00:55.120 --> 00:01:01.460
+Later on, we'll add another "section" about the input fields and the different controls.
+
+00:01:01.460 --> 00:01:09.909
+You've got also a &lt;body onload="plot();&gt;", that means that when the page is loaded,
+
+00:01:09.909 --> 00:01:15.490
+we execute a JavaScript function named "plot()", that is located here.
+
+00:01:15.490 --> 00:01:23.869
+And it uses the "functionPlot()" function from the external library we use.
+
+00:01:23.869 --> 00:01:26.729
+This one.
+
+00:01:26.729 --> 00:01:33.680
+And it takes a set of parameters that are located at the beginning of the JavaScript part.
+
+00:01:33.680 --> 00:01:44.149
+That will indicate, within the target property, the "id" of the div where we are going to plot the function.
+
+00:01:44.149 --> 00:01:51.630
+In the data property is the function itself: "sin(x)" and its color: red.
+
+00:01:51.630 --> 00:01:54.640
+So what can we do to improve this?
+
+00:01:54.640 --> 00:01:58.710
+At first, we can add some CSS code to make this nicer.
+
+00:01:58.710 --> 00:02:01.600
+I'm going to change the view with CodePen.
+
+00:02:01.600 --> 00:02:08.819
+So let's resize that, and let's work on the CSS part: "Maximize CSS Editor".
+
+00:02:08.819 --> 00:02:16.340
+So what I can do, is that I can indicate that the div that contains this function
+
+00:02:16.340 --> 00:02:18.700
+wil have a rounded border, some shadows and so on.
+
+00:02:18.700 --> 00:02:24.920
+So now it's rounded, you can have add some shadows, height, margin and so on.
+
+00:02:24.920 --> 00:02:30.380
+So let's me just copy and paste some code I’ve prepared.
+
+00:02:30.380 --> 00:02:32.950
+So here we are.
+
+00:02:32.950 --> 00:02:43.340
+So now, what I've got, is a nicer presentation of the function itself.
+
+00:02:43.340 --> 00:02:49.180
+Now, I'm going to add a section that will contain the different controllers
+
+00:02:49.180 --> 00:02:53.940
+that are input fields from HTML5.
+
+00:02:53.940 --> 00:03:08.740
+So let's do it. I add a section called "plotSettings" that will contains all these controllers.
+
+00:03:08.740 --> 00:03:16.129
+Let's start for example with a controller for the color.
+
+00:03:16.129 --> 00:03:20.120
+So here we go.
+
+00:03:20.120 --> 00:03:29.510
+So, what we added here is a label color value and the color input field from HTML5.
+
+00:03:29.510 --> 00:03:34.050
+So, if I click here, it asks for a color.
+
+00:03:34.050 --> 00:03:40.530
+And we can also add an event listener: "onchange="plot(); ».
+
+00:03:40.530 --> 00:03:44.989
+That means: "when the color has been selected, call the plot() function".
+
+00:03:44.989 --> 00:03:51.780
+And you remember that this function is the one that plots the mathematical function, here.
+
+00:03:51.780 --> 00:03:53.610
+The plot function is here.
+
+00:03:53.610 --> 00:03:58.879
+So what we are going to do in this change color function ?
+
+00:03:58.879 --> 00:04:03.610
+It changes the property of the parameters here.
+
+00:04:03.610 --> 00:04:08.239
+So let's add some code for that...
+
+00:04:08.239 --> 00:04:16.979
+So, how can we get the value of the color from JavaScript before plotting the function?
+
+00:04:16.979 --> 00:04:28.759
+We are going to use the selector API: "document.querySelector(...)" for the input field whose id is "color".
+
+00:04:28.759 --> 00:04:33.110
+The value, here, is the color itself.
+
+00:04:33.110 --> 00:04:40.930
+So what we do is that we are going do use the color for changing this, here.
+
+00:04:40.930 --> 00:04:48.500
+So "parameters.data"... it's an array.
+
+00:04:48.500 --> 00:04:54.410
+So 0 is the first index, the first element that corresponds to the part that I highlight now.
+
+00:04:54.410 --> 00:04:55.620
+.color=color
+
+00:04:55.620 --> 00:05:06.680
+If I change the color, this line is executed and the color changes.
+
+00:05:06.680 --> 00:05:13.620
+We can use the same principles with other input fields.
+
+00:05:13.620 --> 00:05:18.180
+So let me just copy and paste some code I prepared,
+
+00:05:18.180 --> 00:05:25.479
+that will add all these different controllers.
+
+00:05:25.479 --> 00:05:36.720
+So, now I've got all the different controllers,
+
+00:05:36.720 --> 00:05:46.940
+and if you look at them, they all have an "onchange" or "oninput" event listener.
+
+00:05:46.940 --> 00:05:51.139
+Now, we’ve got 2 sections, 2 HTML sections:
+
+00:05:51.139 --> 00:05:57.360
+one with an "id="plotSettings"" that corresponds to the different input fields.
+
+00:05:57.360 --> 00:06:06.130
+And one with an "id="plot"" that corresponds to the function itself (the drawing here).
+
+00:06:06.130 --> 00:06:12.631
+So, if I want to have a nice look and feel, what I can do is to share the same borders
+
+00:06:12.631 --> 00:06:15.230
+and shadow properties from CSS,
+
+00:06:15.230 --> 00:06:22.770
+put the first section with the different input fields on the left and the plot on the right.
+
+00:06:22.770 --> 00:06:31.340
+So let me just cut and paste some CSS rules here, that will factorize the common properties
+
+00:06:31.340 --> 00:06:33.830
+for both sections in a section selector.
+
+00:06:33.830 --> 00:06:44.740
+OK, so what I've got now, is that I've got a nice balanced view of the whole application.

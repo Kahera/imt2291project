@@ -1,0 +1,184 @@
+﻿WEBVTT - https://subtitletools.com
+
+00:00:00.570 --> 00:00:01.570
+Hi!
+
+00:00:01.570 --> 00:00:09.081
+In this video, I will show you how to try and tweak the HTML example from the Web page,
+
+00:00:09.081 --> 00:00:12.259
+the one from the course.
+
+00:00:12.259 --> 00:00:20.260
+So I propose first to show you two online tools that are very practical for editing some
+
+00:00:20.260 --> 00:00:27.640
+HTML, CSS and JavaScript code, and seeing in real time the result of your modifications.
+
+00:00:27.640 --> 00:00:32.599
+In the second time, I will show you how to use the regular source code editor for editing
+
+00:00:32.599 --> 00:00:36.899
+HTML5 files directly on your hard disk.
+
+00:00:36.899 --> 00:00:43.470
+So, in order to use the JSbin.com tool, that is the first one I recommend,
+
+00:00:43.470 --> 00:00:48.399
+you will open a new tab with your browser and you go to http://jsbin.com.
+
+00:00:59.100 --> 00:01:01.960
+For the moment, we are going to use only HTML code.
+
+00:01:01.960 --> 00:01:05.799
+So, I will work only on the HTML part.
+
+00:01:05.799 --> 00:01:13.560
+So if you want to try the example from the course, just copy and paste the code in the
+
+00:01:13.560 --> 00:01:19.259
+HTML part on JsBin, and you see the result instantly.
+
+00:01:19.259 --> 00:01:31.240
+This is very practical because then you can modify the content, you can change the different values, the different elements…
+
+00:01:31.240 --> 00:01:40.420
+You can type your own text or your own HTML elements and attributes, and so on.
+
+00:01:40.420 --> 00:01:50.149
+You can also save your work using the "Save snapshot" menu, and if you created an account, it's completely free.
+
+00:01:50.149 --> 00:01:53.950
+And you will be able to find back your work the next days and so on.
+
+00:01:53.950 --> 00:01:59.630
+You can share the URL, you can share the Web addresses of your work with friends.
+
+00:01:59.630 --> 00:02:04.110
+They won't to be able to break what you've done because it will be create a new version
+
+00:02:04.110 --> 00:02:10.770
+or clone your own work so that your friends can work on what you've done.
+
+00:02:10.770 --> 00:02:16.230
+The other online tool, that is very practical, is codepen.io.
+
+00:02:16.230 --> 00:02:24.110
+This one is maybe nicer but I think than JsBin is more practical for typing code.
+
+00:02:24.110 --> 00:02:31.830
+This one is interesting because it's got a search engine, and you can look for existing examples made by others.
+
+00:02:31.830 --> 00:02:38.140
+So I just typed "button », and here I can see an example that create buttons.
+
+00:02:38.140 --> 00:02:43.870
+I can see the HTML code, CSS code and I can learn by looking these examples.
+
+00:02:43.870 --> 00:02:51.310
+So in our case, if you want to just create a new example, you just open codepen.io,
+
+00:02:51.310 --> 00:03:00.060
+you click on the "New Pen" button and you copy the HTML code in the HTML part on the editor, and you see the result.
+
+00:03:01.380 --> 00:03:05.950
+Don't forget to save to create an account also.
+
+00:03:05.950 --> 00:03:13.290
+And here, you can download the result for editing that offline if you would like using the "export" option.
+
+00:03:13.290 --> 00:03:23.440
+So "Export.zip". With codePen, I've got a zip file and in the zip file,I've got index.html here.
+
+00:03:23.440 --> 00:03:28.700
+And if I look at the source, it's exactly the source from the example.
+
+00:03:28.700 --> 00:03:34.390
+With JsBin, you can also download your result: "Download".
+
+00:03:34.390 --> 00:03:41.920
+And in that case, the name of HTML file will be built using the name of your example in
+
+00:03:41.920 --> 00:03:44.430
+the address bar of your browser.
+
+00:03:44.430 --> 00:03:47.810
+But if you click on it, you’ve got the same result.
+
+00:03:47.810 --> 00:03:53.400
+You’ve got an HTML file that is local in your hard disk that you can edit later on.
+
+00:03:53.400 --> 00:03:56.900
+You can see that the source code is nearly the same.
+
+00:03:56.900 --> 00:04:02.900
+The only difference is some comments that have been inserted at the top of the file.
+
+00:04:02.900 --> 00:04:10.600
+And if you want to create this example locally on your hard disk, I recommend to install some source code editor.
+
+00:04:10.600 --> 00:04:14.870
+In the course, we propose different ones.
+
+00:04:14.870 --> 00:04:16.320
+The one I use is "Sublime Text".
+
+00:04:16.320 --> 00:04:17.600
+So you go to sublimeText.com Web site.
+
+00:04:17.600 --> 00:04:22.420
+You download, it's free.
+
+00:04:22.420 --> 00:04:27.390
+You can also buy an enhanced version but the free version is ok. You download it.
+
+00:04:27.390 --> 00:04:33.740
+And once it's installed, you can work with it locally.
+
+00:04:33.740 --> 00:04:37.080
+So, I'm going to show you how to do that.
+
+00:04:37.080 --> 00:04:41.270
+So, what I recommend is that you create a directory somewhere.
+
+00:04:41.270 --> 00:04:45.140
+Here, I'm creating a directory on my desktop.
+
+00:04:45.140 --> 00:04:54.110
+… so a new directory: "Example 1". And inside that directory, i will create the HTML file.
+
+00:04:54.110 --> 00:05:01.200
+So, i use the "New file" option from Sublime Text.
+
+00:05:01.200 --> 00:05:03.780
+I copy and paste the code.
+
+00:05:03.780 --> 00:05:12.720
+I use "Save as" and i will save the page as index.html file… you can name it as you like.
+
+00:05:12.720 --> 00:05:15.440
+"index" is very common for the main page of Web site.
+
+00:05:15.440 --> 00:05:21.550
+I go to the desktop to the « Example 1" directory and i save the file.
+
+00:05:21.550 --> 00:05:29.080
+And from Sublime Text, you can use the right click "Open in browser" and you can see the result.
+
+00:05:29.080 --> 00:05:44.390
+If I change the code here, my home page "Hello W3Cx students" and I want to see the result, I just save ‘CTRL s’ or command s on my Mac.
+
+00:05:44.390 --> 00:05:52.670
+I do "Open in the browser" or I can just reload the page, and I can see that I change the content of the HTML file.
+
+00:05:52.670 --> 00:06:03.620
+So this is how you can work. Or you can also directly open an example you downloaded from JsBin or from CodePen.
+
+00:06:03.620 --> 00:06:12.490
+So, my download directory, I can find back the file that I downloaded when I was working with CodePen.io.
+
+00:06:12.490 --> 00:06:15.770
+An here, I have got HTML file.
+
+00:06:19.430 --> 00:06:25.180
+This is the code I prototyped, I tested first using an online environment.
