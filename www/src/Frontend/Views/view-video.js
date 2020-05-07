@@ -144,12 +144,12 @@ export class ViewVideo extends LitElement {
                 <component-videoplayer 
                     vid="${this.vid}"
                     vttfile="${this.vttfile}">
-                    </component-videoplayer>
+                </component-videoplayer>
             </div>
             <div class="cues">
                 <component-videocueviewer 
-                cues="${this.cues}" 
-                activecues="${this.activecues}">
+                    cues="${this.cues}" 
+                    activecues="${this.activecues}">
                 </component-videocueviewer>
             </div>
 

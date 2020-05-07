@@ -109,9 +109,9 @@ export class ComponentVideoplayer extends LitElement {
             }));
         });
 
-        this.shadowRoot.querySelector('video').textTracks[0].mode = 'hidden';
         this.shadowRoot.querySelector('video').textTracks[0].addEventListener('cuechange', e => {   // When a cue change event occurs
-            // console.log(e);
+            console.log("Componentvideoplayer - firstupdated");
+            console.log(e);
             const startTimes = [];
             for (let i = 0; i < e.target.activeCues.length; i++) {
                 startTimes.push(e.target.activeCues[i].startTime);

@@ -5,9 +5,9 @@ export class ComponentVideocueviewer extends LitElement {
 
     static get properties() {
         return {
-            cues: Array,
-            activeCues: Array
-        }
+            cues: { type: Array },
+            activecues: { type: Array }
+        };
     }
 
     constructor() {
@@ -48,9 +48,9 @@ export class ComponentVideocueviewer extends LitElement {
     render() {
         return html`
             <ul>
-            ${JSON.parse(this.cues).map(cue =>
+            ${this.cues.map(cue =>
             html`
-                <li cue_starttime="${cue.startTime}">
+                <li data-starttime="${cue.startTime}">
                    ${cue.text}
                 </li>`)}
             </ul>
@@ -86,8 +86,10 @@ export class ComponentVideocueviewer extends LitElement {
      * @param  {[Array]} changedProperties [description]
      */
     updated(changedProperties) {
+        console.log("updated");
         console.log(changedProperties);
         changedProperties.forEach((oldValue, propName) => {
+            console.log(propName);
             if (propName == 'activecues') {   // Only act when the activecues property changes
                 this.shadowRoot.querySelectorAll('li').forEach(li => {  // Remove class=active from all items in list
                     li.classList.remove('active');
