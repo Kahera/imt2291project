@@ -7,10 +7,10 @@ June V. E. Hansen
 Project description in [original project](https://bitbucket.org/okolloen/imt2291-prosjekt2-2019/wiki/Home).   
    
 ## Setup: 
+- download repo      
 - docker-compose up -d   
 
 The project runs on localhost:8080   
-Shouldn't be more needed, as all dependencies are in the project files.    
    
 There are a few already created users:    
 Admin user login:    
