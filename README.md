@@ -1,4 +1,4 @@
-# Prosjekt 2 - IMT2291 - Spring 2020 #   
+# Project 2 - IMT2291 - Spring 2020 #   
    
 ## Group members:     
 June V. E. Hansen   
